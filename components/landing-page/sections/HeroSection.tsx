@@ -1,16 +1,16 @@
-
 import Image from 'next/image'
 
 const HeroSection = () => {
   return (
-    <header className=' mt-[100px] relative h-full'>
-      <div className='w-full h-[1000px] absolute overflow-hidden'>
+    <header className='  w-full overflow-hidden'>
+      <div className=' mt-[100px] max-w-[1300px] mx-auto w-full pb-[150px] md:pb-[300px] relative h-full'>
+        <div className='absolute inset-0  overflow-visible pointer-events-none select-none '>
         <Image
           src='/hero/2.png'
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[220px] w-[150px] absolute  left-[4%] top-[50px]  rounded-[20px] object-cover'
+          className='absolute rounded-[20px] object-cover shadow-lg  w-[7rem] h-[8rem] md:w-[10rem] md:h-[13rem] left-[2%] md:left-[4%] top-6 sm:top-12'
         />
 
         <Image
@@ -18,7 +18,7 @@ const HeroSection = () => {
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[220px] w-[150px] absolute  left-[-20px] top-[300px]  rounded-[20px] object-cover'
+          className='absolute hidden md:block rounded-[20px] object-cover shadow-lg left-[1%] w-[7rem] h-[8rem] md:left-[2%] top-[220px] md:top-[300px] md:w-[10rem] md:h-[13rem]'
         />
 
         <Image
@@ -26,23 +26,23 @@ const HeroSection = () => {
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[220px] w-[150px] absolute  left-[100px] top-[400px]  rounded-[20px] object-cover'
+          className='absolute rounded-[20px] object-cover shadow-lg left-[6%] w-[7rem] h-[8rem] md:left-[13%] top-[27rem] md:top-[400px] md:w-[10rem] md:h-[13rem]'
         />
         <Image
           src='/hero/8.png'
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[220px] w-[150px] absolute  left-[260px] top-[500px]  rounded-[20px] object-cover'
+          className='absolute rounded-[20px] object-cover shadow-lg  w-[7rem] h-[8rem] left-[15%] md:left-[26%] top-[32rem] md:top-[500px] md:w-[10rem] md:h-[13rem]'
         />
       </div>
-      <div className='w-full h-[1000px] absolute overflow-hidden'>
+      <div className='absolute inset-0 overflow-visible pointer-events-none select-none '>
         <Image
           src='/hero/4.png'
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[220px] w-[150px] absolute  right-[8%] top-[50px]  rounded-[20px] object-cover'
+          className='absolute rounded-[20px] object-cover shadow-lg right-[3%]  md:right-[8%] top-6 sm:top-12 w-[7rem] h-[8rem] md:w-[12rem] md:h-[16rem]'
         />
 
         <Image
@@ -50,7 +50,7 @@ const HeroSection = () => {
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[204px] w-[203px] absolute  right-[-20px] top-[300px]  rounded-[20px] object-cover'
+          className='absolute hidden  md:block rounded-[20px] object-cover shadow-lg right-[-8px] w-[7rem] h-[8rem] md:right-[-20px] top-[220px] md:top-[300px] md:w-[203px] md:h-[204px]'
         />
 
         <Image
@@ -58,7 +58,7 @@ const HeroSection = () => {
           alt='Creator'
           height={200}
           width={200}
-          className=' h-[197px] w-[162px]  absolute  right-[5%] top-[550px]  rounded-[20px] object-cover'
+          className='absolute rounded-[20px]  object-cover shadow-lg right-[5%] top-[420px] md:top-[550px] w-[7rem] h-[8rem] md:w-[10rem] md:h-[12rem]'
         />
 
         <Image
@@ -66,10 +66,10 @@ const HeroSection = () => {
           alt='Creator'
           height={200}
           width={200}
-          className=' w-[260px] h-[164px]  absolute  right-[10%] top-[650px]  rounded-[20px] object-cover'
+          className='absolute rounded-[20px] object-cover shadow-lg right-[10%] top-[520px] md:top-[40rem] w-[10rem] h-[8rem] md:w-[18rem] md:h-[10rem]'
         />
       </div>
-      <div className=' max-w-[850px] relative z-20 mx-auto  min-h-[600px]  flex flex-col justify-center items-center'>
+      <div className=' max-w-[750px] relative z-20 mx-auto  min-h-[600px]  flex flex-col justify-center items-center'>
         <div className=' mb-[26px] gap-2 bg-[#F6FFFD] p-2 flex items-center rounded-[20px]'>
           <div className='   flex items-center rounded-[20px]'>
             <Image
@@ -98,29 +98,30 @@ const HeroSection = () => {
               />
             </div>
           </div>
-          <span className=' text-text-color-200'>
+          <span className=' tracking-tight text-text-color-200'>
             1,026+ Nigeria Content Creators
           </span>
         </div>
 
         <div className=' text-center flex  flex-col'>
-          <h1 className=' font-extrabold  text-[60px] leading-[73px] '>
+          <h1 className=' font-extrabold  tracking-tighter text-[60px] leading-none '>
             Connect with Nigeria&apos;s Content Creators.
           </h1>
-          <p className=' max-w-[700px] mx-auto mt-[14px] text-text-color-200 font-medium text-[20px] leading-[30px]'>
+          <p className=' max-w-[700px] tracking-tight mx-auto mt-[14px] text-text-color-200 font-medium text-[20px] leading-[30px]'>
             We connect brands with Nigeria&apos;s top content creators for
             authentic, engaging social media presence.
           </p>
 
           <div className=' flex mt-[26px] justify-center gap-4'>
-            <button className='text-[18px]  h-[60px] px-4 rounded-[16px] border border-border-200 text-black font-semibold'>
+            <button className='text-[18px] bg-white tracking-tight   h-[60px] px-4 rounded-[16px] border border-border-200 text-black font-semibold'>
               I&apos;m a Creator
             </button>
-            <button className=' text-[18px]  h-[60px] px-4 rounded-[16px] bg-primary text-white font-semibold'>
+            <button className=' text-[18px] tracking-tight  h-[60px] px-4 rounded-[16px] bg-primary text-white font-semibold'>
               I&apos;m a Brand
             </button>
           </div>
         </div>
+      </div>
       </div>
     </header>
   )
