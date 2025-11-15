@@ -3,19 +3,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import { useRef, useState } from 'react'
 
 const CreatorsListSection = () => {
   const [progress, setProgress] = useState(0)
-  const swiperRef = useRef<any>(null)
+  const swiperRef = useRef<SwiperType | null>(null)
   const initialIndex = 1
   return (
     <section className=' w-full '>
       <div className=' w-full '>
         <div className=' mx-auto  flex flex-col items-center'>
           <h3 className=' text-[24px] md:text-[32px] font-bold text-black tracking-tighter'>
-            Nigeria's Top Creators
+            Nigeria&apos;s Top Creators
           </h3>
           <p className=' mt-2 text-text-color-200 text-[14px] md:text-[16px]'>
             Across Every Niche Including:

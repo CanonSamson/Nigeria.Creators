@@ -59,7 +59,7 @@ const TopCreatorsSection = () => {
       <div className=' w-full px-6 md:px-10 '>
         <div className='h-[100dvh] pt-[20vh] relative   mx-auto max-w-[1100px]  overflow-visible  flex flex-col items-center'>
           <h3 className=' text-[24px] md:text-[32px] font-bold text-black  tracking-tighter'>
-            Nigeria's Top Creators
+            Nigeria&apos;s Top Creators
           </h3>
           <p className=' mt-2 text-text-color-200 text-[14px] md:text-[16px]'>
             Across Every Niche Including:
@@ -71,7 +71,7 @@ const TopCreatorsSection = () => {
           >
             <div className=' invisible pt-[20vh]'>
               <h2 className=' text-[24px] md:text-[32px] font-bold text-black tracking-tighter'>
-                Nigeria's Top Creators
+                Nigeria&apos;s Top Creators
               </h2>
               <p className=' mt-2 text-text-color-200 text-[14px] md:text-[16px]'>
                 Across Every Niche Including:
