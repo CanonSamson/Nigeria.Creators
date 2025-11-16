@@ -40,10 +40,10 @@ const CreatorsListSection = () => {
             >
               {cards.map(card => (
                 <SwiperSlide key={card.alt}>
-                  <div className=' bg-amber-300'>
+                  <div className=''>
                     <article role='group' aria-label={card.alt} className=' '>
                       <div className=' relative rounded-[20px] overflow-hidden bg-[#F3F3F3]'>
-                        <div className=' absolute inset-0 bg-gradient-to-b from-[#d1d1d1] to-transparent opacity-60' />
+                        <div className=' absolute inset-0 bg-gradient-to-b to-black opacity-60' />
                         <Image
                           src={card.src}
                           alt={card.alt}
@@ -56,7 +56,7 @@ const CreatorsListSection = () => {
                           <span className=' text-black'>{card.city}</span>
                         </div>
                         {card.message && (
-                          <div className=' absolute left-4 top-1/2 -translate-y-1/2 px-3 py-1 rounded-full bg-[#F9C5DB] text-[#6E4D5A] text-[12px] md:text-[13px]'>
+                          <div className=' absolute left-4 top-1/2 -translate-y-1/2 px-3 py-1 rounded-full bg-primary text-white text-[12px] md:text-[13px]'>
                             {card.message}
                           </div>
                         )}
@@ -128,45 +128,45 @@ const cards = [
   {
     src: '/hero/1.png',
     alt: 'Fitness and lifestyle creator',
-    name: 'Manel',
-    city: 'Paris',
-    flag: '🇫🇷'
+    name: 'Tunde',
+    city: 'Lagos',
+    flag: '🇳🇬'
   },
   {
     src: '/hero/2.png',
     alt: 'Digital marketing creator',
-    name: 'Angee',
-    city: 'London',
-    flag: '🇬🇧',
+    name: 'Ada',
+    city: 'Kano',
+    flag: '🇳🇬',
     message: 'Send us a DM'
   },
   {
     src: '/hero/3.png',
     alt: 'Lifestyle and home creator',
-    name: 'Irene',
-    city: 'Milan',
-    flag: '🇮🇹'
+    name: 'Chinedu',
+    city: 'Rivers',
+    flag: '🇳🇬'
   },
   {
     src: '/hero/4.png',
     alt: 'Editing vlogs tutorial creator',
-    name: 'Leo',
-    city: 'Berlin',
-    flag: '🇩🇪'
+    name: 'Favour',
+    city: 'Oyo',
+    flag: '🇳🇬'
   },
   {
     src: '/hero/5.png',
     alt: 'Tech and productivity creator',
-    name: 'Naomi',
-    city: 'Rotterdam',
-    flag: '🇳🇱'
+    name: 'Zainab',
+    city: 'Edo',
+    flag: '🇳🇬'
   },
   {
     src: '/hero/6.png',
     alt: 'Food and wellness creator',
-    name: 'Roksana',
-    city: 'Warsaw',
-    flag: '🇵🇱'
+    name: 'Ifeoma',
+    city: 'Enugu',
+    flag: '🇳🇬'
   }
 ]
 

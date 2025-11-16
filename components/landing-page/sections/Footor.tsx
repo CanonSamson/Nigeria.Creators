@@ -46,26 +46,25 @@ const Footer = () => {
                   Become a Creator
                 </h2>
                 <div>
-                <Link
-                  href='/apply/creator'
-                  className='inline-flex mt-4 items-center justify-center h-[48px] md:h-[56px] px-4 rounded-[12px] bg-white text-black font-semibold border border-[#DFE2EB]'
-                >
-                  Become a Creator
-                </Link>
+                  <Link
+                    href='/apply/creator'
+                    className='inline-flex mt-4 items-center justify-center h-[48px] md:h-[56px] px-4 rounded-[12px] bg-white text-black font-semibold border border-[#DFE2EB]'
+                  >
+                    Become a Creator
+                  </Link>
+                </div>
               </div>
-              </div>
-              
             </div>
           </div>
 
           <div className='mt-[100px] grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-8 items-start'>
             <div className='flex items-center gap-3'>
               <Image
-                src='/logo/v1.png'
+                src='/logo/footer.png'
                 alt='Nigeria Creators'
-                height={50}
-                width={50}
-                className='h-[50px] w-[50px] rounded-[16px] object-cover'
+                height={200}
+                width={200}
+                className='h-[50px] w-auto  object-cover'
               />
               <span className='sr-only'>Nigeria Creators</span>
             </div>
