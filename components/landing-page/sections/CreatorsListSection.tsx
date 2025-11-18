@@ -42,8 +42,8 @@ const CreatorsListSection = () => {
                 <SwiperSlide key={card.alt}>
                   <div className=''>
                     <article role='group' aria-label={card.alt} className=' '>
-                      <div className=' relative rounded-[20px] overflow-hidden bg-[#F3F3F3]'>
-                        <div className=' absolute inset-0 bg-gradient-to-b to-black opacity-60' />
+                      <div className=' relative rounded-[20px] overflow-hidden '>
+                        {/* <div className=' absolute inset-0 bg-black opacity-20' /> */}
                         <Image
                           src={card.src}
                           alt={card.alt}
@@ -68,27 +68,6 @@ const CreatorsListSection = () => {
                   </div>
                 </SwiperSlide>
               ))}
-              <SwiperSlide>
-                <div className=' px-3 md:px-4'>
-                  <article
-                    role='group'
-                    aria-label='Join Our Community'
-                    className=' w-[150px] sm:w-[200px] md:w-[300px]'
-                  >
-                    <Link
-                      href='/community'
-                      aria-label='Join Our Community'
-                      className=' block rounded-[20px] h-[300px] md:h-[350px] bg-[#DFE2EB] text-black hover:bg-primary hover:text-white transition-colors duration-300'
-                    >
-                      <div className=' w-full h-full flex items-center justify-center px-6'>
-                        <span className=' text-[14px] md:text-[16px] font-semibold'>
-                          Join Our Community
-                        </span>
-                      </div>
-                    </Link>
-                  </article>
-                </div>
-              </SwiperSlide>
             </Swiper>
 
             <div className=' mx-auto max-w-[1100px]  pb-20'>
@@ -126,46 +105,46 @@ const CreatorsListSection = () => {
 
 const cards = [
   {
-    src: '/hero/1.png',
+    src: '/placeholder/profile.svg',
     alt: 'Fitness and lifestyle creator',
-    name: 'Tunde',
-    city: 'Lagos',
+    name: 'Creator',
+    city: 'Location',
     flag: '🇳🇬'
   },
   {
-    src: '/hero/2.png',
+    src: '/placeholder/profile.svg',
     alt: 'Digital marketing creator',
-    name: 'Ada',
-    city: 'Kano',
+    name: 'Creator',
+    city: 'Location',
     flag: '🇳🇬',
-    message: 'Send us a DM'
+    message: 'Send a DM'
   },
   {
-    src: '/hero/3.png',
+    src: '/placeholder/profile.svg',
     alt: 'Lifestyle and home creator',
-    name: 'Chinedu',
-    city: 'Rivers',
+    name: 'Creator',
+    city: 'Location',
     flag: '🇳🇬'
   },
   {
-    src: '/hero/4.png',
+    src: '/placeholder/profile.svg',
     alt: 'Editing vlogs tutorial creator',
-    name: 'Favour',
+    name: 'Creator',
     city: 'Oyo',
     flag: '🇳🇬'
   },
   {
-    src: '/hero/5.png',
+    src: '/placeholder/profile.svg',
     alt: 'Tech and productivity creator',
-    name: 'Zainab',
-    city: 'Edo',
+    name: 'Creator',
+    city: 'Location',
     flag: '🇳🇬'
   },
   {
-    src: '/hero/6.png',
+    src: '/placeholder/profile.svg',
     alt: 'Food and wellness creator',
-    name: 'Ifeoma',
-    city: 'Enugu',
+    name: 'Creator',
+    city: 'Location',
     flag: '🇳🇬'
   }
 ]

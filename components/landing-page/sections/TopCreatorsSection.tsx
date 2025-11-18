@@ -113,7 +113,7 @@ const TopCreatorsSection = () => {
                       →
                     </span>
                     <span className=' ml-3  text-[14px] md:text-[16px] font-semibold'>
-                      Join Our Community
+                      Join Our WaitList
                     </span>
                   </div>
                 </Link>
@@ -128,17 +128,17 @@ const TopCreatorsSection = () => {
 
 const cards = [
   {
-    src: '/top-creators/5d43e81d-f8d3-496c-bdca-744b3368c027 1.png',
+    src: '/placeholder/cases.svg',
     alt: 'Fitness and lifestyle creator'
   },
   {
-    src: '/top-creators/9f63856b-34f9-4397-854d-afdae284c649 1.png',
+    src: '/placeholder/cases.svg',
     alt: 'Digital marketing creator'
   },
-  { src: '/top-creators/top-creator-1.png', alt: 'Lifestyle and home creator' },
-  { src: '/hero/4.png', alt: 'Editing vlogs tutorial creator' },
-  { src: '/hero/5.png', alt: 'Tech and productivity creator' },
-  { src: '/hero/6.png', alt: 'Food and wellness creator' }
+  { src: '/placeholder/cases.svg', alt: 'Lifestyle and home creator' },
+  { src: '/placeholder/cases.svg', alt: 'Editing vlogs tutorial creator' },
+  { src: '/placeholder/cases.svg', alt: 'Tech and productivity creator' },
+  { src: '/placeholder/cases.svg', alt: 'Food and wellness creator' }
 ]
 
 export default TopCreatorsSection
