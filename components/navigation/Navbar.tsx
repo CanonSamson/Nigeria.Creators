@@ -11,25 +11,25 @@ const Navbar = () => {
             alt='Nigeria Creators'
             height={100}
             width={100}
-            className=' h-[30px]  w-[30px]  md:h-[50px]  md:w-[50px] object-center object-cover rounded-[8px] md:rounded-[16px] '
+            className='duration-300 transition-all active:opacity-80 hover:opacity-80 h-[30px]  w-[30px]  md:h-[50px]  md:w-[50px] object-center object-cover rounded-[8px] md:rounded-[16px] '
           />
         </Link>
 
         <nav>
           <ul className=' inline-flex font font-medium  gap-[10px] text-[14px] md:text-[16px] md:gap-[16px]'>
             <li>
-              <Link href='/creators'>Creators</Link>
+              <Link href='/'>Creators</Link>
             </li>
             <li>
-              <Link href='/brands'>Brands</Link>
+              <Link href='/'>Brands</Link>
             </li>
             <li>
-              <Link href='/contact'>Contact</Link>
+              <Link href='/'>Contact</Link>
             </li>
           </ul>
         </nav>
         <div>
-          <button className=' md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'>
+          <button className='duration-300 transition-all active:opacity-80 hover:opacity-80 md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'>
             I&apos;m a Brand
           </button>
         </div>
