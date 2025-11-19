@@ -1,6 +1,5 @@
 'use client'
 import Image from 'next/image'
-import Link from 'next/link'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { gsap } from 'gsap'
 import { useEffect, useRef } from 'react'
@@ -103,8 +102,10 @@ const TopCreatorsSection = () => {
                 aria-label='Join Our Community'
                 className=' snap-center shrink-0 w-[220px] sm:w-[260px] md:w-[300px]'
               >
-                <Link
-                  href='/community'
+                <button
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
                   aria-label='Join Our Community'
                   className=' block rounded-[20px] h-[360px] md:h-[50vh] duration-300 transition-colors hover:bg-primary text-primary hover:text-white focus:outline-none  '
                 >
@@ -116,7 +117,7 @@ const TopCreatorsSection = () => {
                       Join Our WaitList
                     </span>
                   </div>
-                </Link>
+                </button>
               </article>
             </div>
           </div>

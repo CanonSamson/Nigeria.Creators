@@ -27,7 +27,7 @@ const HeroSection = () => {
             alt='Creator'
             height={200}
             width={200}
-            className='absolute rounded-[20px] object-cover shadow-lg left-[6%] w-[7rem] h-[8rem] md:left-[13%] top-[27rem] md:top-[400px] md:w-[10rem] md:h-[13rem]'
+            className='absolute rounded-[20px] object-cover shadow-lg left-[6%] w-[7rem] h-[8rem] md:left-[13%] top-[30rem] md:top-[400px] md:w-[10rem] md:h-[13rem]'
           />
           <Image
             src='/hero/8.png'
@@ -59,7 +59,7 @@ const HeroSection = () => {
             alt='Creator'
             height={200}
             width={200}
-            className='absolute rounded-[20px]  object-cover shadow-lg right-[5%] top-[420px] md:top-[550px] w-[7rem] h-[8rem] md:w-[10rem] md:h-[12rem]'
+            className='absolute rounded-[20px]  object-cover shadow-lg right-[5%] top-[460px] md:top-[550px] w-[7rem] h-[8rem] md:w-[10rem] md:h-[12rem]'
           />
 
           <Image

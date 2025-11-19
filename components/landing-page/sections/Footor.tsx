@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Instagram, Youtube, Camera } from 'lucide-react'
@@ -46,12 +47,14 @@ const Footer = () => {
                   Become a Creator
                 </h2>
                 <div>
-                  <Link
-                    href='/apply/creator'
+                  <button
+                        onClick={() => 
+                     window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
                     className='inline-flex mt-4 items-center justify-center h-[48px] md:h-[56px] px-4 rounded-[12px] bg-white text-black font-semibold border border-[#DFE2EB]'
                   >
-                    Become a Creator
-                  </Link>
+                    Join WaitList
+                  </button>
                 </div>
               </div>
             </div>
@@ -80,39 +83,41 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href='/signin' className='hover:text-primary'>
+                  <Link href='/' className='hover:text-primary'>
                     Sign In
                   </Link>
                 </li>
                 <li>
-                  <Link href='/apply/creator' className='hover:text-primary'>
+                  <Link href='/' className='hover:text-primary'>
                     Apply as Creator
                   </Link>
                 </li>
                 <li>
-                  <Link href='/apply/brand' className='hover:text-primary'>
+                  <Link href='/' className='hover:text-primary'>
                     Apply as Brand
                   </Link>
                 </li>
                 <li>
-                  <Link href='/waitlist' className='hover:text-primary'>
+                  <button      onClick={() => 
+                     window.scrollTo({ top: 0, behavior: 'smooth' })
+                  } className='hover:text-primary'>
                     Join Wait-List
-                  </Link>
+                  </button>
                 </li>
               </ul>
               <ul className='space-y-2 text-[14px] md:text-[16px]'>
                 <li>
-                  <Link href='/privacy' className='hover:text-primary'>
+                  <Link href='/' className='hover:text-primary'>
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link href='/terms' className='hover:text-primary'>
+                  <Link href='/' className='hover:text-primary'>
                     Terms of service
                   </Link>
                 </li>
                 <li>
-                  <Link href='/contact' className='hover:text-primary'>
+                  <Link href='/' className='hover:text-primary'>
                     Contact
                   </Link>
                 </li>
@@ -139,7 +144,7 @@ const Footer = () => {
                 <Youtube className='h-5 w-5' />
               </a>
               <a
-                href='https://www.instagram.com/explore/tags/creators/'
+                href='https://www.instagram.com/nigeriacreators?igsh=MXZyaGZ6dWpsMWg2cg%3D%3D&utm_source=qr'
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='Creators media'

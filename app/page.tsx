@@ -9,6 +9,7 @@ import Footer from '@/components/landing-page/sections/Footor'
 export default function Home () {
   return (
     <div className='font-sans min-h-screen '>
+      <div id="top" />
       <Navbar />
       <HeroSection />
       <FeaturesSection />
