@@ -9,6 +9,14 @@ const inter = Inter({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 })
 
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: "no",
+};
+
 export const metadata: Metadata = {
   title: 'Nigeria Creators',
   description: "Connect with Nigeria's Content Creators."
