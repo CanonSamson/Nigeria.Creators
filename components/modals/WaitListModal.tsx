@@ -83,17 +83,16 @@ const WaitListModal = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: String(values?.email || '').toLowerCase(),
-            role: String(values?.role || 'brand'),
-            features: Array.isArray(values?.selectedFeatures)
-              ? values?.selectedFeatures
-              : []
+            email: String(values?.email || '').toLowerCase()
           })
         })
-      } catch {}
+      } catch (error) {
+        console.log(error, 'errors')
+      }
       toast.success('Added to waitlist')
       toggleModal('waitListModal')
-    } catch {
+    } catch (error) {
+      console.log(error, 'errors')
       toast.error('Network error')
     } finally {
       setIsLoading(false)
