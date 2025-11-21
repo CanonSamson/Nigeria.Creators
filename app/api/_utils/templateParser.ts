@@ -6,12 +6,10 @@ export type TemplatePlaceholders = Record<string, string | number | boolean>
 export const parseTemplate = (
   templateName: string,
   placeholders: TemplatePlaceholders
-) => {
+): string => {
   let template = ''
 
-  const candidates: string[] = [
-    path.join(process.cwd(), 'public/email-templates', `${templateName}.html`)
-  ]
+  const candidates: string[] = []
 
   try {
     const compiledPath = fileURLToPath(
@@ -22,6 +20,12 @@ export const parseTemplate = (
 
   candidates.push(
     path.join(process.cwd(), 'app/api/_email-templates', `${templateName}.html`)
+  )
+  candidates.push(
+    path.join(process.cwd(), 'public/email-templates', `${templateName}.html`)
+  )
+  candidates.push(
+    path.join(process.cwd(), 'email-templates', `${templateName}.html`)
   )
 
   for (const p of candidates) {
