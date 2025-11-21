@@ -1,10 +1,10 @@
+import { sendEmail } from '@/utils/emailService'
 import { NextRequest, NextResponse } from 'next/server'
-import { sendEmail } from '@/app/api/_utils/emailService'
 
 export async function POST (request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json()
-    const email = String(body?.email || '')
+    const email = String(body?.values?.email || body?.email || '')
       .trim()
       .toLowerCase()
 

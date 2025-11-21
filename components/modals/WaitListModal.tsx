@@ -79,16 +79,13 @@ const WaitListModal = () => {
         return
       }
       try {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/v1/wait-email`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: String(values?.email || '').toLowerCase()
-            })
-          }
-        )
+        await fetch(`/api/wait-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: String(values?.email || '').toLowerCase()
+          })
+        })
       } catch (error) {
         console.log(error, 'errors')
       }

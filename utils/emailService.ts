@@ -1,6 +1,6 @@
-import { parseTemplate, TemplatePlaceholders } from './templateParser'
 import dotenv from 'dotenv'
 import { Resend } from 'resend'
+import { parseTemplate, TemplatePlaceholders } from './templateParser'
 
 dotenv.config()
 

@@ -1,4 +1,4 @@
-import { templates } from './_email-templates'
+import { templates } from "./email-templates"
 
 export type TemplatePlaceholders = Record<string, string | number | boolean>
 
