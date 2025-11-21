@@ -11,16 +11,6 @@ export const parseTemplate = (
 
   const candidates: string[] = []
 
-  try {
-    const compiledPath = fileURLToPath(
-      new URL(`../_email-templates/${templateName}.html`, import.meta.url)
-    )
-    candidates.push(compiledPath)
-  } catch {}
-
-  candidates.push(
-    path.join(process.cwd(), 'app/api/_email-templates', `${templateName}.html`)
-  )
   candidates.push(
     path.join(process.cwd(), 'public/email-templates', `${templateName}.html`)
   )
