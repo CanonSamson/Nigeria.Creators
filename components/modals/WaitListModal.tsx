@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { createBrowserClient } from '@supabase/ssr'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 const brandFeatures = [
   {
@@ -202,9 +203,16 @@ const WaitListModal = () => {
             <button
               onClick={handleJoinWaitList}
               disabled={isLoading}
-              className='h-[50px] w-full px-4 disabled:opacity-70 hover:opacity-80 transition-all duration-300 active:opacity-80 rounded-[12px] bg-primary text-white font-semibold text-[14px] md:text-[16px]'
+              className='h-[50px] flex items-center justify-center gap-2 w-full px-4 disabled:opacity-70 hover:opacity-80 transition-all duration-300 active:opacity-80 rounded-[12px] bg-primary text-white font-semibold text-[14px] md:text-[16px]'
             >
               Join Waitlist
+              {isLoading ? (
+                <AiOutlineLoading3Quarters
+                  name='loading'
+                  size={20}
+                  className=' animate-spin'
+                />
+              ) : null}
             </button>
           </div>
         </div>
