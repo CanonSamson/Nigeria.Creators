@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import CustomRootLayout from '@/components/layout/CustomRootLayout'
+import { ResolvingMetadata } from 'next'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -9,17 +9,41 @@ const inter = Inter({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 })
 
-
 export const viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  userScalable: "no",
-};
+  userScalable: 'no'
+}
 
-export const metadata: Metadata = {
-  title: 'Nigeria Creators',
-  description: "Connect with Nigeria's Content Creators."
+type RootProps = {
+  params?: Record<string, string>
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata (
+  _: RootProps,
+  parent: ResolvingMetadata
+) {
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  // generate metadata
+  const metadata = {
+    title: { default: 'Nigeria Creators', template: '%s | Nigeria Creators' },
+    description: "Connect with Nigeria's Content Creators.",
+
+    openGraph: {
+      title: 'Nigeria Creators',
+      description: "Connect with Nigeria's Content Creators.",
+      images: [
+        `${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/meta/1200-675.png`,
+        ...previousImages
+      ].filter(Boolean)
+    }
+  }
+
+  return metadata
 }
 
 export default function RootLayout ({
