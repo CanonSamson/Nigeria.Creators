@@ -1,12 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useFormikContext } from 'formik'
 import BasicInput from '@/components/input/BasicInput'
 
 const SocialInfoSection = () => {
-  const [contentLink, setContentLink] = useState('')
-  const [instagram, setInstagram] = useState('')
-  const [tiktok, setTiktok] = useState('')
+  const { values, setFieldValue, errors, touched } = useFormikContext<{
+    contentLink: string
+    instagram: string
+    tiktok: string
+  }>()
+  const contentLink = values.contentLink || ''
+  const instagram = values.instagram || ''
+  const tiktok = values.tiktok || ''
 
   return (
     <div>
@@ -29,8 +34,9 @@ const SocialInfoSection = () => {
             label=''
             type='url'
             value={contentLink}
-            onChange={e => setContentLink(e.target.value)}
+            onChange={e => setFieldValue('contentLink', e.target.value)}
             placeholder='Link of content'
+            error={touched.contentLink && errors.contentLink ? String(errors.contentLink) : undefined}
           />
         </div>
 
@@ -42,8 +48,9 @@ const SocialInfoSection = () => {
             label=''
             type='url'
             value={instagram}
-            onChange={e => setInstagram(e.target.value)}
+            onChange={e => setFieldValue('instagram', e.target.value)}
             placeholder='https://www.instagram.com'
+            error={touched.instagram && errors.instagram ? String(errors.instagram) : undefined}
           />
         </div>
 
@@ -55,8 +62,9 @@ const SocialInfoSection = () => {
             label=''
             type='url'
             value={tiktok}
-            onChange={e => setTiktok(e.target.value)}
+            onChange={e => setFieldValue('tiktok', e.target.value)}
             placeholder='https://www.tiktok.com'
+            error={touched.tiktok && errors.tiktok ? String(errors.tiktok) : undefined}
           />
         </div>
       </div>

@@ -1,15 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useFormikContext } from 'formik'
 import BasicInput from '@/components/input/BasicInput'
+import CustomPhoneInput from '@/components/input/CustomPhoneInput'
 
 const BasicInfoSection = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+  const { values, errors, touched, setFieldValue } = useFormikContext<{
+    name: string
+    email: string
+    phone: string
+  }>()
 
   return (
-    < >
+    <>
       <div className='mt-4 '>
         <h2 className='text-[18px] md:text-[22px] font-bold text-black'>
           Enter your Name and Email to Begin!
@@ -23,23 +26,30 @@ const BasicInfoSection = () => {
         <BasicInput
           label='Name'
           type='text'
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={values.name}
+          onChange={e => setFieldValue('name', e.target.value)}
           placeholder='Full Name'
+          error={touched.name && errors.name ? String(errors.name) : undefined}
         />
         <BasicInput
           label='Email'
           type='email'
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          value={values.email}
+          onChange={e => setFieldValue('email', e.target.value)}
           placeholder='Your Email'
+          error={
+            touched.email && errors.email ? String(errors.email) : undefined
+          }
         />
-        <BasicInput
+        <CustomPhoneInput
           label='Phone No'
-          type='tel'
-          value={phone}
-          onChange={e => setPhone(e.target.value)}
-          placeholder='Phone No'
+          value={values.phone}
+          onChange={v => setFieldValue('phone', v)}
+          className=''
+
+          error={
+            touched.phone && errors.phone ? String(errors.phone) : undefined
+          }
         />
       </div>
     </>

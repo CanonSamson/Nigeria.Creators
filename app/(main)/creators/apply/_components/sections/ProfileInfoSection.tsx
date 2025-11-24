@@ -3,12 +3,18 @@
 import { useRef, useState } from "react"
 import { CloudUpload } from "lucide-react"
 import { toast } from "sonner"
+import { useFormikContext } from "formik"
 
 const ProfileInfoSection = () => {
-  const [resident, setResident] = useState("")
-  const [fileName, setFileName] = useState("")
+  const { values, setFieldValue, errors, touched } = useFormikContext<{
+    resident: string
+    profilePicture: File | null
+    description: string
+  }>()
+  const resident = values.resident || ""
+  const fileName = values.profilePicture ? values.profilePicture.name : ""
   const [isDragging, setIsDragging] = useState(false)
-  const [description, setDescription] = useState("")
+  const description = values.description || ""
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleFiles = (files: FileList | null) => {
@@ -18,7 +24,7 @@ const ProfileInfoSection = () => {
       toast.error("File exceeds 25MB limit")
       return
     }
-    setFileName(file.name)
+    setFieldValue("profilePicture", file)
   }
 
   return (
@@ -37,7 +43,7 @@ const ProfileInfoSection = () => {
           </label>
           <select
             value={resident}
-            onChange={e => setResident(e.target.value)}
+            onChange={e => setFieldValue("resident", e.target.value)}
             className="w-full h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none"
           >
             <option value="" disabled>
@@ -46,6 +52,9 @@ const ProfileInfoSection = () => {
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
+          {touched.resident && errors.resident ? (
+            <p className="mt-1 text-[12px] text-red-500">{String(errors.resident)}</p>
+          ) : null}
         </div>
 
         <div>
@@ -96,10 +105,13 @@ const ProfileInfoSection = () => {
           </label>
           <textarea
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={e => setFieldValue("description", e.target.value)}
             placeholder="Description"
             className="w-full min-h-[120px] md:min-h-[160px] px-4 py-3 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black placeholder:text-text-color-200 outline-none"
           />
+          {touched.description && errors.description ? (
+            <p className="mt-1 text-[12px] text-red-500">{String(errors.description)}</p>
+          ) : null}
         </div>
       </div>
     </>

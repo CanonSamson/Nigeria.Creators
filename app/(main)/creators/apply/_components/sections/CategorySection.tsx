@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useFormikContext } from 'formik'
 
 const categories = [
   'Tech',
@@ -20,12 +20,16 @@ const categories = [
 ]
 
 const CategorySection = () => {
-  const [selected, setSelected] = useState<string[]>([])
+  const { values, setFieldValue, errors, touched } = useFormikContext<{
+    categories: string[]
+  }>()
+  const selected: string[] = values.categories || []
 
   const toggle = (name: string) => {
-    setSelected(prev =>
-      prev.includes(name) ? prev.filter(v => v !== name) : [...prev, name]
-    )
+    const next = selected.includes(name)
+      ? selected.filter(v => v !== name)
+      : [...selected, name]
+    setFieldValue('categories', next)
   }
   return (
     <>
@@ -61,6 +65,9 @@ const CategorySection = () => {
             )
           })}
         </div>
+        {touched.categories && errors.categories ? (
+          <p className='text-[12px] text-red-500'>{String(errors.categories)}</p>
+        ) : null}
       </div>
     </>
   )

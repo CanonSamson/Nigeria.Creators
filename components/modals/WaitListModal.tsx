@@ -5,7 +5,7 @@ import React from 'react'
 import { toast } from 'sonner'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { createBrowserClient } from '@supabase/ssr'
+import { supabaseService } from '@/utils/supabase/services'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 const brandFeatures = [
@@ -60,19 +60,16 @@ const WaitListModal = () => {
   const handleJoinWaitList = async () => {
     try {
       setIsLoading(true)
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-      )
-      const { error } = await supabase.from('wait_list').insert({
-        email: String(values?.email || '').toLowerCase(),
-        role: String(values?.role || 'brand'),
-        features: Array.isArray(values?.selectedFeatures)
-          ? values?.selectedFeatures
-          : []
-      })
-      if (error) {
-        const msg = /duplicate/i.test(error.message)
+      try {
+        await supabaseService.insertDB('wait_list', {
+          email: String(values?.email || '').toLowerCase(),
+          role: String(values?.role || 'brand'),
+          features: Array.isArray(values?.selectedFeatures)
+            ? values?.selectedFeatures
+            : []
+        })
+      } catch (error) {
+        const msg = error instanceof Error && /duplicate/i.test(error.message)
           ? 'Email has already been registered'
           : 'Failed to join waitlist'
         toast.error(msg)
