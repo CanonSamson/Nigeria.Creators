@@ -5,7 +5,7 @@ const DashboardSideBar = () => {
   return (
     <div
       className={cn(
-        '  sticky top-0 left-4 h-[100vh] flex flex-col items-center justify-center py-4',
+        '   fixed top-0 left-4 h-[100vh] flex flex-col items-center justify-center py-4',
         ' !h-[100dvh]'
       )}
     >
