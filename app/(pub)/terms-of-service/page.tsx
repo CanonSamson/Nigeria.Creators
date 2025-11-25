@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const TermsOfService = () => {
   return (
-    <main className={cn('w-full min-h-screen font-sans', 'min-h-[100dvh]')}>
+    <main className={cn('w-full min-h-screen font-sans px-4', '!min-h-[100dvh]')}>
       <div className='mx-auto max-w-[1100px] flex min-h-[100dvh] flex-col  w-full '>
         <div className=' w-full flex py-4 justify-end'>
           <Link
