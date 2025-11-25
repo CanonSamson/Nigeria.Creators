@@ -38,6 +38,10 @@ body {
   display: none;
 }
 
+.hide-x-scrollbar {
+ 
+}
+
 .prevent-select {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
