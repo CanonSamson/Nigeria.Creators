@@ -9,7 +9,7 @@ const DashboardSideBar = () => {
         ' !h-[100dvh]'
       )}
     >
-      <div className='  w-[56px] h-full max-h-[300px] bg-[#F8F8F8] border border-[#EFEFEF] rounded-[20px] shadow-sm flex flex-col items-center justify-between py-[12px]'>
+      <div className='  w-[56px] h-full max-h-[300px] bg-[#F8F8F8] border border-[#EFEFEF] rounded-[20px]  flex flex-col items-center justify-between py-[12px]'>
         <div className='flex flex-col items-center gap-6'>
           <div className='h-10 w-10 rounded-full '>
             <Image
