@@ -48,9 +48,9 @@ const Footer = () => {
                 </h2>
                 <div>
                   <button
-                        onClick={() => 
-                     window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
                     className='inline-flex mt-4 items-center justify-center h-[48px] md:h-[56px] px-4 rounded-[12px] bg-white text-black font-semibold border border-[#DFE2EB]'
                   >
                     Join WaitList
@@ -83,12 +83,12 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href='/' className='hover:text-primary'>
-                    Sign In
+                  <Link href='/creators/login' className='hover:text-primary'>
+                    Login In
                   </Link>
                 </li>
                 <li>
-                  <Link href='/' className='hover:text-primary'>
+                  <Link href='/creators/apply' className='hover:text-primary'>
                     Apply as Creator
                   </Link>
                 </li>
@@ -98,26 +98,29 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <button      onClick={() => 
-                     window.scrollTo({ top: 0, behavior: 'smooth' })
-                  } className='hover:text-primary'>
+                  <button
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                    className='hover:text-primary'
+                  >
                     Join Wait-List
                   </button>
                 </li>
               </ul>
               <ul className='space-y-2 text-[14px] md:text-[16px]'>
                 <li>
-                  <Link href='/' className='hover:text-primary'>
+                  <Link href='/privacy-policy' className='hover:text-primary'>
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link href='/' className='hover:text-primary'>
+                  <Link href='/terms-of-service' className='hover:text-primary'>
                     Terms of service
                   </Link>
                 </li>
                 <li>
-                  <Link href='/' className='hover:text-primary'>
+                  <Link href='/contact' className='hover:text-primary'>
                     Contact
                   </Link>
                 </li>
