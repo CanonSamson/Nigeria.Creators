@@ -46,12 +46,15 @@ const CreatorsDashboard = () => {
                 <span className='text-[14px] md:text-[16px]'>{dateRange}</span>
               </button>
             </div>
-            <div className='pl-22 md:pl-0 mr-10 md:mr-0 pr-10 md:pr-0  mt-10 overflow-x-auto  hide-scrollbar'>
+            <div className='pl-22 flex items-start md:pl-0  pr-4 md:pr-0  mt-10 overflow-x-auto  hide-scrollbar'>
               
               <MetricsCard />
+             <span className=' flex w-4 md:w-0'/> 
+
             </div>{' '}
-            <div className='pl-22 mr-10 md:mr-0 md:pl-0 md:pr-0 pr-10  mt-10 overflow-x-auto  hide-scrollbar'>
+            <div className='pl-22   flex items-start md:pl-0 md:pr-0 pr-4  mt-10 overflow-x-auto  hide-scrollbar'>
               <CreatorVisitorChart />
+             <span className=' flex w-4 md:w-0'/> 
             </div>
           </div>
         </div>
