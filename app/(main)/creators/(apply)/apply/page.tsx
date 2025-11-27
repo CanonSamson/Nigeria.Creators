@@ -6,7 +6,7 @@ import Button from '@/components/custom/Button'
 import BasicInfoSection from './_components/sections/BasicInfoSection'
 import ProfileInfoSection from './_components/sections/ProfileInfoSection'
 import SocialInfoSection from './_components/sections/SocialInfoSection'
-import { Formik, FormikHelpers, FormikValues } from 'formik'
+import { useFormik, FormikProvider, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { supabaseService } from '@/utils/supabase/services'
 import { v4 as uuidv4 } from 'uuid'
@@ -19,8 +19,7 @@ const validationSchema = Yup.object({
   email: Yup.string().trim().email('Enter a valid email').required('Required'),
   phone: Yup.string()
     .trim()
-    .matches(/^(?:\+?234|0)\d{10}$/,
-      'Enter a valid Nigerian phone number')
+    .matches(/^(?:\+?234|0)\d{10}$/, 'Enter a valid Nigerian phone number')
     .required('Required'),
   resident: Yup.string()
     .oneOf(['yes', 'no'], 'Select one')
@@ -44,7 +43,7 @@ const stepFields: Record<number, string[]> = {
 
 export default function CreatorApplyPage () {
   const [totalSteps] = useState(4)
-  const [currentStep, setCurrentStep] = useState(2)
+  const [currentStep, setCurrentStep] = useState(1)
   const [lastProfileUpload, setLastProfileUpload] = useState<{
     name: string
     size: number
@@ -82,7 +81,7 @@ export default function CreatorApplyPage () {
   }
 
   const handleSubmit = async (
-    values: FormikValues,
+    values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
@@ -141,10 +140,19 @@ export default function CreatorApplyPage () {
           contentLink: values.contentLink.trim(),
           instagram: values.instagram || null,
           tiktok: values.tiktok || null,
-          profilePictureUrl: profileUrl,
+          profilePictureUrl: profileUrl
         },
         id
       )
+
+      await fetch(`/api/apply-as-creator`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailLower,
+          name: values.name.trim()
+        })
+      })
 
       router.replace(`/creators/requested?id=${id}`)
     } catch (e) {
@@ -154,87 +162,87 @@ export default function CreatorApplyPage () {
       setSubmitting(false)
     }
   }
+  const formik = useFormik<FormValues>({
+    initialValues,
+    validationSchema,
+    onSubmit: handleSubmit
+  })
+
   return (
-    <Formik<FormValues>
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {({ validateForm, submitForm, setFieldTouched, isSubmitting }) => (
-        <section className='mt-8 w-full flex-col  '>
-          <div className='w-full max-w-[580px] mx-auto'>
-            <div className='flex items-center gap-3'>
-              {Array.from({ length: totalSteps }).map((_, i) => (
-                <div
-                  key={i}
-                  aria-hidden
-                  className={`h-[4px] flex-1 rounded-full ${
-                    i < currentStep ? 'bg-primary' : 'bg-[#EAEAEA]'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <div className='mt-4'>
-              <p
-                id='step-heading'
-                className='text-primary text-[14px] md:text-[16px] font-medium'
-              >
-                Step {currentStep}/{totalSteps}
-              </p>
-            </div>
-          </div>
-
-          <div className=' w-full max-w-[640px] mx-auto flex flex-col'>
-            {currentStep === 1 ? (
-              <CategorySection />
-            ) : currentStep === 2 ? (
-              <BasicInfoSection />
-            ) : currentStep === 3 ? (
-              <ProfileInfoSection />
-            ) : currentStep === 4 ? (
-              <SocialInfoSection />
-            ) : null}
-
-            <div className='mt-8  w-full mx-auto ml-auto flex items-center justify-between '>
-              {currentStep > 1 ? (
-                <Button
-                  text='Previous Step'
-                  type='outline'
-                  className='w-auto px-5 font-medium py-[12px] text-[16px] rounded-[12px]'
-                  onClick={() =>
-                    setCurrentStep(prev => (prev > 1 ? prev - 1 : prev))
-                  }
-                />
-              ) : (
-                <div />
-              )}
-              <Button
-                text={currentStep < totalSteps ? 'Next Step' : 'Submit'}
-                className=' w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px]'
-                isSubmit={currentStep === totalSteps && isSubmitting}
-                onClick={() => {
-                  const fields = stepFields[currentStep] || []
-                  fields.forEach(f => setFieldTouched(f, true))
-                  validateForm().then(errs => {
-                    const hasErr = fields.some(f =>
-                      Boolean((errs as Record<string, unknown>)[f])
-                    )
-                    if (hasErr) return
-                    if (currentStep < totalSteps) {
-                      setCurrentStep(prev =>
-                        prev < totalSteps ? prev + 1 : prev
-                      )
-                    } else {
-                      submitForm()
-                    }
-                  })
-                }}
+    <FormikProvider value={formik}>
+      <section className='mt-8 w-full flex-col  '>
+        <div className='w-full max-w-[580px] mx-auto'>
+          <div className='flex items-center gap-3'>
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <div
+                key={i}
+                aria-hidden
+                className={`h-[4px] flex-1 rounded-full ${
+                  i < currentStep ? 'bg-primary' : 'bg-[#EAEAEA]'
+                }`}
               />
-            </div>
+            ))}
           </div>
-        </section>
-      )}
-    </Formik>
+
+          <div className='mt-4'>
+            <p
+              id='step-heading'
+              className='text-primary text-[14px] md:text-[16px] font-medium'
+            >
+              Step {currentStep}/{totalSteps}
+            </p>
+          </div>
+        </div>
+
+        <div className=' w-full max-w-[640px] mx-auto flex flex-col'>
+          {currentStep === 1 ? (
+            <CategorySection />
+          ) : currentStep === 2 ? (
+            <BasicInfoSection />
+          ) : currentStep === 3 ? (
+            <ProfileInfoSection />
+          ) : currentStep === 4 ? (
+            <SocialInfoSection />
+          ) : null}
+
+          <div className='mt-8  w-full mx-auto ml-auto flex items-center justify-between '>
+            {currentStep > 1 ? (
+              <Button
+                text='Previous Step'
+                type='outline'
+                className='w-auto px-5 font-medium py-[12px] text-[16px] rounded-[12px]'
+                onClick={() =>
+                  setCurrentStep(prev => (prev > 1 ? prev - 1 : prev))
+                }
+              />
+            ) : (
+              <div />
+            )}
+            <Button
+              text={currentStep < totalSteps ? 'Next Step' : 'Submit'}
+              className=' w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px]'
+              isSubmit={currentStep === totalSteps && formik.isSubmitting}
+              onClick={() => {
+                const fields = stepFields[currentStep] || []
+                fields.forEach(f => formik.setFieldTouched(f, true))
+                formik.validateForm().then(errs => {
+                  const hasErr = fields.some(f =>
+                    Boolean((errs as Record<string, unknown>)[f])
+                  )
+                  if (hasErr) return
+                  if (currentStep < totalSteps) {
+                    setCurrentStep(prev =>
+                      prev < totalSteps ? prev + 1 : prev
+                    )
+                  } else {
+                    formik.submitForm()
+                  }
+                })
+              }}
+            />
+          </div>
+        </div>
+      </section>
+    </FormikProvider>
   )
 }

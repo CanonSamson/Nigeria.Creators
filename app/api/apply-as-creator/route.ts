@@ -5,6 +5,7 @@ export async function POST (request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json()
     const email = String(body?.values?.email || body?.email || '')
+    const name = String(body?.values?.name || body?.name || '')
       .trim()
       .toLowerCase()
 
@@ -15,7 +16,15 @@ export async function POST (request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    await sendEmail(email, 'Waitlist Confirmation', 'waitlist-confirmation', {}, "waitlist")
+    await sendEmail(
+      email,
+      'Thanks for Applying to Join Nigeria Creators',
+      'apply-as-creator',
+      {
+        name
+      },
+      'onboarding'
+    )
 
     return NextResponse.json({ success: true })
   } catch (error) {

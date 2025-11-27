@@ -1,0 +1,47 @@
+export const creatorsFinishUpLinkTemplate = `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to
+        Nigeria Creators — Set Your Password</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+
+<body style="margin:0; padding:24px 0; font-family:'Inter', sans-serif; background-color:#F5F6F8; line-height:1.5;">
+
+    <div style="max-width:600px; margin:0 auto; width:100%;">
+        <div style="background-color:#E5E7EB; padding:16px 20px; display:flex; align-items:center;">
+            <a href="https://nigeriacreators.com.ng" style="text-decoration: none; display: inline-block;">
+                <img src="https://nigeriacreators.com.ng/logo/footer.png" alt="Logo"
+                    style="height: 40px; width: auto; display: block; max-width: 100%;">
+            </a>
+        </div>
+
+        <div style="background-color:#FFFFFF; padding:32px 24px;">
+            <h1 style="color:#111827; font-size:28px; line-height:1.3; font-weight:600; margin:0 0 16px 0;">Welcome to
+                Nigeria Creators — Set Your Password</h1>
+            <p style="color:#6B7280; font-size:16px; margin:0 0 12px 0;">Great news — your application to Nigerian
+                Creators has been approved!</p>
+            <p style="color:#6B7280; font-size:16px; margin:0 0 24px 0;">To access your Creator Dashboard, please set
+                your password using the link below:</p>
+
+            <div style="text-align:center; margin:0 0 24px 0;">
+                <a href="{{setPasswordUrl}}"
+                    style="display:block; width:92%; max-width:520px; margin:0 auto; background-color:#2F6F57; color:#FFFFFF; text-decoration:none; font-size:16px; font-weight:600; padding:14px 16px; border-radius:12px;">Set
+                    Your Password</a>
+            </div>
+
+            <p style="color:#6B7280; font-size:16px; margin:0 0 24px 0;">Once your password is created, you can log in
+                anytime and complete your profile.</p>
+
+            <div style="background-color:#F3F4F6; color:#6B7280; font-size:14px; padding:12px 14px; border-radius:8px;">
+                If you didn't request this email, no worries, you can simply ignore it.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>`

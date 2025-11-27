@@ -67,11 +67,6 @@ function RequestedContent () {
                 We will review your request to ensure you are a good fit to our
                 community. You will be notified within 24 hours.
               </p>
-              {isValid && id ? (
-                <p className='mt-2 text-text-color-200 text-[12px]'>
-                  Reference: {id}
-                </p>
-              ) : null}
             </div>
           </div>
         </section>

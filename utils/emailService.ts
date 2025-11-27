@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import { Resend } from 'resend'
 import { parseTemplate, TemplatePlaceholders } from './templateParser'
+import { EmailFrom } from './contant'
 
 dotenv.config()
 
@@ -10,13 +11,17 @@ export const sendEmail = async (
   to: string,
   subject: string,
   templateName: string,
-  placeholders: TemplatePlaceholders
+  placeholders: TemplatePlaceholders,
+  from: EmailFrom = 'noreply'
 ) => {
   try {
     const htmlContent = parseTemplate(templateName, placeholders)
 
     const apiKey = process.env.RESEND_API_KEY
-    const fromEmail = process.env.EMAIL_FROM
+
+    const fromEmail =
+      `${from}@${process.env.DOMAIN_NAME || 'nigeriacreators.com.ng'}` ||
+      process.env.EMAIL_FROM
 
     if (!apiKey) {
       throw new Error('Missing RESEND_API_KEY')
