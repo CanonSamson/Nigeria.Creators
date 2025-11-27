@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabaseService } from '@/utils/supabase/services'
 
@@ -12,7 +12,6 @@ function RequestedContent () {
   const searchParams = useSearchParams()
   const id = searchParams.get('id') || ''
   const router = useRouter()
-  const [isValid, setIsValid] = useState(false)
   const pathName = usePathname()
   useEffect(() => {
     const handleIsRequested = async () => {
@@ -30,7 +29,6 @@ function RequestedContent () {
           router.replace('/')
           return
         }
-        setIsValid(true)
       } catch {
         router.replace('/')
       }
