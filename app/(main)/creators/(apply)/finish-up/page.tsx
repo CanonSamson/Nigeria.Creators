@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { ReactNode } from 'react'
+import { ReactNode, Suspense } from 'react'
 import FinishUpForm from './_components/FinishUpForm'
 import Navbar from '@/components/navigation/Navbar'
 import Footer from '@/components/landing-page/sections/Footer'
@@ -65,7 +65,9 @@ export default function FinishUpApplication () {
       <div className='w-full  mt-[80px] md:min-h-[100dvh] font-sans'>
         <div className='mx-auto max-w-[1100px] w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start md:items-center pt-[80px] md:pt-[120px] pb-12 md:pb-20'>
           <LeftPanel>
-            <FinishUpForm />
+            <Suspense fallback={null}>
+              <FinishUpForm />
+            </Suspense>
           </LeftPanel>
           <RightPanel />
         </div>

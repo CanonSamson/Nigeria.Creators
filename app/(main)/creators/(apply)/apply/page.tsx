@@ -89,7 +89,7 @@ export default function CreatorApplyPage () {
       const emailLower = values.email.trim().toLowerCase()
       const { data: existing, error: existingError } =
         await supabaseService.client
-          .from('creators-join-request')
+          .from('creators_join_request')
           .select('id')
           .eq('email', emailLower)
           .limit(1)
@@ -129,7 +129,7 @@ export default function CreatorApplyPage () {
       }
 
       await supabaseService.insertDB(
-        'creators-join-request',
+        'creators_join_request',
         {
           categories: values.categories,
           name: values.name.trim(),

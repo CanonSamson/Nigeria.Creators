@@ -21,7 +21,7 @@ function RequestedContent () {
       }
       try {
         const { data, error } = await supabaseService.client
-          .from('creators-join-request')
+          .from('creators_join_request')
           .select('id')
           .eq('id', id)
           .single()

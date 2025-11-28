@@ -32,7 +32,7 @@ export class SupabaseService {
   }
 
   insertDB = async <T extends Record<string, unknown>>(
-    table: 'creators-join-request' | 'wait_list',
+    table: 'creators_join_request' | 'wait_list',
     data: T,
     id?: string
   ): Promise<T> => {

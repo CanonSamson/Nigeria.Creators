@@ -4,7 +4,11 @@ import BasicInput from '@/components/input/BasicInput'
 import Button from '@/components/custom/Button'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { supabaseService } from '@/utils/supabase/services'
+import { CreatorJoinRequestType } from '@/types/request'
+import { toast } from 'sonner'
 
 const schema = Yup.object({
   password: Yup.string()
@@ -19,6 +23,11 @@ const schema = Yup.object({
 
 export default function FinishUpForm () {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id') || ''
+  const pathName = usePathname()
+  const [isLoading, setIsLoading] = useState(true)
+  const [request, setRequest] = useState<CreatorJoinRequestType | null>()
 
   const formik = useFormik<{ password: string; confirmPassword: string }>({
     initialValues: { password: '', confirmPassword: '' },
@@ -26,8 +35,56 @@ export default function FinishUpForm () {
     onSubmit: () => {}
   })
 
+  useEffect(() => {
+    console.log(isLoading)
+    const handleIsRequested = async () => {
+      if (!id) {
+        router.replace('/')
+        return
+      }
+      try {
+        setIsLoading(true)
+
+        const { data, error } = await supabaseService.client
+          .from('creators_join_request')
+          .select('*')
+          .eq('id', id)
+          .single()
+        if (error || !data) {
+          router.replace('/')
+          return
+        }
+        if (data) {
+          setRequest(data)
+        }
+      } catch {
+        router.replace('/')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    handleIsRequested()
+  }, [id, pathName, router])
+
+  const handleSubmit = async () => {
+    if (!request) {
+      toast.error('Not found')
+      return
+    }
+    formik.setTouched({ password: true, confirmPassword: true })
+    formik.validateForm().then(errs => {
+      const hasErr = Boolean(errs.password || errs.confirmPassword)
+      if (hasErr) return
+
+      if (!Boolean(request?.isAccepted === true)) {
+        toast.error('Request not accepted')
+        return
+      }
+    })
+  }
+
   return (
-    <form className='mt-6 space-y-5' aria-label='Finish account setup form'>
+    <div className='mt-6 space-y-5' aria-label='Finish account setup form'>
       <BasicInput
         label='Password'
         type='password'
@@ -61,17 +118,9 @@ export default function FinishUpForm () {
           aria-label='Go to dashboard'
           className='w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px] bg-[#327468] hover:bg-[#285d54]'
           buttonType='button'
-          onClick={e => {
-            e.preventDefault()
-            formik.setTouched({ password: true, confirmPassword: true })
-            formik.validateForm().then(errs => {
-              const hasErr = Boolean(errs.password || errs.confirmPassword)
-              if (hasErr) return
-              router.replace('/creators')
-            })
-          }}
+          onClick={() => handleSubmit()}
         />
       </div>
-    </form>
+    </div>
   )
 }
