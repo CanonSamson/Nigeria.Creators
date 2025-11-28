@@ -1,3 +1,5 @@
+import { tables } from '@/types/supabase/table'
+import type { GetDBFn } from '@/types/supabase/getDB'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 export class SupabaseService {
@@ -45,6 +47,36 @@ export class SupabaseService {
     if (error) throw new Error(error.message)
     return inserted as T
   }
+
+  getDB: GetDBFn = async <T extends Record<string, unknown>>(
+    table: tables,
+    options?: {
+      select?: string
+      filters?: Record<string, unknown>
+      single?: boolean
+      limit?: number
+    }
+  ): Promise<T | T[] | null> => {
+    const select = options?.select ?? '*'
+    let query = this.client.from(table).select(select)
+    if (options?.filters) {
+      for (const [key, value] of Object.entries(options.filters)) {
+        query = query.eq(key, value as any)
+      }
+    }
+    if (options?.limit && options.single !== true) {
+      query = query.limit(options.limit)
+    }
+    if (options?.single ?? true) {
+      const { data, error } = await query.single()
+      if (error) return null
+      return data as unknown as T
+    }
+    const { data, error } = await query
+    if (error) return null
+    return (data as unknown as T[]) ?? []
+  }
+  
 }
 
 export const supabaseService = new SupabaseService()

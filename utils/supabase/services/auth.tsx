@@ -5,7 +5,10 @@ export class SupabaseAuthService extends SupabaseService {
   async signUpWithEmailAndPassword (email: string, password: string) {
     const { data, error } = await this.client.auth.signUp({
       email,
-      password
+      password,
+      options: {
+        emailRedirectTo: undefined
+      }
     })
     if (error) {
       return {
@@ -14,6 +17,7 @@ export class SupabaseAuthService extends SupabaseService {
         message: error.message
       }
     }
+    console.log(data, 'data')
     return {
       success: true,
       data: data

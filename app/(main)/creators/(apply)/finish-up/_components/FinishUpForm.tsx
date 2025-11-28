@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { supabaseService } from '@/utils/supabase/services'
 import { CreatorJoinRequestType } from '@/types/request'
 import { toast } from 'sonner'
+import { supabaseAuthService } from '@/utils/supabase/services/auth'
 
 const schema = Yup.object({
   password: Yup.string()
@@ -28,6 +29,7 @@ export default function FinishUpForm () {
   const pathName = usePathname()
   const [isLoading, setIsLoading] = useState(true)
   const [request, setRequest] = useState<CreatorJoinRequestType | null>()
+  const [isSignUp, setIsSignUp] = useState(false)
 
   const formik = useFormik<{ password: string; confirmPassword: string }>({
     initialValues: { password: '', confirmPassword: '' },
@@ -67,12 +69,14 @@ export default function FinishUpForm () {
   }, [id, pathName, router])
 
   const handleSubmit = async () => {
-    if (!request) {
-      toast.error('Not found')
-      return
-    }
-    formik.setTouched({ password: true, confirmPassword: true })
-    formik.validateForm().then(errs => {
+    try {
+      setIsSignUp(true)
+      if (!request) {
+        toast.error('Not found')
+        return
+      }
+      formik.setTouched({ password: true, confirmPassword: true })
+      const errs = await formik.validateForm()
       const hasErr = Boolean(errs.password || errs.confirmPassword)
       if (hasErr) return
 
@@ -80,7 +84,74 @@ export default function FinishUpForm () {
         toast.error('Request not accepted')
         return
       }
-    })
+
+      const email = String(request.email || '')
+        .trim()
+        .toLowerCase()
+      const password = String(formik.values.password)
+      const res = await supabaseAuthService.signUpWithEmailAndPassword(
+        email,
+        password
+      )
+
+      if (!res.success) {
+        toast.error(res.message || 'Failed to create account')
+        return
+      }
+
+      const userId = res.data?.user?.id
+      try {
+        const { error: userInsertError } = await supabaseService.client
+          .from('users')
+          .insert({
+            id: userId,
+            requestId: request?.id || '',
+            email,
+            name: request?.name || '',
+            roles: ['CREATOR'],
+            profilePictureUrl: request?.profilePictureUrl || '',
+            phoneNumber: request?.phone || '',
+            isEmailVerified: true,
+            resident: request?.resident || 'no',
+            isDisabled: null,
+            isDisabledAt: null,
+            isSuspendedAt: null,
+            isSuspended: null
+          })
+        if (userInsertError) throw new Error(userInsertError.message)
+
+        const { error: profileInsertError } = await supabaseService.client
+          .from('user_profile')
+          .insert({
+            userId,
+            description: request?.description || '',
+            contentLink: request?.contentLink || null,
+            tiktokLink: request?.tiktok || null,
+            instagramLink: request?.instagram || null,
+            categories: request?.categories || []
+          })
+        if (profileInsertError) {
+          await supabaseService.client
+            .from('users')
+            .delete()
+            .eq('userId', userId)
+          throw new Error(profileInsertError.message)
+        }
+      } catch (e) {
+        toast.error('Failed to finalize account setup')
+
+        console.log(e)
+
+        return
+      }
+    } catch (e) {
+      toast.error('Failed to finalize account setup')
+      console.log(e)
+
+      return
+    } finally {
+      setIsSignUp(false)
+    }
   }
 
   return (
@@ -119,6 +190,7 @@ export default function FinishUpForm () {
           className='w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px] bg-[#327468] hover:bg-[#285d54]'
           buttonType='button'
           onClick={() => handleSubmit()}
+          isSubmit={isSignUp}
         />
       </div>
     </div>
