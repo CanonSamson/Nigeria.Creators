@@ -42,37 +42,38 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = React.useState<
     boolean | undefined
   >(undefined)
+  const [isOnline, setIsOnline] = React.useState(true)
+
   const router = useRouter()
 
- useEffect(() => {
-  const init = async () => {
-    await fetchCurrentUser({ load: true })
-  }
-  const { data } = supabaseService.client.auth.onAuthStateChange(
-    (_event, session) => {
-      const authed = !!session?.user
-      setIsAuthenticated(authed)
-      if (authed) {
-        const u = session!.user
-        ;(async () => {
-          const user = await getUser(u.id)
-          if (user) {
-            setCurrentUser(user)
-          } else {
-            setCurrentUser(null)
-          }
-        })()
-      } else {
-        setCurrentUser(null)
-      }
+  useEffect(() => {
+    const init = async () => {
+      await fetchCurrentUser({ load: true })
     }
-  )
-  init()
-  return () => {
-    data.subscription.unsubscribe()
-  }
-}, [])
-
+    const { data } = supabaseService.client.auth.onAuthStateChange(
+      (_event, session) => {
+        const authed = !!session?.user
+        setIsAuthenticated(authed)
+        if (authed) {
+          const u = session!.user
+          ;(async () => {
+            const user = await getUser(u.id)
+            if (user) {
+              setCurrentUser(user)
+            } else {
+              setCurrentUser(null)
+            }
+          })()
+        } else {
+          setCurrentUser(null)
+        }
+      }
+    )
+    init()
+    return () => {
+      data.subscription.unsubscribe()
+    }
+  }, [])
 
   const fetchCurrentUser = async ({ load = true }: { load: boolean }) => {
     try {
@@ -105,7 +106,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-
   const getUser = async (id: string): Promise<UserType | null> => {
     try {
       const userRes = await supabaseService.getDB<UserType>('users', {
@@ -130,6 +130,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       setTimeout(() => setAllowRedirect(true), 50)
     }
   }
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
+
 
   return (
     <UserContext.Provider

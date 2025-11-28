@@ -1,7 +1,33 @@
+'use client'
+import { UserContext } from '@/context/user'
+import { hasPermission } from '@/utils/permissions/auth-abac'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useContextSelector } from 'use-context-selector'
 
 const Navbar = () => {
+  const router = useRouter()
+  const isAuthenticated = useContextSelector(
+    UserContext,
+    state => state.isAuthenticated
+  )
+  const currentUser = useContextSelector(
+    UserContext,
+    state => state.currentUser
+  )
+
+  const isCreator = hasPermission(
+    {
+      blockedBy: [],
+      roles: currentUser?.roles || [],
+      id: currentUser?.id as string
+    },
+    'is-creator',
+    'view',
+    { userId: currentUser?.id as string }
+  )
+
   return (
     <div className=' px-2 md:px-4 fixed w-full top-0 right-0 z-40'>
       <div className='  font-inter mx-auto w-full  mt-[16px] md:mt-[26px] max-w-[583px] items-center border border-[#EFEFEF] sticky top-0 flex justify-between bg-[#F8F8F8] rounded-[16px]  md:rounded-[20px]  p-[10px] md:p-[14px]'>
@@ -29,9 +55,28 @@ const Navbar = () => {
           </ul>
         </nav>
         <div>
-          <button className='duration-300 transition-all active:opacity-80 hover:opacity-80 md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'>
-            I&apos;m a Brand
-          </button>
+          {isAuthenticated ? (
+            <>
+              <button
+                onClick={() => {
+                  if (isCreator) {
+                    router.push('/creator')
+                  } else {
+                    router.push('/brand')
+                  }
+                }}
+                className='duration-300 transition-all active:opacity-80 hover:opacity-80 md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'
+              >
+                Dashboard
+              </button>
+            </>
+          ) : (
+            <>
+              <button className='duration-300 transition-all active:opacity-80 hover:opacity-80 md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'>
+                I&apos;m a Brand
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

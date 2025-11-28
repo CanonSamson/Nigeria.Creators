@@ -36,7 +36,7 @@ const metrics = [
 
 const MetricsCard = () => {
   return (
-    <div className='rounded-[12px] border min-w-[500px] border-[#EFEFEF] bg-white p-4 md:p-6 '>
+    <div className='rounded-[12px] border min-w-[500px] border-[#EFEFEF] bg-white p-4 md:p-6 md:w-full '>
       <div className='flex items-center justify-between'>
         <div>
           <h2 className='text-[18px] md:text-[20px] font-semibold'>

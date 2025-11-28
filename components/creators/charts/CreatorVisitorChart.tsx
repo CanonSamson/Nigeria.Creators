@@ -74,7 +74,7 @@ const CreatorVisitorChart = () => {
   }, [])
 
   return (
-    <div className='rounded-[12px] min-w-[500px]  border border-[#EFEFEF] bg-white p-4 md:p-6 '>
+    <div className='rounded-[12px] min-w-[500px]  border md:w-full border-[#EFEFEF] bg-white p-4 md:p-6 '>
       <div className='flex items-center justify-between'>
         <h3 className='text-[16px] md:text-[18px] font-semibold'>Visitor</h3>
         <button className='text-text-color-200 text-[12px] md:text-[14px] flex items-center gap-1'>

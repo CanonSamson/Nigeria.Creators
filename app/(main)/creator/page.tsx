@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic'
 import DashboardSideBar from '@/components/dashboard-sidebar'
 import { cn } from '@/lib/utils'
 import MetricsCard from '@/components/creators/MetricsCard'
+import { useContextSelector } from 'use-context-selector'
+import { UserContext } from '@/context/user'
 
 const CreatorVisitorChart = dynamic(
   () => import('@/components/creators/charts/CreatorVisitorChart'),
@@ -14,6 +16,11 @@ const CreatorVisitorChart = dynamic(
 
 const CreatorsDashboard = () => {
   const [dateRange] = useState('Mar 5, 2024 - June 5, 2024')
+
+  const currentUser = useContextSelector(
+    UserContext,
+    state => state.currentUser
+  )
 
   return (
     <div
@@ -33,7 +40,7 @@ const CreatorsDashboard = () => {
           <div className='pt-10 md:pt-14 '>
             <div className='pl-22 md:pl-0 md:pr-0 pr-10  flex items-center justify-between'>
               <h1 className='text-[28px] md:text-[36px] font-bold tracking-tight'>
-                Welcome, Canon
+                Welcome, {currentUser?.name || ''}
               </h1>
               <button className='hidden md:flex items-center gap-2 h-[40px] px-4 rounded-[12px] border border-[#EFEFEF] bg-white text-black'>
                 <Filter className='h-4 w-4 text-text-color-200' />
@@ -46,15 +53,13 @@ const CreatorsDashboard = () => {
                 <span className='text-[14px] md:text-[16px]'>{dateRange}</span>
               </button>
             </div>
-            <div className='pl-22 flex items-start md:pl-0  pr-4 md:pr-0  mt-10 overflow-x-auto  hide-scrollbar'>
-              
+            <div className='pl-22 flex items-start md:pl-0 pr-4 md:pr-0  mt-10 overflow-x-auto  md:w-full hide-scrollbar'>
               <MetricsCard />
-             <span className=' flex w-4 md:w-0'/> 
-
+              <span className=' flex w-4 md:w-0' />
             </div>{' '}
-            <div className='pl-22   flex items-start md:pl-0 md:pr-0 pr-4  mt-10 overflow-x-auto  hide-scrollbar'>
+            <div className='pl-22   flex items-start md:pl-0 md:pr-0 pr-4   mt-10 overflow-x-auto  hide-scrollbar'>
               <CreatorVisitorChart />
-             <span className=' flex w-4 md:w-0'/> 
+              <span className=' flex w-4 md:w-0' />
             </div>
           </div>
         </div>

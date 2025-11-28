@@ -1,7 +1,7 @@
 export type Roles = 'CREATOR' | 'BRAND'
 
 export type UserType = {
-  userId: string
+  id: string
   requestId: string
   email: string
   name: string
@@ -16,6 +16,7 @@ export type UserType = {
   isSuspended: boolean | null
 }
 export type UserProfileType = {
+  userId : string
   description: string
   contentLink: string | null
   tiktokLink: string | null

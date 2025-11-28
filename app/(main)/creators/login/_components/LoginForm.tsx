@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { supabaseAuthService } from '@/utils/supabase/services/auth'
 import { useState } from 'react'
+import { useContextSelector } from 'use-context-selector'
+import { UserContext } from '@/context/user'
 
 const schema = Yup.object({
   email: Yup.string().trim().email('Enter a valid email').required('Required'),
@@ -21,7 +23,11 @@ export default function LoginForm () {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  
+  const fetchCurrentUser = useContextSelector(
+    UserContext,
+    state => state.fetchCurrentUser
+  )
+
   const onSubmit = async () => {
     setTouched({ email: true, password: true })
     const errs = await validateForm()
@@ -41,8 +47,10 @@ export default function LoginForm () {
         toast.error(res.message || 'Failed to login')
         return
       }
-      router.replace('/creators')
-    } catch (e) {
+      await fetchCurrentUser({ load: false })
+      router.replace('/creator')
+    } catch (err) {
+      console.log(err)
       toast.error('Something went wrong, please try again')
     } finally {
       setIsLoading(false)

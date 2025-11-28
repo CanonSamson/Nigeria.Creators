@@ -11,4 +11,6 @@ export const EMAILS_FROM = {
 
 }
 
+export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE === 'true'
+
 export type EmailFrom = keyof typeof EMAILS_FROM
