@@ -101,13 +101,14 @@ const CreatorsDashboard = () => {
               <h1 className='text-[28px] md:text-[36px] font-bold tracking-tight'>
                 Welcome, {currentUser?.name || ''}
               </h1>
-              <PreviewProfileButton />
             </div>
             <div className=' pl-22 md:pl-0 md:pr-0 pr-10  mt-6 flex items-center gap-3'>
               <button className='flex items-center gap-2 h-[40px] px-3 rounded-[12px] border border-[#EFEFEF] bg-white text-black'>
                 <Calendar className='h-4 w-4 text-text-color-200' />
                 <span className='text-[14px] md:text-[16px]'>{dateRange}</span>
               </button>
+              <PreviewProfileButton />
+
             </div>
             <div className='pl-22 flex items-start md:pl-0 pr-4 md:pr-0  mt-10 overflow-x-auto  md:w-full hide-scrollbar'>
               <MetricsCard />
@@ -137,10 +138,9 @@ function PreviewProfileButton () {
   return (
     <button
       onClick={handleClick}
-      className='hidden md:flex items-center gap-2 h-[40px] px-4 rounded-[12px] border border-[#EFEFEF] bg-white text-black'
+      className=' flex items-center gap-2 h-[40px] px-4 rounded-[12px] border border-[#EFEFEF] bg-white text-black'
     >
       <Eye className='h-4 w-4 text-text-color-200' />
-      Preview Profile
     </button>
   )
 }
