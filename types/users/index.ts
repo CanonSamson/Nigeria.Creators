@@ -5,7 +5,7 @@ export type UserType = {
   requestId: string
   email: string
   name: string
-  roles: Roles[]
+  role: Roles
   profilePictureUrl: string
   phoneNumber: string
   isEmailVerified: boolean

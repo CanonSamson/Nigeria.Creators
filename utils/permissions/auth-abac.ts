@@ -2,7 +2,7 @@ import { Roles } from '@/types/users'
 
 type User = {
   blockedBy: string[]
-  roles: Roles[]
+  role: Roles | Roles[] | undefined
   id: string
 }
 
@@ -77,28 +77,26 @@ export function hasPermission<Resource extends keyof Permissions> (
   resource: Resource,
   action: Permissions[Resource]['action'],
   data?: Permissions[Resource]['dataType']
-) {
-  return user.roles.some(role => {
-    // Check if the role exists in ROLES
-    if (!(role in ROLES)) return false
+): boolean {
+  const roles: Roles[] = Array.isArray(user.role)
+    ? user.role
+    : user.role
+    ? [user.role]
+    : []
 
-    // Check if the resource exists for this role
-    const resourcePermissions = ROLES[role as keyof typeof ROLES][resource]
-    if (!resourcePermissions) return false
+  if (roles.length === 0) return false
 
-    // Check if the action exists for this resource
+  for (const r of roles) {
+    if (!(r in ROLES)) continue
+    const resourcePermissions = ROLES[r as keyof typeof ROLES][resource]
+    if (!resourcePermissions) continue
     const permission = resourcePermissions[action]
-    if (permission == null) return false
-
-    if (typeof permission === 'boolean') return permission
-    return (
-      data != null &&
-      (
-        permission as (
-          user: User,
-          data: Permissions[Resource]['dataType']
-        ) => boolean
-      )(user, data)
-    )
-  })
+    if (permission == null) continue
+    if (typeof permission === 'boolean') {
+      if (permission) return true
+    } else if (data != null && permission(user, data)) {
+      return true
+    }
+  }
+  return false
 }

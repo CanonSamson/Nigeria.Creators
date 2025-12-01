@@ -20,7 +20,7 @@ const Navbar = () => {
   const isCreator = hasPermission(
     {
       blockedBy: [],
-      roles: currentUser?.roles || [],
+      role: currentUser?.role,
       id: currentUser?.id as string
     },
     'is-creator',

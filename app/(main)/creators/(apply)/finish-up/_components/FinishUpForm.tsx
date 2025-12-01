@@ -108,15 +108,15 @@ export default function FinishUpForm () {
             requestId: request?.id || '',
             email,
             name: request?.name || '',
-            roles: ['CREATOR'],
+            role: 'CREATOR',
             profilePictureUrl: request?.profilePictureUrl || '',
             phoneNumber: request?.phone || '',
             isEmailVerified: true,
             resident: request?.resident || 'no',
-            isDisabled: null,
+            isDisabled: false,
             isDisabledAt: null,
             isSuspendedAt: null,
-            isSuspended: null
+            isSuspended: false
           })
         if (userInsertError) throw new Error(userInsertError.message)
 
