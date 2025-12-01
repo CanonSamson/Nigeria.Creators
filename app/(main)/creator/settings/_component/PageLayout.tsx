@@ -6,7 +6,6 @@ import { ReactNode } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useContextSelector } from 'use-context-selector'
-import Avatar from '@/components/ui/avatar'
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   const currentUser = useContextSelector(
@@ -43,14 +42,8 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                 </p>
               </div>
 
-              <div className='pl-22 md:pl-0 md:pr-0 pr-10 mt-8 flex items-center gap-4'>
-                <Avatar
-                  img={currentUser?.profilePictureUrl || ''}
-                  alt={currentUser?.name || 'Profile'}
-                  fullName={currentUser?.name || ''}
-                  className='md:h-12 md:w-12'
-                  innerClassName='size-10 md:size-12 rounded-3xl object-cover object-center'
-                />
+              <div className='   mt-8 flex items-center gap-4'>
+                <div className='h-10 w-10 md:h-12 md:w-12 rounded-full bg-[#EFEFEF] overflow-hidden' />
                 <div>
                   <p className='text-[16px] md:text-[18px] font-medium text-black'>
                     {currentUser?.name || ''} / Creator
