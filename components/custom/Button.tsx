@@ -27,7 +27,7 @@ const Button = ({
       type={buttonType}
       className={cn(
         'w-full active:scale-95 font-sans rounded-[12px] text-[14px] items-center transition-all justify-center py-4 font-light flex gap-2',
-        color ? color : 'bg-primary hover:bg-primary-dark duration-300',
+        color ? color : 'bg-primary hover:bg-primary-dark duration-700',
         type === 'outline'
           ? cn(
               color

@@ -5,7 +5,7 @@ import Button from '@/components/custom/Button'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+// import { toast } from 'sonner'
 import { supabaseAuthService } from '@/utils/supabase/services/auth'
 import { useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
@@ -22,6 +22,7 @@ const schema = Yup.object({
 export default function LoginForm () {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const fetchCurrentUser = useContextSelector(
     UserContext,
@@ -34,6 +35,7 @@ export default function LoginForm () {
     const hasErr = Boolean(errs.email || errs.password)
     if (hasErr) return
     setIsLoading(true)
+    setError('')
     try {
       const email = String(values.email || '')
         .trim()
@@ -44,14 +46,14 @@ export default function LoginForm () {
         password
       )
       if (!res.success) {
-        toast.error(res.message || 'Failed to login')
+        setError(res.message || 'Failed to login')
         return
       }
       await fetchCurrentUser({ load: false })
       router.replace('/creator')
     } catch (err) {
       console.log(err)
-      toast.error('Something went wrong, please try again')
+      setError('Something went wrong, please try again')
     } finally {
       setIsLoading(false)
     }
@@ -96,6 +98,11 @@ export default function LoginForm () {
         }
       />
 
+      <div>
+        {error ? (
+          <p className='mt-1 text-[14px] text-red-500'>{error}</p>
+        ) : null}
+      </div>
       <div className='pt-2'>
         <Button
           text='Login'

@@ -2,13 +2,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Instagram, Youtube, Camera } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 const Footer = () => {
+  const pathname = usePathname()
+
+  const hideCard = pathname === '/creators/login'
   return (
-    <footer aria-label='Footer' className='w-full py-[200px]'>
+    <footer aria-label='Footer' className={cn('w-full ' ,hideCard ?" pb-[200px] md:py-[200px]": "py-[200px]")}>
       <div className='w-full px-6 md:px-10'>
         <div className='mx-auto max-w-[1100px]'>
-          <div className='relative py-10 overflow-hidden rounded-[20px] bg-primary/80'>
+          <div className={cn('relative py-10 overflow-hidden rounded-[20px] bg-primary/80',  hideCard ? "hidden md:block" : "")}>
             <div className='absolute inset-0 grid grid-cols-4 opacity-35'>
               <Image
                 src='/hero/2.png'
