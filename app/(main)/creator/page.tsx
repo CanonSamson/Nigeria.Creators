@@ -1,7 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { Calendar, Filter } from 'lucide-react'
+import { useMemo } from 'react'
+import { Calendar, Eye } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import DashboardSideBar from '@/components/dashboard-sidebar'
 import { cn } from '@/lib/utils'
@@ -10,6 +10,7 @@ import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
 import { useQuery } from '@tanstack/react-query'
 import { supabaseService } from '@/utils/supabase/services'
+import { useSettingModal } from '@/context/model-settings'
 
 const CreatorEngagementsChart = dynamic(
   () => import('@/components/creators/charts/CreatorEngagementsChart'),
@@ -17,12 +18,25 @@ const CreatorEngagementsChart = dynamic(
 )
 
 const CreatorsDashboard = () => {
-  const [dateRange] = useState('Mar 5, 2024 - June 5, 2024')
+  
 
   const currentUser = useContextSelector(
     UserContext,
     state => state.currentUser
   )
+
+  const dateRange = useMemo(() => {
+    const createdAt = currentUser?.createdAt
+    const start = createdAt ? new Date(createdAt as unknown as string) : null
+    if (!start || isNaN(start.getTime())) return ''
+    const end = new Date()
+    const fmt = new Intl.DateTimeFormat('en', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+    return `${fmt.format(start)} - ${fmt.format(end)}`
+  }, [currentUser?.createdAt])
 
   const { labels, startIso } = useMemo((): {
     labels: string[]
@@ -81,16 +95,13 @@ const CreatorsDashboard = () => {
         )}
       >
         <DashboardSideBar />
-        <div className=' max-w-[1200px] w-full flex-1 mx-auto'>
+        <div className=' pb-[100px] md:max-w-[80%] md:w-full  min-[800px]:max-w-[1200px] w-full flex-1 mx-auto'>
           <div className='pt-10 md:pt-14 '>
             <div className='pl-22 md:pl-0 md:pr-0 pr-10  flex items-center justify-between'>
               <h1 className='text-[28px] md:text-[36px] font-bold tracking-tight'>
                 Welcome, {currentUser?.name || ''}
               </h1>
-              <button className='hidden md:flex items-center gap-2 h-[40px] px-4 rounded-[12px] border border-[#EFEFEF] bg-white text-black'>
-                <Filter className='h-4 w-4 text-text-color-200' />
-                Filter
-              </button>
+              <PreviewProfileButton />
             </div>
             <div className=' pl-22 md:pl-0 md:pr-0 pr-10  mt-6 flex items-center gap-3'>
               <button className='flex items-center gap-2 h-[40px] px-3 rounded-[12px] border border-[#EFEFEF] bg-white text-black'>
@@ -114,3 +125,22 @@ const CreatorsDashboard = () => {
 }
 
 export default CreatorsDashboard
+
+function PreviewProfileButton () {
+  const { openModal } = useSettingModal()
+  const currentUser = useContextSelector(UserContext, state => state.currentUser)
+  const handleClick = () => {
+    const userId = currentUser?.id || ''
+    if (!userId) return
+    openModal('creatorProfileModal', { userId })
+  }
+  return (
+    <button
+      onClick={handleClick}
+      className='hidden md:flex items-center gap-2 h-[40px] px-4 rounded-[12px] border border-[#EFEFEF] bg-white text-black'
+    >
+      <Eye className='h-4 w-4 text-text-color-200' />
+      Preview Profile
+    </button>
+  )
+}

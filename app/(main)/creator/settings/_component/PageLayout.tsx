@@ -6,6 +6,7 @@ import { ReactNode } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useContextSelector } from 'use-context-selector'
+import Avatar from '@/components/ui/avatar'
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   const currentUser = useContextSelector(
@@ -31,9 +32,9 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
       >
         <DashboardSideBar />
         <div className=' max-w-[1200px] w-full flex-1 mx-auto'>
-          <div className='pt-10 md:pt-14 pl-22 md:pl-26 flex items-start  md:pr-10   w-full '>
+          <div className='pt-20 md:mtp-10 md:pt-14  px-4 md:pl-26 flex items-start  md:pr-10   w-full '>
             <div className='pt-10 md:pt-14  w-full sm:max-w-[80%] md:max-w-[90%]'>
-              <div className=' '>
+              <div className=' md:text-start text-center '>
                 <h1 className='text-[28px] md:text-[36px] font-bold tracking-tight'>
                   Account Settings
                 </h1>
@@ -42,8 +43,15 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                 </p>
               </div>
 
-              <div className='   mt-8 flex items-center gap-4'>
-                <div className='h-10 w-10 md:h-12 md:w-12 rounded-full bg-[#EFEFEF] overflow-hidden' />
+              <div className=' flex-col text-center md:text-start md:flex-row   mt-8 flex items-center gap-4'>
+                <Avatar
+                  img={currentUser?.profilePictureUrl || ''}
+                  fullName={currentUser?.name || ''}
+                  className='h-10 w-10 md:h-12 md:w-12'
+                  innerClassName='size-10 md:size-12 rounded-full object-cover'
+                  width={100}
+                  height={100}
+                />
                 <div>
                   <p className='text-[16px] md:text-[18px] font-medium text-black'>
                     {currentUser?.name || ''} / Creator
@@ -56,7 +64,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               <div className=' mt-10 flex flex-col  md:flex-row items-start gap-6 w-full'>
                 <div className=' md:w-[250px]'>
                   <div>
-                    <p className='text-[16px] md:text-[18px] font-medium text-black'>
+                    <p className='text-[16px] hidden md:block md:text-[18px] font-medium text-black'>
                       General
                     </p>
                     <div className='mt-3 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
@@ -74,7 +82,10 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                       <Link
                         href={'/creator/settings/password'}
                         className={cn(
-                          'text-[14px] md:text-[16px] text-text-color-200 flex-none'
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/creator/settings/password'
+                            ? 'text-[#327468]'
+                            : 'text-black'
                         )}
                       >
                         Password
@@ -82,7 +93,10 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                       <Link
                         href={'/creator/settings/social'}
                         className={cn(
-                          'text-[14px] md:text-[16px] text-text-color-200 flex-none'
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/creator/settings/social'
+                            ? 'text-[#327468]'
+                            : 'text-black'
                         )}
                       >
                         Social Profiles
@@ -90,7 +104,10 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                       <Link
                         href={'/creator/settings/notifications'}
                         className={cn(
-                          'text-[14px] md:text-[16px] text-text-color-200 flex-none'
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/creator/settings/notifications'
+                            ? 'text-[#327468]'
+                            : 'text-black'
                         )}
                       >
                         Email Notifications
@@ -115,7 +132,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                     </div>
                   </div>
                 </div>
-                <div className=' flex-1 w-full '>{children}</div>
+                <div className=' flex-1 w-full pb-20 '>{children}</div>
               </div>
             </div>
           </div>

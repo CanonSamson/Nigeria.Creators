@@ -45,6 +45,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     UserContext,
     state => state.allowRedirect
   )
+  const isOnline = useContextSelector(UserContext, state => state.isOnline)
 
   const isGuestPath = useMemo(() => {
     return APP_DEFAULT_GUEST_PATHS.some(path => {
@@ -76,7 +77,8 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       MAINTENANCE_MODE ||
       isAuthenticated === undefined ||
       isLoading === undefined ||
-      isLoading
+      isLoading ||
+      !isOnline
     )
       return
 
@@ -98,7 +100,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         }
       }
     }
-  }, [isLoading, isAuthenticated, isGuestPath, MAINTENANCE_MODE])
+  }, [isLoading, isAuthenticated, isGuestPath, MAINTENANCE_MODE, isOnline])
 
   const isDontAllowLoadingScreenPath = useMemo(() => {
     return DONT_ALLOW_LOADING_SCREEN_PATHS.some(path => {
@@ -113,7 +115,10 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     })
   }, [pathName])
 
-  if (isLoading && !MAINTENANCE_MODE && !isDontAllowLoadingScreenPath) {
+  if (
+    (isLoading && !MAINTENANCE_MODE && !isDontAllowLoadingScreenPath) ||
+    !isOnline
+  ) {
     return <Loading />
   }
 

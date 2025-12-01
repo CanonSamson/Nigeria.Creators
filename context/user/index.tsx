@@ -17,6 +17,7 @@ export interface UserContextType {
   fetchCurrentUser: ({ load }: { load: boolean }) => Promise<UserType | null>
   setAllowRedirect: React.Dispatch<React.SetStateAction<boolean>>
   allowRedirect: boolean
+  isOnline: boolean
 }
 
 // Create the UserContext
@@ -29,6 +30,7 @@ export const UserContext = createContext<UserContextType>({
   setIsAuthenticated: () => {},
   logout: () => {},
   allowRedirect: true,
+  isOnline: true,
   setAllowRedirect: () => {},
   fetchCurrentUser: async () => null
 })
@@ -46,6 +48,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const router = useRouter()
 
+console.log('UserProvider mounted', isOnline, currentUser?.createdAt)
   useEffect(() => {
     const init = async () => {
       await fetchCurrentUser({ load: true })
@@ -148,6 +151,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <UserContext.Provider
       value={{
+        isOnline,
         currentUser,
         isLoading,
         setIsLoading,

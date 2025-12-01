@@ -1,6 +1,8 @@
 'use client'
 import { UserContext } from '@/context/user'
 import { cn } from '@/lib/utils'
+import DashboardIcon from '@/public/icons/DashboardIcon'
+import SettingsIcon from '@/public/icons/SettingsIcon'
 import { hasPermission } from '@/utils/permissions/auth-abac'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,6 +17,8 @@ const DashboardSideBar = () => {
 
   const pathname = usePathname()
 
+  const isSettings = pathname.includes('/settings')
+
   const isCreator = hasPermission(
     {
       blockedBy: [],
@@ -28,26 +32,51 @@ const DashboardSideBar = () => {
   return (
     <div
       className={cn(
-        '   fixed top-0 z-[50] left-4 h-[100vh] flex flex-col items-center justify-center py-4',
-        ' !h-[100dvh]'
+        '   fixed top-0 z-[50] left-4  flex  items-center justify-center py-4  duration-700 transition-all',
+        isSettings
+          ? ' w-full md:h-[100vh] md:w-auto md:flex-col md:!h-[100dvh]'
+          : 'h-[100vh] flex-col !h-[100dvh]'
       )}
     >
-      <div className='  w-[56px] h-full max-h-[300px] bg-[#F8F8F8] border border-[#EFEFEF] rounded-[20px]  flex flex-col items-center justify-between py-[12px]'>
+      <div
+        className={cn(
+          ` bg-[#F8F8F8] border border-[#EFEFEF] rounded-[20px]  flex  items-center justify-between py-[12px] duration-700 transition-all`,
+          isSettings
+            ? 'h-[56px] w-full max-w-[300px]  md:flex-col md:w-[56px] md:h-full md:max-h-[300px]'
+            : 'flex-col w-[56px] h-full max-h-[300px]'
+        )}
+      >
         <div className='flex flex-col items-center gap-6'>
-          <div className='h-10 w-10 rounded-full '>
+          <div className='h-10 w-10 flex justify-center items-center relative bg-[#F1F1F1]   rounded-[10px]  '>
             <Link href={isCreator ? '/creator' : '/brand'}>
               <Image
                 src='/logo/logo-icon.svg'
                 alt='avatar'
                 width={40}
                 height={40}
-                className='object-contain'
+                className={cn(
+                  'object-contain duration-300 transition-opacity',
+                  pathname === '/creator' ? 'opacity-100' : ' opacity-0'
+                )}
               />
+              <div className=' w-full h-full  flex justify-center items-center top-0 right-0  absolute rounded-[10px]  '>
+                <DashboardIcon
+                  stroke={pathname === '/creator' ? 'white' : '#303030'}
+                />
+              </div>
             </Link>
           </div>
         </div>
-        <div className=' flex flex-col gap-2'>
-          <div className='flex flex-col bg-[#F1F1F1] h-10 w-10  rounded-[10px] items-center justify-center p-1'>
+        <div
+          className={cn(
+            ' flex  gap-2 duration-700 transition-all',
+            isSettings ? ' md:flex-col' : 'flex-col'
+          )}
+        >
+          <div
+            onClick={() => {}}
+            className='flex flex-col bg-[#F1F1F1] h-10 w-10  rounded-[10px] items-center justify-center p-1'
+          >
             <Image
               src='/icons/notification-bing.svg'
               alt='avatar'
@@ -56,22 +85,26 @@ const DashboardSideBar = () => {
               className=' w-[24px] h-[24px] object-contain'
             />
           </div>
-          <Link href={isCreator ? '/creator/settings' : ''}>
-            <div
-              className={cn(
-                'flex flex-col bg-[#F1F1F1] h-10 w-10  rounded-[10px] items-center justify-center p-1',
-                pathname.includes('/settings') ? '' : ''
-              )}
-            >
+
+          <div className='h-10 w-10 flex justify-center items-center relative bg-[#F1F1F1]   rounded-[10px]  '>
+            <Link href={isCreator ? '/creator/settings' : '/brand/settings'}>
               <Image
-                src='/icons/setting-2.svg'
+                src='/logo/logo-icon.svg'
                 alt='avatar'
                 width={40}
                 height={40}
-                className=' w-[24px] h-[24px] object-contain'
+                className={cn(
+                  'object-contain duration-300   transition-opacity',
+                  pathname.includes('/settings') ? 'opacity-100' : ' opacity-0'
+                )}
               />
-            </div>
-          </Link>
+              <div className=' w-full h-full  flex justify-center items-center top-0 right-0  absolute rounded-[10px]  '>
+                <SettingsIcon
+                  stroke={pathname.includes('/settings') ? 'white' : '#303030'}
+                />
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import ProviderWrapper from '@/context/ProviderWrapper'
 import WaitListModal from '../modals/WaitListModal'
+import CreatorProfileModal from '../modals/CreatorProfileModal'
 
 export default function CustomRootLayout ({
   children
@@ -11,6 +12,7 @@ export default function CustomRootLayout ({
       <ProviderWrapper>
         {children}
         <WaitListModal />
+        <CreatorProfileModal />
       </ProviderWrapper>
     </>
   )

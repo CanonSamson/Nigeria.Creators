@@ -1,14 +1,15 @@
 import { Elysia, t } from 'elysia'
 import { supabaseService } from '@/utils/supabase/services'
 
-export const listOfCreatorsRoutes = new Elysia().get(
-  '/creators',
-  async ({ query, set }) => {
-    try {
-      const limit = query.limit ? Math.max(1, Number(query.limit)) : 20
-      const pageNum = query.page ? Number(query.page) : undefined
-      const page = pageNum && pageNum > 0 ? pageNum : undefined
-      const offset = page ? (page - 1) * limit : query.offset ? Number(query.offset) : 0
+export const listOfCreatorsRoutes = new Elysia()
+  .get(
+    '/creators',
+    async ({ query, set }) => {
+      try {
+        const limit = query.limit ? Math.max(1, Number(query.limit)) : 20
+        const pageNum = query.page ? Number(query.page) : undefined
+        const page = pageNum && pageNum > 0 ? pageNum : undefined
+        const offset = page ? (page - 1) * limit : query.offset ? Number(query.offset) : 0
 
       const { data: users, count, error } = await supabaseService.client
         .from('users')
@@ -60,7 +61,10 @@ export const listOfCreatorsRoutes = new Elysia().get(
       }
 
       const profileMap = new Map(
-        (profiles || []).map(p => [p.userId as string, p])
+        (profiles || []).map(p => {
+          const { userId, ...rest } = p
+          return [userId as string, rest]
+        })
       )
 
       const merged = (users || []).map(u => ({
@@ -91,12 +95,74 @@ export const listOfCreatorsRoutes = new Elysia().get(
       set.status = 500
       return { success: false, error: msg }
     }
-  },
-  {
-    query: t.Object({
-      limit: t.Optional(t.String()),
-      offset: t.Optional(t.String()),
-      page: t.Optional(t.String())
-    })
-  }
-)
+    },
+    {
+      query: t.Object({
+        limit: t.Optional(t.String()),
+        offset: t.Optional(t.String()),
+        page: t.Optional(t.String())
+      })
+    }
+  )
+  .get(
+    '/creators/:id',
+    async ({ params, set }) => {
+      try {
+        const id = params.id
+
+        const { data: users, error } = await supabaseService.client
+          .from('users')
+          .select('id,email,name,profilePictureUrl,phoneNumber,resident')
+          .eq('id', id)
+          .eq('role', 'CREATOR')
+          .not('isDisabled', 'eq', true)
+          .not('isSuspended', 'eq', true)
+          .limit(1)
+
+        if (error) {
+          set.status = 500
+          return { success: false, error: error.message }
+        }
+
+        const user = (users || [])[0]
+        if (!user) {
+          set.status = 404
+          return { success: false, error: 'Creator not found' }
+        }
+
+        const { data: profiles, error: pErr } = await supabaseService.client
+          .from('user_profile')
+          .select('userId,description,contentLink,tiktokLink,instagramLink,categories')
+          .eq('userId', id)
+          .limit(1)
+
+        if (pErr) {
+          set.status = 500
+          return { success: false, error: pErr.message }
+        }
+
+        const profile = (profiles || [])[0]
+        const merged = {
+          ...user,
+          profile: profile
+            ? {
+                description: profile.description,
+                contentLink: profile.contentLink,
+                tiktokLink: profile.tiktokLink,
+                instagramLink: profile.instagramLink,
+                categories: profile.categories
+              }
+            : null
+        }
+
+        return { success: true, data: merged }
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        set.status = 500
+        return { success: false, error: msg }
+      }
+    },
+    {
+      params: t.Object({ id: t.String() })
+    }
+  )

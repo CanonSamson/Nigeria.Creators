@@ -10,8 +10,16 @@ import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
 
 const schema = Yup.object({
-  contentLink: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
-  instagramLink: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
+  contentLink: Yup.string()
+    .trim()
+    .url('Enter a valid URL')
+    .nullable()
+    .optional(),
+  instagramLink: Yup.string()
+    .trim()
+    .url('Enter a valid URL')
+    .nullable()
+    .optional(),
   tiktokLink: Yup.string().trim().url('Enter a valid URL').nullable().optional()
 })
 
@@ -22,7 +30,11 @@ export default function SocialSettingsPage () {
     state => state.currentUser
   )
 
-  const formik = useFormik<{ contentLink: string; instagramLink: string; tiktokLink: string }>({
+  const formik = useFormik<{
+    contentLink: string
+    instagramLink: string
+    tiktokLink: string
+  }>({
     initialValues: { contentLink: '', instagramLink: '', tiktokLink: '' },
     validationSchema: schema,
     onSubmit: async values => {
@@ -73,15 +85,19 @@ export default function SocialSettingsPage () {
   }, [currentUser?.id])
 
   return (
-    <div className='pl-22 font-sans md:pl-0 md:pr-0 pr-10 max-w-[640px] space-y-6'>
-    <div>
-        <h2 className='text-[18px] md:text-[22px] font-bold text-black'>Social Profiles</h2>
-      <p className='text-text-color-200 text-[14px] md:text-[16px]'>Help us understand your creative focus and goals.</p>
-
-    </div>
+      <div className='font-sans space-y-6'>
+      <div>
+        <h2 className='text-[18px] md:text-[22px] font-bold text-black'>
+          Social Profiles
+        </h2>
+        <p className='text-text-color-200 text-[14px] md:text-[16px]'>
+          Help us understand your creative focus and goals.
+        </p>
+      </div>
       <div>
         <label className='block text-[13px] md:text-[14px] text-black mb-2'>
-          Content Creator link to instagram post you have made (this will show on your profile)
+          Content Creator link to instagram post you have made (this will show
+          on your profile)
         </label>
         <input
           name='contentLink'
@@ -126,10 +142,16 @@ export default function SocialSettingsPage () {
           buttonType='button'
           isSubmit={isSubmitting}
           onClick={() => {
-            formik.setTouched({ contentLink: true, instagramLink: true, tiktokLink: true })
+            formik.setTouched({
+              contentLink: true,
+              instagramLink: true,
+              tiktokLink: true
+            })
             formik.validateForm().then(errs => {
               const hasErr = Boolean(
-                (errs as any).contentLink || (errs as any).instagramLink || (errs as any).tiktokLink
+                (errs as any).contentLink ||
+                  (errs as any).instagramLink ||
+                  (errs as any).tiktokLink
               )
               if (hasErr) return
               formik.submitForm()

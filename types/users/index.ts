@@ -1,6 +1,7 @@
 export type Roles = 'CREATOR' | 'BRAND'
 
 export type UserType = {
+  createdAt: Date
   id: string
   requestId: string
   email: string

@@ -131,7 +131,7 @@ export default function NotificationSettingsPage () {
   )
 
   return (
-    <div className='pl-22 md:pl-0 md:pr-0 pr-10 font-sans max-w-[640px] space-y-6'>
+    <div className=' font-sans max-w-[640px] space-y-6'>
       <div>
         <h2 className='text-[18px] md:text-[22px] font-bold text-black'>
           Notification Preferences
