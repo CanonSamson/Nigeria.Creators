@@ -5,18 +5,21 @@ export const listOfCreatorsRoutes = new Elysia().get(
   '/creators',
   async ({ query, set }) => {
     try {
-      const limit = query.limit ? Number(query.limit) : 20
-      const offset = query.offset ? Number(query.offset) : 0
+      const limit = query.limit ? Math.max(1, Number(query.limit)) : 20
+      const pageNum = query.page ? Number(query.page) : undefined
+      const page = pageNum && pageNum > 0 ? pageNum : undefined
+      const offset = page ? (page - 1) * limit : query.offset ? Number(query.offset) : 0
 
-      const { data: users, error } = await supabaseService.client
+      const { data: users, count, error } = await supabaseService.client
         .from('users')
-        .select('id,email,name,profilePictureUrl,phoneNumber,resident')
+        .select('id,email,name,profilePictureUrl,phoneNumber,resident', {
+          count: 'exact'
+        })
         .eq('role', 'CREATOR')
         .not('isDisabled', 'eq', true)
         .not('isSuspended', 'eq', true)
         .range(offset, offset + limit - 1)
 
-      console.log(error)
       if (error) {
         set.status = 500
         return { success: false, error: error.message }
@@ -24,7 +27,24 @@ export const listOfCreatorsRoutes = new Elysia().get(
 
       const ids = (users || []).map(u => u.id)
       if (ids.length === 0) {
-        return { success: true, data: [] }
+        const total = count ?? 0
+        const currentPage = page ?? Math.floor(offset / limit) + 1
+        const pageCount = total > 0 ? Math.ceil(total / limit) : 0
+        const hasNext = offset + limit < total
+        const hasPrev = offset > 0
+        return {
+          success: true,
+          data: [],
+          pagination: {
+            total,
+            limit,
+            offset,
+            page: currentPage,
+            pageCount,
+            hasNext,
+            hasPrev
+          }
+        }
       }
 
       const { data: profiles, error: pErr } = await supabaseService.client
@@ -48,7 +68,24 @@ export const listOfCreatorsRoutes = new Elysia().get(
         profile: profileMap.get(u.id) || null
       }))
 
-      return { success: true, data: merged }
+      const total = count ?? 0
+      const currentPage = page ?? Math.floor(offset / limit) + 1
+      const pageCount = total > 0 ? Math.ceil(total / limit) : 0
+      const hasNext = offset + limit < total
+      const hasPrev = offset > 0
+      return {
+        success: true,
+        data: merged,
+        pagination: {
+          total,
+          limit,
+          offset,
+          page: currentPage,
+          pageCount,
+          hasNext,
+          hasPrev
+        }
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e)
       set.status = 500
@@ -58,7 +95,8 @@ export const listOfCreatorsRoutes = new Elysia().get(
   {
     query: t.Object({
       limit: t.Optional(t.String()),
-      offset: t.Optional(t.String())
+      offset: t.Optional(t.String()),
+      page: t.Optional(t.String())
     })
   }
 )
