@@ -4,21 +4,17 @@ import { useEffect, useRef } from 'react'
 import ApexCharts from 'apexcharts'
 import { ChevronRight } from 'lucide-react'
 
-const CreatorVisitorChart = () => {
+const CreatorEngagementsChart = ({
+  data,
+  categories
+}: {
+  data: number[]
+  categories: string[]
+}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (!chartRef.current) return
-
-    const data = [12, 50, 120, 100, 100, 20]
-    const categories = [
-      'Apr 21',
-      'May 21',
-      'Jun 21',
-      'Jul 21',
-      'Jun 21',
-      'Apr 21'
-    ]
 
     const chart = new ApexCharts(chartRef.current, {
       chart: {
@@ -71,12 +67,14 @@ const CreatorVisitorChart = () => {
     return () => {
       chart.destroy()
     }
-  }, [])
+  }, [data, categories])
 
   return (
     <div className='rounded-[12px] min-w-[500px]  border md:w-full border-[#EFEFEF] bg-white p-4 md:p-6 '>
       <div className='flex items-center justify-between'>
-        <h3 className='text-[16px] md:text-[18px] font-semibold'>Visitor</h3>
+        <h3 className='text-[16px] md:text-[18px] font-semibold'>
+          Engagements
+        </h3>
         <button className='text-text-color-200 text-[12px] md:text-[14px] flex items-center gap-1'>
           More <ChevronRight className='h-3 w-3' />
         </button>
@@ -88,4 +86,4 @@ const CreatorVisitorChart = () => {
   )
 }
 
-export default CreatorVisitorChart
+export default CreatorEngagementsChart

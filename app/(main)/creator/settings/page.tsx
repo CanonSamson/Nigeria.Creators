@@ -3,6 +3,7 @@
 import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
 import BasicInput from '@/components/input/BasicInput'
+import CustomPhoneInput from '@/components/input/CustomPhoneInput'
 import Button from '@/components/custom/Button'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -32,6 +33,11 @@ const CreatorsDashboard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const fetchCurrentUser = useContextSelector(
+    UserContext,
+    state => state.fetchCurrentUser
+  )
 
   const formik = useFormik<{
     name: string
@@ -88,6 +94,7 @@ const CreatorsDashboard = () => {
           .eq('userId', userId)
         if (profileUpdateError) throw new Error(profileUpdateError.message)
 
+        await fetchCurrentUser({ load: false })
         toast.success('Settings updated')
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e)
@@ -142,12 +149,11 @@ const CreatorsDashboard = () => {
           }
         />
 
-        <BasicInput
+        <CustomPhoneInput
           label='Phone No'
-          name='phoneNumber'
           value={formik.values.phoneNumber}
-          onChange={formik.handleChange}
-          placeholder='Phone No'
+          onChange={v => formik.setFieldValue('phoneNumber', v)}
+          className=''
           error={
             formik.touched.phoneNumber && formik.errors.phoneNumber
               ? String(formik.errors.phoneNumber)

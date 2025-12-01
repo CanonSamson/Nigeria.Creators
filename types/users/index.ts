@@ -9,17 +9,25 @@ export type UserType = {
   profilePictureUrl: string
   phoneNumber: string
   isEmailVerified: boolean
- resident: 'yes' | 'no' | string
+  resident: 'yes' | 'no' | string
   isDisabled: boolean | null
   isDisabledAt: Date | null
   isSuspendedAt: Date | null
   isSuspended: boolean | null
 }
 export type UserProfileType = {
-  userId : string
+  userId: string
   description: string
   contentLink: string | null
   tiktokLink: string | null
   instagramLink: string | null
   categories: string[]
+}
+
+export type UserSettingsType = {
+  id: string
+  userId: string
+  isNotificationEnabled: boolean
+  isWeeklyEmailEnabled: boolean
+  isBrandEmailEnabled: boolean
 }

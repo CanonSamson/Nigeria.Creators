@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Calendar, Filter } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import DashboardSideBar from '@/components/dashboard-sidebar'
@@ -8,9 +8,11 @@ import { cn } from '@/lib/utils'
 import MetricsCard from '@/components/creators/MetricsCard'
 import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
+import { useQuery } from '@tanstack/react-query'
+import { supabaseService } from '@/utils/supabase/services'
 
-const CreatorVisitorChart = dynamic(
-  () => import('@/components/creators/charts/CreatorVisitorChart'),
+const CreatorEngagementsChart = dynamic(
+  () => import('@/components/creators/charts/CreatorEngagementsChart'),
   { ssr: false }
 )
 
@@ -21,6 +23,49 @@ const CreatorsDashboard = () => {
     UserContext,
     state => state.currentUser
   )
+
+  const { labels, startIso } = useMemo((): {
+    labels: string[]
+    startIso: string
+  } => {
+    const now = new Date()
+    const months: string[] = []
+    const formatter = new Intl.DateTimeFormat('en', {
+      month: 'short',
+      year: '2-digit'
+    })
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+      months.push(formatter.format(d))
+    }
+    const start = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+    return { labels: months, startIso: start.toISOString() }
+  }, [])
+
+  const creatorId = currentUser?.id || ''
+  const { data: engagements = [] } = useQuery({
+    queryKey: ['creator-engagements-monthly', creatorId, startIso],
+    enabled: !!creatorId,
+    queryFn: async () => {
+      const { data } = await supabaseService.client
+        .from('metrics')
+        .select('timestamp')
+        .eq('creatorId', creatorId)
+        .eq('eventName', 'POST_ENGAGEMENT')
+        .gte('timestamp', startIso)
+      const buckets = new Array(6).fill(0)
+      const base = new Date(startIso)
+
+      ;(data || []).forEach(r => {
+        const t = new Date(r.timestamp)
+        const idx =
+          (t.getFullYear() - base.getFullYear()) * 12 +
+          (t.getMonth() - base.getMonth())
+        if (idx >= 0 && idx < buckets.length) buckets[idx]++
+      })
+      return buckets
+    }
+  })
 
   return (
     <div
@@ -58,7 +103,7 @@ const CreatorsDashboard = () => {
               <span className=' flex w-4 md:w-0' />
             </div>{' '}
             <div className='pl-22   flex items-start md:pl-0 md:pr-0 pr-4   mt-10 overflow-x-auto  hide-scrollbar'>
-              <CreatorVisitorChart />
+              <CreatorEngagementsChart data={engagements} categories={labels} />
               <span className=' flex w-4 md:w-0' />
             </div>
           </div>

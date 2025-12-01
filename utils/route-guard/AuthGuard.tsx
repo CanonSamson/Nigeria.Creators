@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
 import {
@@ -13,6 +13,7 @@ import { useContextSelector } from 'use-context-selector'
 import { MAINTENANCE_MODE } from '../contant'
 import { UserContext } from '@/context/user'
 import Loading from '@/components/Loader'
+import { hasPermission } from '../permissions/auth-abac'
 
 const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter()
@@ -23,6 +24,23 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     UserContext,
     state => state.isAuthenticated
   )
+
+  const currentUser = useContextSelector(
+    UserContext,
+    state => state.currentUser
+  )
+
+  const isCreator = hasPermission(
+    {
+      blockedBy: [],
+      roles: currentUser?.roles || [],
+      id: currentUser?.id as string
+    },
+    'is-creator',
+    'view',
+    { userId: currentUser?.id as string }
+  )
+
   const allowRedirect = useContextSelector(
     UserContext,
     state => state.allowRedirect
@@ -71,8 +89,13 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }
     } else {
       if (isGuestPath && !isAuthPath) {
-        router.replace('/')
-        return
+        if (isCreator) {
+          router.replace('/creator')
+          return
+        } else {
+          router.replace('/brand')
+          return
+        }
       }
     }
   }, [isLoading, isAuthenticated, isGuestPath, MAINTENANCE_MODE])
@@ -89,9 +112,6 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       return path === cleanPathName
     })
   }, [pathName])
-
-
-
 
   if (isLoading && !MAINTENANCE_MODE && !isDontAllowLoadingScreenPath) {
     return <Loading />

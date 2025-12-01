@@ -1,11 +1,15 @@
 // ==============================|| APP CONSTANT ||============================== //
 
 export const APP_DEFAULT_PATH = '/'
+export const APP_CREATOR_DEFAULT_PATH = '/creator'
+export const APP_BRAND_DEFAULT_PATH = '/brand'
+
 export const APP_DEFAULT_GUEST_PATHS = [
   '/creators/finish-up',
   '/creators/login',
   '/creators/forget-pass',
-  '/creators/forget-pass/reset'
+  '/creators/forget-pass/reset',
+  '/creators/apply'
 ]
 
 export const DONT_ALLOW_LOADING_SCREEN_PATHS = [
