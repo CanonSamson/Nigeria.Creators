@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useContextSelector } from 'use-context-selector'
+import { mixpanelService } from '@/services/mixpanel'
 
 const Navbar = () => {
   const router = useRouter()
@@ -44,7 +45,7 @@ const Navbar = () => {
         <nav>
           <ul className=' inline-flex font font-medium  gap-[10px] text-[14px] md:text-[16px] md:gap-[16px]'>
             <li>
-              <Link href='/'>Creators</Link>
+              <Link href='/creators/login'>Creators</Link>
             </li>
             <li>
               <Link href='/'>Brands</Link>
@@ -59,6 +60,10 @@ const Navbar = () => {
             <>
               <button
                 onClick={() => {
+                  mixpanelService.track('NAV_DASHBOARD_CLICK', {
+                    isCreator,
+                    userId: currentUser?.id || null
+                  })
                   if (isCreator) {
                     router.push('/creator')
                   } else {

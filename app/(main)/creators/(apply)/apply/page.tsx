@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CategorySection from './_components/sections/CategorySection'
 import Button from '@/components/custom/Button'
 import BasicInfoSection from './_components/sections/BasicInfoSection'
@@ -10,8 +10,8 @@ import { useFormik, FormikProvider, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { supabaseService } from '@/utils/supabase/services'
 import { v4 as uuidv4 } from 'uuid'
-// import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { mixpanelService } from '@/services/mixpanel'
 
 const validationSchema = Yup.object({
   categories: Yup.array().of(Yup.string()).min(1, 'Select at least one'),
@@ -55,6 +55,12 @@ export default function CreatorApplyPage () {
   } | null>(null)
 
   const router = useRouter()
+  useEffect(() => {
+    mixpanelService.track('APPLY_VIEWED', { totalSteps })
+  }, [totalSteps])
+  useEffect(() => {
+    mixpanelService.track('APPLY_STEP_CHANGED', { step: currentStep })
+  }, [currentStep])
 
   type FormValues = {
     categories: string[]
@@ -88,6 +94,9 @@ export default function CreatorApplyPage () {
   ) => {
     try {
       setError('')
+      mixpanelService.track('APPLY_SUBMIT_STARTED', {
+        email: values.email.trim().toLowerCase()
+      })
       const id = uuidv4()
       const emailLower = values.email.trim().toLowerCase()
       const { data: existing, error: existingError } =
@@ -99,6 +108,7 @@ export default function CreatorApplyPage () {
       if (existingError) throw new Error(existingError.message)
       if (Array.isArray(existing) && existing.length > 0) {
         setError('You have already requested')
+        mixpanelService.track('APPLY_ALREADY_REQUESTED', { email: emailLower })
         setSubmitting(false)
         return
       }
@@ -113,6 +123,10 @@ export default function CreatorApplyPage () {
           lastProfileUpload.lastModified === f.lastModified
         if (sameAsLast) {
           profileUrl = lastProfileUpload.url
+          mixpanelService.track('APPLY_PROFILE_UPLOAD_REUSED', {
+            name: f.name,
+            size: f.size
+          })
         } else {
           const ext = f.name.split('.').pop()?.toLowerCase() || 'jpg'
           const key = `profiles/${uuidv4()}.${ext}`
@@ -121,6 +135,7 @@ export default function CreatorApplyPage () {
           })
           if (res.error) throw new Error(res.error)
           profileUrl = supabaseService.getPublicUrl('profiles', key)
+          mixpanelService.track('APPLY_PROFILE_UPLOADED', { ext, size: f.size })
           setLastProfileUpload({
             name: f.name,
             size: f.size,
@@ -148,6 +163,10 @@ export default function CreatorApplyPage () {
         id
       )
       console.log(response)
+      mixpanelService.track('APPLY_SUBMITTED', {
+        id,
+        categories: values.categories.length
+      })
 
       await fetch(`/api/apply-as-creator`, {
         method: 'POST',
@@ -157,12 +176,14 @@ export default function CreatorApplyPage () {
           name: values.name.trim()
         })
       })
+      mixpanelService.track('APPLY_EMAIL_SENT', { email: emailLower })
 
       router.replace(`/creators/requested?id=${id}`)
     } catch (e) {
       console.log(e)
       const msg = e instanceof Error ? e.message : String(e)
       setError(msg)
+      mixpanelService.track('APPLY_SUBMIT_FAILED', { error: msg })
     } finally {
       setSubmitting(false)
     }
@@ -221,9 +242,12 @@ export default function CreatorApplyPage () {
                 text='Previous Step'
                 type='outline'
                 className='w-auto px-5 font-medium py-[12px] text-[16px] rounded-[12px]'
-                onClick={() =>
+                onClick={() => {
+                  mixpanelService.track('APPLY_PREV_CLICK', {
+                    step: currentStep
+                  })
                   setCurrentStep(prev => (prev > 1 ? prev - 1 : prev))
-                }
+                }}
               />
             ) : (
               <div />
@@ -239,12 +263,23 @@ export default function CreatorApplyPage () {
                   const hasErr = fields.some(f =>
                     Boolean((errs as Record<string, unknown>)[f])
                   )
-                  if (hasErr) return
+                  if (hasErr) {
+                    mixpanelService.track('APPLY_STEP_VALIDATION_ERROR', {
+                      step: currentStep
+                    })
+                    return
+                  }
                   if (currentStep < totalSteps) {
+                    mixpanelService.track('APPLY_NEXT_CLICK', {
+                      step: currentStep
+                    })
                     setCurrentStep(prev =>
                       prev < totalSteps ? prev + 1 : prev
                     )
                   } else {
+                    mixpanelService.track('APPLY_SUBMIT_CLICK', {
+                      step: currentStep
+                    })
                     formik.submitForm()
                   }
                 })

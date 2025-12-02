@@ -48,7 +48,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const router = useRouter()
 
-console.log('UserProvider mounted', isOnline, currentUser?.createdAt)
   useEffect(() => {
     const init = async () => {
       await fetchCurrentUser({ load: true })

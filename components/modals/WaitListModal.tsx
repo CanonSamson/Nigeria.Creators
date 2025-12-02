@@ -69,9 +69,10 @@ const WaitListModal = () => {
             : []
         })
       } catch (error) {
-        const msg = error instanceof Error && /duplicate/i.test(error.message)
-          ? 'Email has already been registered'
-          : 'Failed to join waitlist'
+        const msg =
+          error instanceof Error && /duplicate/i.test(error.message)
+            ? 'Email has already been registered'
+            : 'Failed to join waitlist'
         toast.error(msg)
         return
       }
@@ -119,33 +120,6 @@ const WaitListModal = () => {
         </div>
 
         <div className='px-5 pb-5'>
-          <div className='flex justify-center'>
-            <div className='inline-flex w-full max-w-[400px] items-center gap-2 bg-[#F5F5F5] rounded-[16px] p-1'>
-              <button
-                onClick={() =>
-                  updateModalData('waitListModal', { role: 'creator' })
-                }
-                aria-pressed={role === 'creator'}
-                className={`h-[45px] flex-1 px-4 rounded-[12px]  duration-300 transition-all active:opacity-80 hover:opacity-80 font-semibold text-[14px] md:text-[16px] ${
-                  role === 'creator' ? 'bg-primary text-white' : 'text-black'
-                }`}
-              >
-                I&apos;m a Creator
-              </button>
-              <button
-                onClick={() =>
-                  updateModalData('waitListModal', { role: 'brand' })
-                }
-                aria-pressed={role === 'brand'}
-                className={`h-[45px] flex-1 px-4 rounded-[12px] duration-300 transition-all active:opacity-80 hover:opacity-80 font-semibold text-[14px] md:text-[16px] ${
-                  role === 'brand' ? 'bg-primary text-white' : 'text-black'
-                }`}
-              >
-                I&apos;m a Brand
-              </button>
-            </div>
-          </div>
-
           <div className='mt-4 space-y-4'>
             {features.map(f => {
               const selected = Array.isArray(values?.selectedFeatures)

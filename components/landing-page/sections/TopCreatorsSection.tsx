@@ -3,9 +3,11 @@ import Image from 'next/image'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { gsap } from 'gsap'
 import { useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 const TopCreatorsSection = () => {
   const wrapperRef = useRef<HTMLDivElement | null>(null)
+  const router = useRouter()
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const wrapper = wrapperRef.current
@@ -103,9 +105,9 @@ const TopCreatorsSection = () => {
                 className=' snap-center shrink-0 w-[220px] sm:w-[260px] md:w-[300px]'
               >
                 <button
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }
+                  onClick={() => {
+                    router.push('/creators/apply')
+                  }}
                   aria-label='Join Our Community'
                   className=' block rounded-[20px] h-[360px] md:h-[50vh] duration-300 transition-colors hover:bg-primary text-primary hover:text-white focus:outline-none  '
                 >
@@ -114,7 +116,7 @@ const TopCreatorsSection = () => {
                       →
                     </span>
                     <span className=' ml-3  text-[14px] md:text-[16px] font-semibold'>
-                      Join Our WaitList
+                      Join Our Community
                     </span>
                   </div>
                 </button>

@@ -4,6 +4,7 @@ import { useSettingModal } from '@/context/model-settings'
 import { BsArrowRight } from 'react-icons/bs'
 import { useState } from 'react'
 import { Toaster, toast } from 'sonner'
+import { mixpanelService } from '@/services/mixpanel'
 
 const WaitListEmailInput = () => {
   const { openModal } = useSettingModal()
@@ -22,9 +23,11 @@ const WaitListEmailInput = () => {
     if (v) {
       setError(v)
       toast.error(v)
+      mixpanelService.track('WAITLIST_EMAIL_INVALID', { reason: v })
       return
     }
     setError('')
+    mixpanelService.track('WAITLIST_MODAL_OPENED', { email })
     openModal('waitListModal', { email })
   }
 
