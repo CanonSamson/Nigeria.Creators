@@ -9,7 +9,8 @@ export const APP_DEFAULT_GUEST_PATHS = [
   '/creators/login',
   '/creators/forget-pass',
   '/creators/forget-pass/reset',
-  '/creators/apply'
+  '/creators/apply',
+  '/creators/requested'
 ]
 
 export const DONT_ALLOW_LOADING_SCREEN_PATHS = [

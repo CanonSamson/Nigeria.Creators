@@ -41,6 +41,17 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { userId: currentUser?.id as string }
   )
 
+  const isBrand = hasPermission(
+    {
+      blockedBy: [],
+      role: currentUser?.role,
+      id: currentUser?.id as string
+    },
+    'is-brand',
+    'view',
+    { userId: currentUser?.id as string }
+  )
+
   const allowRedirect = useContextSelector(
     UserContext,
     state => state.allowRedirect
@@ -94,7 +105,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         if (isCreator) {
           router.replace('/creator')
           return
-        } else {
+        } else if (isBrand) {
           router.replace('/brand')
           return
         }

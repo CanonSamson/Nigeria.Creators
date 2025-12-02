@@ -2,18 +2,31 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Instagram, Youtube, Camera } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const Footer = () => {
   const pathname = usePathname()
+  const router = useRouter()
 
   const hideCard = pathname === '/creators/login'
   return (
-    <footer aria-label='Footer' className={cn('w-full ' ,hideCard ?" pb-[200px] md:py-[200px]": "py-[200px]")}>
+    <footer
+      aria-label='Footer'
+      className={cn(
+        'w-full ',
+        hideCard ? ' pb-[200px] md:py-[200px]' : 'py-[200px]'
+      )}
+    >
+      
       <div className='w-full px-6 md:px-10'>
         <div className='mx-auto max-w-[1100px]'>
-          <div className={cn('relative py-10 overflow-hidden rounded-[20px] bg-primary/80',  hideCard ? "hidden md:block" : "")}>
+          <div
+            className={cn(
+              'relative py-10 overflow-hidden rounded-[20px] bg-primary/80',
+              hideCard ? 'hidden md:block' : ''
+            )}
+          >
             <div className='absolute inset-0 grid grid-cols-4 opacity-35'>
               <Image
                 src='/hero/2.png'
@@ -53,12 +66,10 @@ const Footer = () => {
                 </h2>
                 <div>
                   <button
-                    onClick={() =>
-                      window.scrollTo({ top: 0, behavior: 'smooth' })
-                    }
+                    onClick={() => router.push('/creators/apply')}
                     className='inline-flex mt-4 items-center justify-center h-[48px] md:h-[56px] px-4 rounded-[12px] bg-white text-black font-semibold border border-[#DFE2EB]'
                   >
-                    Join WaitList
+                    Become A Creator
                   </button>
                 </div>
               </div>

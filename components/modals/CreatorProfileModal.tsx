@@ -7,6 +7,12 @@ import { BsInstagram } from 'react-icons/bs'
 import { SiTiktok } from 'react-icons/si'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
+import {
+  TikTokEmbed,
+  InstagramEmbed,
+  YouTubeEmbed
+} from 'react-social-media-embed'
+import { resolveEmbedUrl } from '@/utils/func/resolveEmbedUrl'
 
 const CreatorProfileModal = () => {
   const { toggleModal, modals, modalData } = useSettingModal()
@@ -42,6 +48,24 @@ const CreatorProfileModal = () => {
       tiktok: mergedData?.profile?.tiktokLink ?? values?.tiktok ?? ''
     },
     work: Array.isArray(values?.work) ? values.work : []
+  }
+
+  const getPlatform = (
+    url: string
+  ): 'tiktok' | 'instagram' | 'youtube' | 'other' => {
+    if (!url) return 'other'
+    const u = url.trim()
+    try {
+      const parsed = new URL(u)
+      const host = parsed.hostname.toLowerCase()
+      if (host.includes('tiktok.com')) return 'tiktok'
+      if (host.includes('instagram.com')) return 'instagram'
+      if (host.includes('youtube.com') || host.includes('youtu.be'))
+        return 'youtube'
+      return 'other'
+    } catch {
+      return 'other'
+    }
   }
 
   const handleClose = () => {
@@ -133,14 +157,26 @@ const CreatorProfileModal = () => {
 
               {Boolean(data.links.contentLink) ? (
                 <div className='mt-6'>
-                  <iframe
-                    src={data.links.contentLink}
-                    width='100%'
-                    height='800'
-                    allow='encrypted-media; picture-in-picture'
-                    frameBorder='0'
-                    className='rounded-[12px] w-full'
-                  />
+                  {getPlatform(data.links.contentLink) === 'tiktok' ? (
+                    <TikTokEmbed url={data.links.contentLink} width={'100%'} />
+                  ) : getPlatform(data.links.contentLink) === 'instagram' ? (
+                    <InstagramEmbed
+                      url={data.links.contentLink}
+                      width={'100%'}
+                    />
+                  ) : getPlatform(data.links.contentLink) === 'youtube' ? (
+                    <YouTubeEmbed url={data.links.contentLink} width={'100%'} />
+                  ) : (
+                    <iframe
+                      src={resolveEmbedUrl(data.links.contentLink) || ''}
+                      width='100%'
+                      height='800'
+                      allow='encrypted-media; picture-in-picture; fullscreen'
+                      allowFullScreen
+                      frameBorder='0'
+                      className='rounded-[12px] w-full'
+                    />
+                  )}
                 </div>
               ) : null}
             </>

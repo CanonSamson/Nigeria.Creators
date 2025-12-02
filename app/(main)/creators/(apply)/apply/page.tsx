@@ -10,7 +10,7 @@ import { useFormik, FormikProvider, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { supabaseService } from '@/utils/supabase/services'
 import { v4 as uuidv4 } from 'uuid'
-import { toast } from 'sonner'
+// import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 const validationSchema = Yup.object({
@@ -44,6 +44,8 @@ const stepFields: Record<number, string[]> = {
 export default function CreatorApplyPage () {
   const [totalSteps] = useState(4)
   const [currentStep, setCurrentStep] = useState(1)
+  const [error, setError] = useState('')
+
   const [lastProfileUpload, setLastProfileUpload] = useState<{
     name: string
     size: number
@@ -85,6 +87,7 @@ export default function CreatorApplyPage () {
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
+      setError('')
       const id = uuidv4()
       const emailLower = values.email.trim().toLowerCase()
       const { data: existing, error: existingError } =
@@ -95,7 +98,7 @@ export default function CreatorApplyPage () {
           .limit(1)
       if (existingError) throw new Error(existingError.message)
       if (Array.isArray(existing) && existing.length > 0) {
-        toast.error('You have already requested')
+        setError('You have already requested')
         setSubmitting(false)
         return
       }
@@ -128,7 +131,7 @@ export default function CreatorApplyPage () {
         }
       }
 
-      await supabaseService.insertDB(
+      const response = await supabaseService.insertDB(
         'creators_join_request',
         {
           categories: values.categories,
@@ -144,6 +147,7 @@ export default function CreatorApplyPage () {
         },
         id
       )
+      console.log(response)
 
       await fetch(`/api/apply-as-creator`, {
         method: 'POST',
@@ -156,8 +160,9 @@ export default function CreatorApplyPage () {
 
       router.replace(`/creators/requested?id=${id}`)
     } catch (e) {
+      console.log(e)
       const msg = e instanceof Error ? e.message : String(e)
-      toast.error(msg)
+      setError(msg)
     } finally {
       setSubmitting(false)
     }
@@ -205,6 +210,11 @@ export default function CreatorApplyPage () {
             <SocialInfoSection />
           ) : null}
 
+          <div>
+            {error ? (
+              <p className='mt-1 text-[14px] text-red-500'>{error}</p>
+            ) : null}
+          </div>
           <div className='mt-8  w-full mx-auto ml-auto flex items-center justify-between '>
             {currentStep > 1 ? (
               <Button
