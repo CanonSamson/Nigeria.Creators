@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 const HeroSectionDetails = () => {
   const [waitList, setWaitList] = useState(false)
+  
   return (
     <div className=' max-w-[750px] relative z-20 mx-auto min-h-[600px]  md:min-h-[600px]  flex flex-col justify-center items-center'>
       <div className=' mb-[18px] md:mb-[26px] gap-2 bg-[#F6FFFD] p-2 flex items-center rounded-[12px] md:rounded-[20px]'>
