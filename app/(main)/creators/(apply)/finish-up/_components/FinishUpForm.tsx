@@ -10,6 +10,8 @@ import { supabaseService } from '@/utils/supabase/services'
 import { CreatorJoinRequestType } from '@/types/request'
 import { toast } from 'sonner'
 import { supabaseAuthService } from '@/utils/supabase/services/auth'
+import { useContextSelector } from 'use-context-selector'
+import { UserContext } from '@/context/user'
 
 const schema = Yup.object({
   password: Yup.string()
@@ -30,6 +32,16 @@ export default function FinishUpForm () {
   const [isLoading, setIsLoading] = useState(true)
   const [request, setRequest] = useState<CreatorJoinRequestType | null>()
   const [isSignUp, setIsSignUp] = useState(false)
+
+  const fetchCurrentUser = useContextSelector(
+    UserContext,
+    state => state.fetchCurrentUser
+  )
+
+  const setAllowRedirect = useContextSelector(
+    UserContext,
+    state => state.setAllowRedirect
+  )
 
   const formik = useFormik<{ password: string; confirmPassword: string }>({
     initialValues: { password: '', confirmPassword: '' },
@@ -66,7 +78,7 @@ export default function FinishUpForm () {
       }
     }
     handleIsRequested()
-  }, [id, pathName, router])
+  }, [id, pathName])
 
   const handleSubmit = async () => {
     try {
@@ -88,6 +100,8 @@ export default function FinishUpForm () {
       const email = String(request.email || '')
         .trim()
         .toLowerCase()
+
+      setAllowRedirect(false)
       const password = String(formik.values.password)
       const res = await supabaseAuthService.signUpWithEmailAndPassword(
         email,
@@ -144,6 +158,8 @@ export default function FinishUpForm () {
 
         return
       }
+
+      await fetchCurrentUser({ load: false })
     } catch (e) {
       toast.error('Failed to finalize account setup')
       console.log(e)
@@ -151,6 +167,8 @@ export default function FinishUpForm () {
       return
     } finally {
       setIsSignUp(false)
+
+      setTimeout(() => setAllowRedirect(true), 50)
     }
   }
 
