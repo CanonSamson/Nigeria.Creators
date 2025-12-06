@@ -1,4 +1,3 @@
-import WaitListEmailInput from '@/components/WaitListEmailInput'
 import Image from 'next/image'
 import HeroSectionDetails from './hero/Details'
 

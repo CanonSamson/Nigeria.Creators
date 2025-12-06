@@ -116,88 +116,88 @@ export default function CreatorApplyPage () {
       mixpanelService.track('BRAND_REGISTRATION_SUBMIT_STARTED', {
         email: values.email.trim().toLowerCase()
       })
-      const id = uuidv4()
-      const emailLower = values.email.trim().toLowerCase()
-      const { data: existing, error: existingError } =
-        await supabaseService.client
-          .from('creators_join_request')
-          .select('id')
-          .eq('email', emailLower)
-          .limit(1)
-      if (existingError) throw new Error(existingError.message)
-      if (Array.isArray(existing) && existing.length > 0) {
-        setError('You have already requested')
-        mixpanelService.track('BRAND_REGISTRATION_ALREADY_REQUESTED', { email: emailLower })
-        setSubmitting(false)
-        return
-      }
+      // const id = uuidv4()
+      // const emailLower = values.email.trim().toLowerCase()
+      // const { data: existing, error: existingError } =
+      //   await supabaseService.client
+      //     .from('creators_join_request')
+      //     .select('id')
+      //     .eq('email', emailLower)
+      //     .limit(1)
+      // if (existingError) throw new Error(existingError.message)
+      // if (Array.isArray(existing) && existing.length > 0) {
+      //   setError('You have already requested')
+      //   mixpanelService.track('BRAND_REGISTRATION_ALREADY_REQUESTED', { email: emailLower })
+      //   setSubmitting(false)
+      //   return
+      // }
 
-      let profileUrl: string | null = null
-      if (values.profilePicture) {
-        const f = values.profilePicture
-        const sameAsLast =
-          !!lastProfileUpload &&
-          lastProfileUpload.name === f.name &&
-          lastProfileUpload.size === f.size &&
-          lastProfileUpload.lastModified === f.lastModified
-        if (sameAsLast) {
-          profileUrl = lastProfileUpload.url
-          mixpanelService.track('BRAND_REGISTRATION_PROFILE_UPLOAD_REUSED', {
-            name: f.name,
-            size: f.size
-          })
-        } else {
-          const ext = f.name.split('.').pop()?.toLowerCase() || 'jpg'
-          const key = `profiles/${uuidv4()}.${ext}`
-          const res = await supabaseService.uploadFile('profiles', key, f, {
-            upsert: true
-          })
-          if (res.error) throw new Error(res.error)
-          profileUrl = supabaseService.getPublicUrl('profiles', key)
-          mixpanelService.track('BRAND_REGISTRATION_PROFILE_UPLOADED', { ext, size: f.size })
-          setLastProfileUpload({
-            name: f.name,
-            size: f.size,
-            lastModified: f.lastModified,
-            url: profileUrl,
-            key
-          })
-        }
-      }
+      // let profileUrl: string | null = null
+      // if (values.profilePicture) {
+      //   const f = values.profilePicture
+      //   const sameAsLast =
+      //     !!lastProfileUpload &&
+      //     lastProfileUpload.name === f.name &&
+      //     lastProfileUpload.size === f.size &&
+      //     lastProfileUpload.lastModified === f.lastModified
+      //   if (sameAsLast) {
+      //     profileUrl = lastProfileUpload.url
+      //     mixpanelService.track('BRAND_REGISTRATION_PROFILE_UPLOAD_REUSED', {
+      //       name: f.name,
+      //       size: f.size
+      //     })
+      //   } else {
+      //     const ext = f.name.split('.').pop()?.toLowerCase() || 'jpg'
+      //     const key = `profiles/${uuidv4()}.${ext}`
+      //     const res = await supabaseService.uploadFile('profiles', key, f, {
+      //       upsert: true
+      //     })
+      //     if (res.error) throw new Error(res.error)
+      //     profileUrl = supabaseService.getPublicUrl('profiles', key)
+      //     mixpanelService.track('BRAND_REGISTRATION_PROFILE_UPLOADED', { ext, size: f.size })
+      //     setLastProfileUpload({
+      //       name: f.name,
+      //       size: f.size,
+      //       lastModified: f.lastModified,
+      //       url: profileUrl,
+      //       key
+      //     })
+      //   }
+      // }
 
-      const response = await supabaseService.insertDB(
-        'creators_join_request',
-        {
-          categories: values.categories,
-          name: values.name.trim(),
-          email: emailLower,
-          phone: values.phone ? values.phone.trim() : null,
-          resident: values.resident,
-          description: values.description.trim(),
-          contentLink: values.contentLink.trim(),
-          instagram: values.instagram || null,
-          tiktok: values.tiktok || null,
-          profilePictureUrl: profileUrl
-        },
-        id
-      )
-      console.log(response)
-      mixpanelService.track('BRAND_REGISTRATION_SUBMITTED', {
-        id,
-        categories: values.categories.length
-      })
+      // const response = await supabaseService.insertDB(
+      //   'creators_join_request',
+      //   {
+      //     categories: values.categories,
+      //     name: values.name.trim(),
+      //     email: emailLower,
+      //     phone: values.phone ? values.phone.trim() : null,
+      //     resident: values.resident,
+      //     description: values.description.trim(),
+      //     contentLink: values.contentLink.trim(),
+      //     instagram: values.instagram || null,
+      //     tiktok: values.tiktok || null,
+      //     profilePictureUrl: profileUrl
+      //   },
+      //   id
+      // )
+      // console.log(response)
+      // mixpanelService.track('BRAND_REGISTRATION_SUBMITTED', {
+      //   id,
+      //   categories: values.categories.length
+      // })
 
-      await fetch(`/api/apply-as-creator`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: emailLower,
-          name: values.name.trim()
-        })
-      })
-      mixpanelService.track('BRAND_REGISTRATION_EMAIL_SENT', { email: emailLower })
+      // await fetch(`/api/apply-as-creator`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     email: emailLower,
+      //     name: values.name.trim()
+      //   })
+      // })
+      // mixpanelService.track('BRAND_REGISTRATION_EMAIL_SENT', { email: emailLower })
 
-      router.replace(`/creators/requested?id=${id}`)
+      // router.replace(`/creators/requested?id=${id}`)
     } catch (e) {
       console.log(e)
       const msg = e instanceof Error ? e.message : String(e)
