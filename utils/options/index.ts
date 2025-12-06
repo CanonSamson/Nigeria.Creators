@@ -226,3 +226,22 @@ export const citiesInNigeriaByState: Record<string, { name: string; value: strin
     { name: 'Kuje', value: 'kuje' }
   ]
 }
+
+
+export 
+const categories = [
+  'Tech',
+  'Cooking',
+  'Family',
+  'Day in a life',
+  'Fashion & Beauty',
+  'UGC',
+  'Health & Wellness',
+  'Travel',
+  'Women’s Health',
+  'Faith & Motivation',
+  'Art & Creativity',
+  'Business & Finance',
+  'Travel & Culture',
+  'Others'
+]
