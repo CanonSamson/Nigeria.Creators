@@ -79,11 +79,10 @@ export default function Requested () {
               <div className='mt-4 max-w-[200px]'>
                 <input
                   aria-label='Verification code'
-                  inputMode='numeric'
                   value={code}
                   onChange={e => setCode(e.target.value)}
                   placeholder=''
-                  className='w-full h-[56px] px-4 rounded-[12px] bg-[#F8F8F8] border border-[#EFEFEF] text-[16px] text-black outline-none'
+                  className='w-full text-[40px] text-gray-700 font-sans h-[56px] px-4 rounded-[12px] bg-[#F8F8F8] border border-[#EFEFEF] outline-none'
                 />
               </div>
 
