@@ -11,5 +11,5 @@ export type CreatorJoinRequestType = {
   instagram: string | null
   tiktok: string | null
   profilePictureUrl: string | null
-  created_at?: string
+  createdAt?: string
 }

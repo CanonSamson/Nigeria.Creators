@@ -8,9 +8,12 @@ import AdditionalBrandInfoSection from './_components/sections/AdditionalBrandIn
 import { useFormik, FormikProvider, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { supabaseService } from '@/utils/supabase/services'
-import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/navigation'
 import { mixpanelService } from '@/services/mixpanel'
+import { supabaseAuthService } from '@/utils/supabase/services/auth'
+import { toast } from 'sonner'
+import { useContextSelector } from 'use-context-selector'
+import { UserContext } from '@/context/user'
 
 const validationSchema = Yup.object({
   categories: Yup.array().of(Yup.string()).min(1, 'Select at least one'),
@@ -37,15 +40,7 @@ const validationSchema = Yup.object({
       excludeEmptyString: true
     })
     .nullable()
-    .optional(),
-  profilePicture: Yup.mixed().nullable(),
-  description: Yup.string().trim().min(10, 'Too short').required('Required'),
-  contentLink: Yup.string()
-    .trim()
-    .url('Enter a valid URL')
-    .required('Required'),
-  instagram: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
-  tiktok: Yup.string().trim().url('Enter a valid URL').nullable().optional()
+    .optional()
 })
 
 const stepFields: Record<number, string[]> = {
@@ -59,20 +54,25 @@ export default function CreatorApplyPage () {
   const [currentStep, setCurrentStep] = useState(3)
   const [error, setError] = useState('')
 
-  const [lastProfileUpload, setLastProfileUpload] = useState<{
-    name: string
-    size: number
-    lastModified: number
-    url: string | null
-    key: string | null
-  } | null>(null)
-
   const router = useRouter()
+
+  const fetchCurrentUser = useContextSelector(
+    UserContext,
+    state => state.fetchCurrentUser
+  )
+
+  const setAllowRedirect = useContextSelector(
+    UserContext,
+    state => state.setAllowRedirect
+  )
+
   useEffect(() => {
     mixpanelService.track('BRAND_REGISTRATION_VIEWED', { totalSteps })
   }, [totalSteps])
   useEffect(() => {
-    mixpanelService.track('BRAND_REGISTRATION_STEP_CHANGED', { step: currentStep })
+    mixpanelService.track('BRAND_REGISTRATION_STEP_CHANGED', {
+      step: currentStep
+    })
   }, [currentStep])
 
   type FormValues = {
@@ -84,11 +84,6 @@ export default function CreatorApplyPage () {
     brandSize: string
     resident: string
     phone: string | null
-    profilePicture: File | null
-    description: string
-    contentLink: string
-    instagram: string
-    tiktok: string
   }
 
   const initialValues: FormValues = {
@@ -99,12 +94,7 @@ export default function CreatorApplyPage () {
     confirmPassword: '',
     brandSize: '',
     resident: '',
-    phone: null,
-    profilePicture: null,
-    description: '',
-    contentLink: '',
-    instagram: '',
-    tiktok: ''
+    phone: null
   }
 
   const handleSubmit = async (
@@ -112,92 +102,72 @@ export default function CreatorApplyPage () {
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
+      setAllowRedirect(false)
       setError('')
       mixpanelService.track('BRAND_REGISTRATION_SUBMIT_STARTED', {
         email: values.email.trim().toLowerCase()
       })
-      // const id = uuidv4()
-      // const emailLower = values.email.trim().toLowerCase()
-      // const { data: existing, error: existingError } =
-      //   await supabaseService.client
-      //     .from('creators_join_request')
-      //     .select('id')
-      //     .eq('email', emailLower)
-      //     .limit(1)
-      // if (existingError) throw new Error(existingError.message)
-      // if (Array.isArray(existing) && existing.length > 0) {
-      //   setError('You have already requested')
-      //   mixpanelService.track('BRAND_REGISTRATION_ALREADY_REQUESTED', { email: emailLower })
-      //   setSubmitting(false)
-      //   return
-      // }
+      const emailLower = values.email.trim().toLowerCase()
 
-      // let profileUrl: string | null = null
-      // if (values.profilePicture) {
-      //   const f = values.profilePicture
-      //   const sameAsLast =
-      //     !!lastProfileUpload &&
-      //     lastProfileUpload.name === f.name &&
-      //     lastProfileUpload.size === f.size &&
-      //     lastProfileUpload.lastModified === f.lastModified
-      //   if (sameAsLast) {
-      //     profileUrl = lastProfileUpload.url
-      //     mixpanelService.track('BRAND_REGISTRATION_PROFILE_UPLOAD_REUSED', {
-      //       name: f.name,
-      //       size: f.size
-      //     })
-      //   } else {
-      //     const ext = f.name.split('.').pop()?.toLowerCase() || 'jpg'
-      //     const key = `profiles/${uuidv4()}.${ext}`
-      //     const res = await supabaseService.uploadFile('profiles', key, f, {
-      //       upsert: true
-      //     })
-      //     if (res.error) throw new Error(res.error)
-      //     profileUrl = supabaseService.getPublicUrl('profiles', key)
-      //     mixpanelService.track('BRAND_REGISTRATION_PROFILE_UPLOADED', { ext, size: f.size })
-      //     setLastProfileUpload({
-      //       name: f.name,
-      //       size: f.size,
-      //       lastModified: f.lastModified,
-      //       url: profileUrl,
-      //       key
-      //     })
-      //   }
-      // }
+      if (!emailLower || !/\S+@\S+\.\S+/.test(emailLower)) {
+        setError('Enter a valid email')
+        toast.error('Enter a valid email')
+        return
+      }
 
-      // const response = await supabaseService.insertDB(
-      //   'creators_join_request',
-      //   {
-      //     categories: values.categories,
-      //     name: values.name.trim(),
-      //     email: emailLower,
-      //     phone: values.phone ? values.phone.trim() : null,
-      //     resident: values.resident,
-      //     description: values.description.trim(),
-      //     contentLink: values.contentLink.trim(),
-      //     instagram: values.instagram || null,
-      //     tiktok: values.tiktok || null,
-      //     profilePictureUrl: profileUrl
-      //   },
-      //   id
-      // )
-      // console.log(response)
-      // mixpanelService.track('BRAND_REGISTRATION_SUBMITTED', {
-      //   id,
-      //   categories: values.categories.length
-      // })
+      const password = String(values.password)
+      const signUpRes = await supabaseAuthService.signUpWithEmailAndPassword(
+        emailLower,
+        password
+      )
+      if (!signUpRes.success) {
+        const msg = signUpRes.message || 'Failed to create brand account'
+        setError(msg)
+        toast.error(msg)
+        mixpanelService.track('BRAND_ACCOUNT_CREATE_FAILED', {
+          email: emailLower
+        })
+        return
+      }
+      const userId = signUpRes.data?.user?.id
 
-      // await fetch(`/api/apply-as-creator`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     email: emailLower,
-      //     name: values.name.trim()
-      //   })
-      // })
-      // mixpanelService.track('BRAND_REGISTRATION_EMAIL_SENT', { email: emailLower })
+      try {
+        const { error: userInsertError } = await supabaseService.client
+          .from('users')
+          .insert({
+            id: userId,
+            email: emailLower,
+            name: values.name.trim(),
+            role: 'BRAND',
+            profilePictureUrl: null,
+            phoneNumber: values.phone ? values.phone.trim() : '',
+            isEmailVerified: false,
+            resident: values.resident || 'no',
+            isDisabled: false,
+            isDisabledAt: null,
+            isSuspendedAt: null,
+            isSuspended: false
+          })
+        if (userInsertError) throw new Error(userInsertError.message)
 
-      // router.replace(`/creators/requested?id=${id}`)
+        const { error: profileInsertError } = await supabaseService.client
+          .from('brand_profile')
+          .insert({
+            userId,
+            categories: values.categories || [],
+            brandSize: values.brandSize || ''
+          })
+        if (profileInsertError) throw new Error(profileInsertError.message)
+
+        await fetchCurrentUser({ load: false })
+      } catch (e) {
+        toast.error('Failed to finalize brand account setup')
+        throw e as Error
+      }
+
+      mixpanelService.track('BRAND_ACCOUNT_CREATED', { email: emailLower })
+      toast.success('Account created. Please verify your email')
+      router.replace(`/brands/verify-email`)
     } catch (e) {
       console.log(e)
       const msg = e instanceof Error ? e.message : String(e)
@@ -205,6 +175,7 @@ export default function CreatorApplyPage () {
       mixpanelService.track('BRAND_REGISTRATION_SUBMIT_FAILED', { error: msg })
     } finally {
       setSubmitting(false)
+      setTimeout(() => setAllowRedirect(true), 50)
     }
   }
   const formik = useFormik<FormValues>({
@@ -280,9 +251,12 @@ export default function CreatorApplyPage () {
                     Boolean((errs as Record<string, unknown>)[f])
                   )
                   if (hasErr) {
-                    mixpanelService.track('BRAND_REGISTRATION_STEP_VALIDATION_ERROR', {
-                      step: currentStep
-                    })
+                    mixpanelService.track(
+                      'BRAND_REGISTRATION_STEP_VALIDATION_ERROR',
+                      {
+                        step: currentStep
+                      }
+                    )
                     return
                   }
                   if (currentStep < totalSteps) {

@@ -46,7 +46,7 @@ export default function FinishUpForm () {
   const formik = useFormik<{ password: string; confirmPassword: string }>({
     initialValues: { password: '', confirmPassword: '' },
     validationSchema: schema,
-    onSubmit: () => {}
+    onSubmit: () => handleSubmit()
   })
 
   useEffect(() => {
@@ -207,7 +207,7 @@ export default function FinishUpForm () {
           aria-label='Go to dashboard'
           className='w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px] bg-[#327468] hover:bg-[#285d54]'
           buttonType='button'
-          onClick={() => handleSubmit()}
+          onClick={() => formik.handleSubmit()}
           isSubmit={isSignUp}
         />
       </div>

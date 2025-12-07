@@ -5,6 +5,8 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import {
   APP_DEFAULT_AUTH_PATHS,
+  APP_DEFAULT_BRAND_AUTH_PATHS,
+  APP_DEFAULT_CREATOR_AUTH_PATHS,
   APP_DEFAULT_GUEST_PATHS,
   DONT_ALLOW_LOADING_SCREEN_PATHS
 } from '@/config'
@@ -83,6 +85,33 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       return path === cleanPathName
     })
   }, [pathName])
+
+  const isBrandAuthPath = useMemo(() => {
+    return APP_DEFAULT_BRAND_AUTH_PATHS.some(path => {
+      // Remove query parameters from pathName for comparison
+      const cleanPathName = pathName.split('?')[0]
+
+      if (path.includes('[id]')) {
+        const pathPattern = new RegExp(`^${path.replace('[id]', '([^/]+)')}$`)
+        return pathPattern.test(cleanPathName)
+      }
+      return path === cleanPathName
+    })
+  }, [pathName])
+
+  const isCreatorAuthPath = useMemo(() => {
+    return APP_DEFAULT_CREATOR_AUTH_PATHS.some(path => {
+      // Remove query parameters from pathName for comparison
+      const cleanPathName = pathName.split('?')[0]
+
+      if (path.includes('[id]')) {
+        const pathPattern = new RegExp(`^${path.replace('[id]', '([^/]+)')}$`)
+        return pathPattern.test(cleanPathName)
+      }
+      return path === cleanPathName
+    })
+  }, [pathName])
+
   useEffect(() => {
     if (
       MAINTENANCE_MODE ||
@@ -109,9 +138,23 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           router.replace('/brand')
           return
         }
+      } else if (isBrandAuthPath && !isBrand) {
+        router.replace('/creator')
+        return
+      } else if (isCreatorAuthPath && !isCreator) {
+        router.replace('/brand')
+        return
       }
     }
-  }, [isLoading, isAuthenticated, isGuestPath, MAINTENANCE_MODE, isOnline])
+  }, [
+    isLoading,
+    isAuthenticated,
+    isGuestPath,
+    MAINTENANCE_MODE,
+    isOnline,
+    isBrandAuthPath,
+    isCreatorAuthPath
+  ])
 
   const isDontAllowLoadingScreenPath = useMemo(() => {
     return DONT_ALLOW_LOADING_SCREEN_PATHS.some(path => {
