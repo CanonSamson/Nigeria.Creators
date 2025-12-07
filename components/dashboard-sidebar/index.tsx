@@ -2,6 +2,7 @@
 import { UserContext } from '@/context/user'
 import { cn } from '@/lib/utils'
 import DashboardIcon from '@/public/icons/DashboardIcon'
+import NotificationIcon from '@/public/icons/NotificationIcon'
 import SettingsIcon from '@/public/icons/SettingsIcon'
 import { hasPermission } from '@/utils/permissions/auth-abac'
 import Image from 'next/image'
@@ -29,6 +30,32 @@ const DashboardSideBar = () => {
     'view',
     { userId: currentUser?.id as string }
   )
+  type SidebarItem = {
+    key: string
+    href: string
+    baseSrc: string
+    active: boolean
+    Overlay?: (props: { stroke: string; size?: string }) => React.ReactNode
+  }
+
+  const items: SidebarItem[] = [
+    {
+      key: 'notifications',
+      href: isCreator
+        ? '/creator/settings/notifications'
+        : '/brand/settings/notifications',
+      baseSrc: '/logo/logo-icon.svg',
+      active: pathname.includes('/notifications') && !isSettings,
+      Overlay: NotificationIcon
+    },
+    {
+      key: 'settings',
+      href: isCreator ? '/creator/settings' : '/brand/settings',
+      baseSrc: '/logo/logo-icon.svg',
+      active: pathname.includes('/settings'),
+      Overlay: SettingsIcon
+    }
+  ]
   return (
     <div
       className={cn(
@@ -73,38 +100,34 @@ const DashboardSideBar = () => {
             isSettings ? ' md:flex-col' : 'flex-col'
           )}
         >
-          <div
-            onClick={() => {}}
-            className='flex flex-col bg-[#F1F1F1] h-10 w-10  rounded-[10px] items-center justify-center p-1'
-          >
-            <Image
-              src='/icons/notification-bing.svg'
-              alt='avatar'
-              width={40}
-              height={40}
-              className=' w-[24px] h-[24px] object-contain'
-            />
-          </div>
-
-          <div className='h-10 w-10 flex justify-center items-center relative bg-[#F1F1F1]   rounded-[10px]  '>
-            <Link href={isCreator ? '/creator/settings' : '/brand/settings'}>
-              <Image
-                src='/logo/logo-icon.svg'
-                alt='avatar'
-                width={40}
-                height={40}
-                className={cn(
-                  'object-contain duration-300   transition-opacity',
-                  pathname.includes('/settings') ? 'opacity-100' : ' opacity-0'
-                )}
-              />
-              <div className=' w-full h-full  flex justify-center items-center top-0 right-0  absolute rounded-[10px]  '>
-                <SettingsIcon
-                  stroke={pathname.includes('/settings') ? 'white' : '#303030'}
+          {items.map(item => (
+            <div
+              key={item.key}
+              className='h-10 w-10 flex justify-center items-center relative bg-[#F1F1F1] rounded-[10px]'
+            >
+              <Link href={item.href}>
+                <Image
+                  src={item.baseSrc}
+                  alt='avatar'
+                  width={40}
+                  height={40}
+                  className={cn(
+                    'object-contain duration-300 transition-opacity',
+                    item.Overlay
+                      ? item.active
+                        ? 'opacity-100'
+                        : 'opacity-0'
+                      : 'opacity-100'
+                  )}
                 />
-              </div>
-            </Link>
-          </div>
+                <div className=' w-full h-full  flex justify-center items-center top-0 right-0  absolute rounded-[10px]'>
+                  {item.Overlay ? (
+                    <item.Overlay stroke={item.active ? 'white' : '#303030'} />
+                  ) : null}
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
     </div>
