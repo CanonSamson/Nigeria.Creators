@@ -38,7 +38,10 @@ export const statesInNIgeriaOptions = [
   { name: 'Federal Capital Territory (FCT)', value: 'fct' }
 ]
 
-export const citiesInNigeriaByState: Record<string, { name: string; value: string }[]> = {
+export const citiesInNigeriaByState: Record<
+  string,
+  { name: string; value: string }[]
+> = {
   abia: [
     { name: 'Aba', value: 'aba' },
     { name: 'Umuahia', value: 'umuahia' },
@@ -227,9 +230,7 @@ export const citiesInNigeriaByState: Record<string, { name: string; value: strin
   ]
 }
 
-
-export 
-const categories = [
+export const categories = [
   'Tech',
   'Cooking',
   'Family',

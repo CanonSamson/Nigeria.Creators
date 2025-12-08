@@ -18,7 +18,8 @@ const DashboardSideBar = () => {
 
   const pathname = usePathname()
 
-  const isSettings = pathname.includes('/settings')
+  const isBottomSider =
+    pathname.includes('/settings') || pathname.includes('/brand')
 
   const isCreator = hasPermission(
     {
@@ -45,7 +46,7 @@ const DashboardSideBar = () => {
         ? '/creator/settings/notifications'
         : '/brand/settings/notifications',
       baseSrc: '/logo/logo-icon.svg',
-      active: pathname.includes('/notifications') && !isSettings,
+      active: pathname.includes('/notifications') && !isBottomSider,
       Overlay: NotificationIcon
     },
     {
@@ -59,17 +60,17 @@ const DashboardSideBar = () => {
   return (
     <div
       className={cn(
-        '   fixed top-0 z-[50] left-4  flex  items-center justify-center py-4  duration-700 transition-all',
-        isSettings
-          ? ' w-full md:h-[100vh] md:w-auto md:flex-col md:!h-[100dvh]'
-          : 'h-[100vh] flex-col !h-[100dvh]'
+        '   fixed  z-[50]  flex  items-center justify-center py-4  duration-700 transition-all',
+        isBottomSider
+          ? ' w-full max-md:bottom-0 md:h-[100vh] left-0 md:left-4 max-md:right-0 md:w-auto md:flex-col md:!h-[100dvh]'
+          : 'h-[100vh] top-0 flex-col left-4 !h-[100dvh]'
       )}
     >
       <div
         className={cn(
           ` bg-[#F8F8F8] border border-[#EFEFEF] rounded-[20px]  flex  items-center justify-between py-[12px] duration-700 transition-all`,
-          isSettings
-            ? 'h-[56px] w-full max-w-[300px]  md:flex-col md:w-[56px] md:h-full md:max-h-[300px]'
+          isBottomSider
+            ? 'h-[56px] w-full max-w-[300px] max-md:overflow-x-auto max-md:px-2  md:flex-col md:w-[56px] md:h-full md:max-h-[300px]'
             : 'flex-col w-[56px] h-full max-h-[300px]'
         )}
       >
@@ -83,12 +84,18 @@ const DashboardSideBar = () => {
                 height={40}
                 className={cn(
                   'object-contain duration-300 transition-opacity',
-                  pathname === '/creator' ? 'opacity-100' : ' opacity-0'
+                  pathname === '/creator' || pathname === '/brand'
+                    ? 'opacity-100'
+                    : ' opacity-0'
                 )}
               />
               <div className=' w-full h-full  flex justify-center items-center top-0 right-0  absolute rounded-[10px]  '>
                 <DashboardIcon
-                  stroke={pathname === '/creator' ? 'white' : '#303030'}
+                  stroke={
+                    pathname === '/creator' || pathname === '/brand'
+                      ? 'white'
+                      : '#303030'
+                  }
                 />
               </div>
             </Link>
@@ -97,7 +104,7 @@ const DashboardSideBar = () => {
         <div
           className={cn(
             ' flex  gap-2 duration-700 transition-all',
-            isSettings ? ' md:flex-col' : 'flex-col'
+            isBottomSider ? ' max-md:flex-row md:flex-col min-w-max' : 'flex-col'
           )}
         >
           {items.map(item => (
