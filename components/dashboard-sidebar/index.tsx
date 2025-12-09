@@ -68,7 +68,7 @@ const DashboardSideBar = () => {
     >
       <div
         className={cn(
-          ` bg-[#F8F8F8] border border-[#EFEFEF] rounded-[20px]  flex  items-center justify-between py-[12px] duration-700 transition-all`,
+          ` bg-[#F8F8F8] border border-[#EFEFEF] overflow-hidden rounded-[20px]  flex  items-center justify-between py-[12px] duration-700 transition-all`,
           isBottomSider
             ? 'h-[56px] w-full max-w-[300px] max-md:overflow-x-auto max-md:px-2  md:flex-col md:w-[56px] md:h-full md:max-h-[300px]'
             : 'flex-col w-[56px] h-full max-h-[300px]'
@@ -104,7 +104,9 @@ const DashboardSideBar = () => {
         <div
           className={cn(
             ' flex  gap-2 duration-700 transition-all',
-            isBottomSider ? ' max-md:flex-row md:flex-col min-w-max' : 'flex-col'
+            isBottomSider
+              ? ' max-md:flex-row md:flex-col min-w-max'
+              : 'flex-col'
           )}
         >
           {items.map(item => (

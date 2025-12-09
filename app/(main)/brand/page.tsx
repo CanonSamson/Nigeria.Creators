@@ -36,12 +36,14 @@ const BrandDashboard = () => {
           )}
         >
           <header className={'mt-4 mb-2'}>
-            <h1 className='text-[28px] md:text-[34px] font-bold text-black'>
+           <div className=' max-md:px-2'>
+             <h1 className='text-[28px] md:text-[34px] font-bold text-black'>
               Welcome, Canon
             </h1>
             <p className='mt-2 text-[#40444C] text-[14px] md:text-[16px]'>
               Find creative content creators ready to work with your brand
             </p>
+           </div>
             <CategoryTabs
               categories={[
                 'Women’s Health',

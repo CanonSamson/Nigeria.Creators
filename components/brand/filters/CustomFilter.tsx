@@ -33,7 +33,7 @@ export default function CustomFilter ({
           >
             <div
               className={`relative w-9 h-5 rounded-full ${
-                o.value ? 'bg-[#D03FEB]' : 'bg-[#EAEAEA]'
+                o.value ? 'bg-primary' : 'bg-[#EAEAEA]'
               }`}
               aria-pressed={o.value}
               aria-label={o.label}

@@ -246,3 +246,76 @@ export const categories = [
   'Travel & Culture',
   'Others'
 ]
+
+export const categoriesOptions: Record<string, { name: string; value: string; tag: string }> = {
+  ["Tech"]: {
+    name: 'Tech',
+    value: 'tech',
+    tag: 'TH'
+  },
+  ["Cooking"]: {
+    name: 'Cooking',
+    value: 'cooking',
+    tag: 'CK'
+  },
+  ["Family"]: {
+    name: 'Family',
+    value: 'family',
+    tag: 'FA'
+  },
+  ["Day in a life"]: {
+    name: 'Day in a life',
+    value: 'day-in-a-life',
+    tag: 'DL'
+  },
+  ["Fashion & Beauty"]: {
+    name: 'Fashion & Beauty',
+    value: 'fashion-beauty',
+    tag: 'FB'
+  },
+  ["UGC"]: {
+    name: 'UGC',
+    value: 'ugc',
+    tag: 'UG'
+  },
+  ["Health & Wellness"]: {
+    name: 'Health & Wellness',
+    value: 'health-wellness',
+    tag: 'HW'
+  },
+  ["Travel"]: {
+    name: 'Travel',
+    value: 'travel',
+    tag: 'TR'
+  },
+  ["Women’s Health"]: {
+    name: 'Women’s Health',
+    value: 'womens-health',
+    tag: 'WH'
+  },
+  ["Faith & Motivation"]: {
+    name: 'Faith & Motivation',
+    value: 'faith-motivation',
+    tag: 'FM'
+  },
+  ["Art & Creativity"]: {
+    name: 'Art & Creativity',
+    value: 'art-creativity',
+    tag: 'AC'
+  },
+  ["Business & Finance"]: {
+    name: 'Business & Finance',
+    value: 'business-finance',
+    tag: 'BF'
+  },
+  ["Travel & Culture"]: {
+    name: 'Travel & Culture',
+    value: 'travel-culture',
+    tag: 'TC'
+  },
+  ["Others"]: {
+    name: 'Others',
+    value: 'others',
+    tag: 'OT'
+  }
+}
