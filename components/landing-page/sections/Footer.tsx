@@ -100,7 +100,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link href='/creators/login' className='hover:text-primary'>
-                    Login In
+                    Log In
                   </Link>
                 </li>
                 <li>
