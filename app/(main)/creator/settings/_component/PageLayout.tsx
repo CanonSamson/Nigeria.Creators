@@ -64,10 +64,11 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               <div className=' mt-10 flex flex-col  md:flex-row items-start gap-6 w-full'>
                 <div className=' md:w-[250px]'>
                   <div>
-                    <p className='text-[16px] hidden md:block md:text-[18px] font-medium text-black'>
+                    {/* <p className='text-[16px] hidden md:block md:text-[18px] font-medium text-black'>
                       General
-                    </p>
+                    </p> */}
                     <div className='mt-3 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
+                     
                       <Link
                         href={'/creator/settings'}
                         className={cn(
@@ -77,19 +78,20 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                             : 'text-black'
                         )}
                       >
-                        Edit Profile
+                        General
                       </Link>
-                      <Link
-                        href={'/creator/settings/password'}
+                       <Link
+                        href={'/creator/settings/profile'}
                         className={cn(
                           'text-[14px] md:text-[16px] font-medium flex-none',
-                          pathName === '/creator/settings/password'
+                          pathName === '/creator/settings/profile'
                             ? 'text-[#327468]'
                             : 'text-black'
                         )}
                       >
-                        Password
+                        Edit Profile
                       </Link>
+
                       <Link
                         href={'/creator/settings/social'}
                         className={cn(
@@ -111,6 +113,17 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                         )}
                       >
                         Email Notifications
+                      </Link>
+                      <Link
+                        href={'/creator/settings/password'}
+                        className={cn(
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/creator/settings/password'
+                            ? 'text-[#327468]'
+                            : 'text-black'
+                        )}
+                      >
+                        Password
                       </Link>
                     </div>
                     <div className='my-4 h-px bg-[#EFEFEF]' />

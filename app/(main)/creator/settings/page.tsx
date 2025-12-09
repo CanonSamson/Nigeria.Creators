@@ -2,27 +2,20 @@
 
 import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
-import BasicInput from '@/components/input/BasicInput'
-import CustomPhoneInput from '@/components/input/CustomPhoneInput'
-import Button from '@/components/custom/Button'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useEffect, useRef, useState } from 'react'
-import { CloudUpload } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { supabaseService } from '@/utils/supabase/services'
+import { categories as creatorCategories } from '@/utils/options'
+import { useQuery } from '@tanstack/react-query'
+import SettingsCard from '@/components/card/SettingsCard'
 
 const schema = Yup.object({
-  name: Yup.string().trim().min(2, 'Enter a valid name').required('Required'),
-  phoneNumber: Yup.string()
-    .trim()
-    .matches(/^(?:\+?234|0)\d{10}$/, 'Enter a valid Nigerian phone number')
-    .required('Required'),
-  resident: Yup.string()
-    .oneOf(['yes', 'no'], 'Select one')
-    .required('Required'),
-  description: Yup.string().trim().min(10, 'Too short').required('Required'),
-  profilePicture: Yup.mixed().nullable()
+  categories: Yup.array()
+    .of(Yup.string())
+    .min(1, 'Select at least one')
+    .required('Required')
 })
 
 const CreatorsDashboard = () => {
@@ -31,71 +24,50 @@ const CreatorsDashboard = () => {
     state => state.currentUser
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [profileVisible, setProfileVisible] = useState(true)
 
+  const persistVisibility = async (next = profileVisible) => {
+    try {
+      setIsSaving(true)
+      const userId = currentUser?.id || ''
+      if (!userId) return
+      const { error } = await supabaseService.client
+        .from('users')
+        .update({ isProfileVisible: next })
+        .eq('id', userId)
+      if (error) throw new Error(error.message)
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e)
+      toast.error(msg)
+    } finally {
+      setIsSaving(false)
+    }
+  }
   const fetchCurrentUser = useContextSelector(
     UserContext,
     state => state.fetchCurrentUser
   )
 
-  const formik = useFormik<{
-    name: string
-    phoneNumber: string
-    resident: string
-    description: string
-    profilePicture: File | null
+  const { values, errors, touched, setFieldValue } = useFormik<{
+    categories: string[]
   }>({
     initialValues: {
-      name: currentUser?.name || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      resident:
-        typeof currentUser?.resident === 'string'
-          ? String(currentUser?.resident)
-          : '',
-      description: '',
-      profilePicture: null
+      categories: []
     },
     validationSchema: schema,
     onSubmit: async values => {
       try {
         setIsSubmitting(true)
-        let profileUrl = currentUser?.profilePictureUrl || null
-        if (values.profilePicture) {
-          const f = values.profilePicture
-          const ext = f.name.split('.').pop()?.toLowerCase() || 'jpg'
-          const key = `profiles/${Date.now()}.${ext}`
-          const res = await supabaseService.uploadFile('profiles', key, f, {
-            upsert: true
-          })
-          if (res.error) throw new Error(res.error)
-          profileUrl = supabaseService.getPublicUrl('profiles', key)
-        }
-
         const userId = currentUser?.id || ''
         if (!userId) throw new Error('Not authenticated')
-
-        const { error: userUpdateError } = await supabaseService.client
-          .from('users')
-          .update({
-            name: values.name.trim(),
-            phoneNumber: values.phoneNumber.trim(),
-            resident: values.resident,
-            profilePictureUrl: profileUrl || ''
-          })
-          .eq('id', userId)
-        if (userUpdateError) throw new Error(userUpdateError.message)
-
         const { error: profileUpdateError } = await supabaseService.client
           .from('user_profile')
-          .update({
-            description: values.description.trim()
-          })
+          .update({ categories: values.categories })
           .eq('userId', userId)
         if (profileUpdateError) throw new Error(profileUpdateError.message)
-
         await fetchCurrentUser({ load: false })
-        toast.success('Settings updated')
+        toast.success('Categories updated')
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e)
         toast.error(msg)
@@ -105,181 +77,127 @@ const CreatorsDashboard = () => {
     }
   })
 
+  const { data: profile } = useQuery<{ categories?: string[] } | null>({
+    queryKey: ['creator-profile', currentUser?.id],
+    enabled: !!currentUser?.id,
+    queryFn: async () => {
+      const p = await supabaseService.getDB<{ categories?: string[] }>(
+        'user_profile',
+        { filters: { userId: currentUser?.id || '' }, single: true }
+      )
+      return (p as { categories?: string[] } | null) || null
+    }
+  })
+  const current =
+    (profile as { categories?: string[] } | null)?.categories || []
+  const selected: string[] = values.categories
+  const toggle = async (name: string) => {
+    const next = selected.includes(name)
+      ? selected.filter(v => v !== name)
+      : [...selected, name]
+    setFieldValue('categories', next)
+    try {
+      setIsSaving(true)
+      const userId = currentUser?.id || ''
+      if (!userId) return
+      const { data: existing, error: existingError } =
+        await supabaseService.client
+          .from('user_profile')
+          .select('id')
+          .eq('userId', userId)
+          .maybeSingle()
+      if (existingError) throw new Error(existingError.message)
+      if (existing?.id) {
+        const { error } = await supabaseService.client
+          .from('user_profile')
+          .update({ categories: next })
+          .eq('id', existing.id)
+        if (error) throw new Error(error.message)
+      } else {
+        const { error } = await supabaseService.client
+          .from('user_profile')
+          .insert({ userId, categories: next })
+        if (error) throw new Error(error.message)
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e)
+      toast.error(msg)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+  if (values.categories.length === 0 && current.length > 0) {
+    setFieldValue('categories', current)
+  }
+
   useEffect(() => {
     ;(async () => {
       try {
-        const userId = currentUser?.id || ''
+        const userId = currentUser?.id || null
         if (!userId) return
-        const profile = await supabaseService.getDB<{ description: string }>(
-          'user_profile',
-          {
-            filters: { userId },
-            single: true
-          }
-        )
-        const desc =
-          (profile as { description?: string } | null)?.description || ''
-        formik.setFieldValue('description', desc)
+        const { data, error } = await supabaseService.client
+          .from('users')
+          .select('visibility')
+          .eq('id', userId)
+          .maybeSingle()
+        if (!error && data) {
+          setProfileVisible(Boolean(data.visibility))
+        }
       } catch {}
     })()
   }, [currentUser?.id])
 
   return (
     <div className='font-sans'>
-      <div className='  pr-10  '>
+      <div className='pr-10'>
         <h2 className='text-[18px] md:text-[22px] font-bold text-black'>
-          Profile Settings
+          Categories
         </h2>
         <p className='mt-2 text-text-color-200 text-[14px] md:text-[16px]'>
-          Help us understand your creative focus and goals.
+          Select your content categories.
         </p>
       </div>
 
-      <div className=' mt-6 md:max-w-[640px] space-y-6'>
-        <BasicInput
-          label='Name'
-          name='name'
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          placeholder='Full Name'
-          error={
-            formik.touched.name && formik.errors.name
-              ? String(formik.errors.name)
-              : undefined
-          }
-        />
-
-        <CustomPhoneInput
-          label='Phone No'
-          value={formik.values.phoneNumber}
-          onChange={v => formik.setFieldValue('phoneNumber', v)}
-          className=''
-          error={
-            formik.touched.phoneNumber && formik.errors.phoneNumber
-              ? String(formik.errors.phoneNumber)
-              : undefined
-          }
-        />
-
-        <div>
-          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
-            Do you live in Nigeria
-          </label>
-          <select
-            value={formik.values.resident}
-            onChange={e => formik.setFieldValue('resident', e.target.value)}
-            className='w-full h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none'
-          >
-            <option value='' disabled>
-              Select
-            </option>
-            <option value='yes'>Yes</option>
-            <option value='no'>No</option>
-          </select>
-          {formik.touched.resident && formik.errors.resident ? (
-            <p className='mt-1 text-[12px] text-red-500'>
-              {String(formik.errors.resident)}
-            </p>
-          ) : null}
-        </div>
-
-        <div>
-          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
-            Content Creators upload a Profile Picture
-          </label>
-          <input
-            ref={fileInputRef}
-            type='file'
-            accept='image/*'
-            hidden
-            onChange={e =>
-              formik.setFieldValue(
-                'profilePicture',
-                e.target.files?.[0] || null
+      <div className='mt-6 md:max-w-[640px] space-y-6'>
+        <div className='mt-2 w-full'>
+          <div className=' flex flex-wrap gap-3'>
+            {creatorCategories.map(name => {
+              const isSelected = selected.includes(name)
+              return (
+                <button
+                  key={name}
+                  type='button'
+                  role='button'
+                  aria-pressed={isSelected}
+                  onClick={() => toggle(name)}
+                  className={`px-4 py-2 rounded-full capitalize text-[14px] md:text-[16px] border-[0.5px] transition-all duration-300 active:opacity-80 hover:opacity-80 ${
+                    isSelected
+                      ? 'bg-primary border-primary text-white transform origin-center rotate-[-6deg] md:rotate-[-4deg]'
+                      : 'bg-white border-[#AEA9B1] text-black'
+                  }`}
+                >
+                  {name}
+                </button>
               )
-            }
-          />
-          <div
-            role='button'
-            aria-label='Upload profile picture'
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={e => {
-              e.preventDefault()
-              setIsDragging(true)
-            }}
-            onDragLeave={e => {
-              e.preventDefault()
-              setIsDragging(false)
-            }}
-            onDrop={e => {
-              e.preventDefault()
-              setIsDragging(false)
-              formik.setFieldValue(
-                'profilePicture',
-                e.dataTransfer.files?.[0] || null
-              )
-            }}
-            className={`min-h-[140px] md:min-h-[160px] flex items-center justify-center text-center rounded-[12px] md:rounded-[16px] border ${
-              isDragging
-                ? 'border-primary bg-[#F5FFFD]'
-                : 'border-[#EFEFEF] bg-[#F8F8F8]'
-            }`}
-          >
-            <div className='flex flex-col items-center gap-2 px-6 py-8'>
-              <CloudUpload className='h-6 w-6 text-text-color-200' />
-              <span className='text-[14px] md:text-[16px] text-text-color-200'>
-                {formik.values.profilePicture?.name ||
-                  'Click to upload file or drag-and-drop.'}
-              </span>
-              <span className='text-[12px] text-text-color-200'>Max 25 MB</span>
-            </div>
+            })}
           </div>
-        </div>
-
-        <div>
-          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
-            Add a short Description for yourself
-          </label>
-          <textarea
-            value={formik.values.description}
-            onChange={e => formik.setFieldValue('description', e.target.value)}
-            placeholder='Description'
-            className='w-full min-h-[120px] md:min-h-[160px] px-4 py-3 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black placeholder:text-text-color-200 outline-none'
-          />
-          {formik.touched.description && formik.errors.description ? (
-            <p className='mt-1 text-[12px] text-red-500'>
-              {String(formik.errors.description)}
+          {touched.categories && errors.categories ? (
+            <p className='text-[12px] text-red-500'>
+              {String(errors.categories)}
             </p>
           ) : null}
         </div>
 
-        <div className='pt-2'>
-          <Button
-            text='Save Changes'
-            aria-label='Save changes'
-            className='w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px] bg-[#327468] hover:bg-[#285d54]'
-            buttonType='button'
-            isSubmit={isSubmitting}
-            onClick={() => {
-              formik.setTouched({
-                name: true,
-                phoneNumber: true,
-                resident: true,
-                description: true
-              })
-              formik.validateForm().then(errs => {
-                const hasErr = Boolean(
-                  (errs as any).name ||
-                    (errs as any).phoneNumber ||
-                    (errs as any).resident ||
-                    (errs as any).description
-                )
-                if (hasErr) return
-                formik.submitForm()
-              })
-            }}
-          />
-        </div>
+        <SettingsCard
+          title='Profile Visibility'
+          subtitle='Show your profile to brands'
+          checked={profileVisible}
+          onChange={() => {
+            const next = !profileVisible
+            setProfileVisible(next)
+            persistVisibility(next)
+          }}
+        />
       </div>
     </div>
   )
