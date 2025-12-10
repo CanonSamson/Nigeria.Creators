@@ -4,9 +4,7 @@ export const APP_DEFAULT_PATH = '/'
 export const APP_CREATOR_DEFAULT_PATH = '/creator'
 export const APP_BRAND_DEFAULT_PATH = '/brand'
 
-export const APP_DEFAULT_BRAND_GUEST_PATHS = [
-  '/login',
-  ,'/brands/register']
+export const APP_DEFAULT_BRAND_GUEST_PATHS = ['/login', , '/brands/register']
 
 export const APP_DEFAULT_CREATOR_GUEST_PATHS = [
   '/creators/finish-up',
@@ -17,9 +15,11 @@ export const APP_DEFAULT_CREATOR_GUEST_PATHS = [
   '/creators/requested'
 ]
 
-export const APP_DEFAULT_GUEST_PATHS = [
-  ...APP_DEFAULT_CREATOR_GUEST_PATHS,
-  ...APP_DEFAULT_BRAND_GUEST_PATHS
+export const APP_DEFAULT_GUEST_PATHS= [
+  ...new Set([
+    ...APP_DEFAULT_CREATOR_GUEST_PATHS,
+    ...APP_DEFAULT_BRAND_GUEST_PATHS
+  ])
 ]
 
 export const DONT_ALLOW_LOADING_SCREEN_PATHS = [

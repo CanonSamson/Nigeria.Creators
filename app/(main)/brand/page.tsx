@@ -16,7 +16,7 @@ const BrandDashboard = () => {
   )
 
   console.log(currentUser?.id)
-  const {creators} = useCreatorsSearch()
+  const { creators } = useCreatorsSearch()
 
   return (
     <div
@@ -38,17 +38,15 @@ const BrandDashboard = () => {
           )}
         >
           <header className={'mt-4 mb-2'}>
-           <div className=' max-md:px-2'>
-             <h1 className='text-[28px] md:text-[34px] font-bold text-black'>
-              Welcome, Canon
-            </h1>
-            <p className='mt-2 text-[#40444C] text-[14px] md:text-[16px]'>
-              Find creative content creators ready to work with your brand
-            </p>
-           </div>
-            <CategoryTabs
-           
-            />
+            <div className=' max-md:px-2'>
+              <h1 className='text-[28px] md:text-[34px] font-bold text-black'>
+                Welcome, Canon
+              </h1>
+              <p className='mt-2 text-[#40444C] text-[14px] md:text-[16px]'>
+                Find creative content creators ready to work with your brand
+              </p>
+            </div>
+            <CategoryTabs />
             <div className=' w-full py-6'>
               <span className=' w-full h-[1px] bg-[#DFDFDF] flex' />
             </div>
@@ -56,7 +54,10 @@ const BrandDashboard = () => {
           </header>
           <section className={'grid grid-cols-1  px-2 gap-6 md:grid-cols-1'}>
             {creators.map(creator => (
-              <CreatorCard key={creator.name + creator.image} creator={creator} />
+              <CreatorCard
+                key={creator.name + creator.image}
+                creator={creator}
+              />
             ))}
           </section>
         </div>

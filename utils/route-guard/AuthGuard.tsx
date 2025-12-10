@@ -65,7 +65,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       // Remove query parameters from pathName for comparison
       const cleanPathName = pathName.split('?')[0]
 
-      if (path.includes('[id]')) {
+      if (path?.includes('[id]')) {
         const pathPattern = new RegExp(`^${path.replace('[id]', '([^/]+)')}$`)
         return pathPattern.test(cleanPathName)
       }
@@ -161,7 +161,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       // Remove query parameters from pathName for comparison
       const cleanPathName = pathName.split('?')[0]
 
-      if (path.includes('[id]')) {
+      if (path?.includes('[id]')) {
         const pathPattern = new RegExp(`^${path.replace('[id]', '([^/]+)')}$`)
         return pathPattern.test(cleanPathName)
       }
