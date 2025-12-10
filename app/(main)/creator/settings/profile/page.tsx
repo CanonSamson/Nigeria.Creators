@@ -102,7 +102,7 @@ const CreatorsDashboard = () => {
         if (userUpdateError) throw new Error(userUpdateError.message)
 
         const { error: profileUpdateError } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .update({
             description: values.description.trim(),
             state: values.resident === 'yes' ? values.state : null
@@ -126,7 +126,7 @@ const CreatorsDashboard = () => {
     enabled: !!currentUser?.id,
     queryFn: async () => {
       const p = await supabaseService.getDB<{ description: string; state?: string }>(
-        'user_profile',
+        'creator_profile',
         { filters: { userId: currentUser?.id || '' }, single: true }
       )
       return (p as { description?: string; state?: string } | null) || null

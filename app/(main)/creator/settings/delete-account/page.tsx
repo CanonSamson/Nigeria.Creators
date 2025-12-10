@@ -24,7 +24,7 @@ export default function DeleteAccountPage () {
       const userId = currentUser?.id || ''
       if (!userId) throw new Error('Not authenticated')
       await supabaseService.client
-        .from('user_profile')
+        .from('creator_profile')
         .delete()
         .eq('userId', userId)
       await supabaseService.client.from('users').delete().eq('userId', userId)

@@ -51,7 +51,7 @@ const stepFields: Record<number, string[]> = {
 
 export default function CreatorApplyPage () {
   const [totalSteps] = useState(4)
-  const [currentStep, setCurrentStep] = useState(3)
+  const [currentStep, setCurrentStep] = useState(1)
   const [error, setError] = useState('')
 
   const router = useRouter()
@@ -240,9 +240,9 @@ export default function CreatorApplyPage () {
               <div />
             )}
             <Button
-              text={currentStep < totalSteps ? 'Next Step' : 'Submit'}
+              text={currentStep < totalSteps - 1 ? 'Next Step' : 'Submit'}
               className=' w-auto px-5 py-[12px] text-[16px] font-medium rounded-[12px]'
-              isSubmit={currentStep === totalSteps && formik.isSubmitting}
+              isSubmit={currentStep === totalSteps - 1 && formik.isSubmitting}
               onClick={() => {
                 const fields = stepFields[currentStep] || []
                 fields.forEach(f => formik.setFieldTouched(f, true))
@@ -259,7 +259,7 @@ export default function CreatorApplyPage () {
                     )
                     return
                   }
-                  if (currentStep < totalSteps) {
+                  if (currentStep < totalSteps - 1) {
                     mixpanelService.track('BRAND_REGISTRATION_NEXT_CLICK', {
                       step: currentStep
                     })

@@ -18,7 +18,6 @@ const Footer = () => {
         hideCard ? ' pb-[200px] md:py-[200px]' : 'py-[200px]'
       )}
     >
-      
       <div className='w-full px-6 md:px-10'>
         <div className='mx-auto max-w-[1100px]'>
           <div
@@ -109,8 +108,8 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href='/' className='hover:text-primary'>
-                    Apply as Brand
+                  <Link href='/brands/register' className='hover:text-primary'>
+                    Register as Brand
                   </Link>
                 </li>
                 <li>

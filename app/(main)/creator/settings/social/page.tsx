@@ -43,7 +43,7 @@ export default function SocialSettingsPage () {
         const userId = currentUser?.id || ''
         if (!userId) throw new Error('Not authenticated')
         const { error } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .update({
             contentLink: values.contentLink || null,
             instagramLink: values.instagramLink || null,
@@ -70,7 +70,7 @@ export default function SocialSettingsPage () {
           contentLink: string | null
           instagramLink: string | null
           tiktokLink: string | null
-        }>('user_profile', {
+        }>('creator_profile', {
           filters: { userId },
           single: true
         })

@@ -135,7 +135,7 @@ export default function FinishUpForm () {
         if (userInsertError) throw new Error(userInsertError.message)
 
         const { error: profileInsertError } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .insert({
             userId,
             description: request?.description || '',

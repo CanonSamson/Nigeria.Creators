@@ -62,7 +62,7 @@ const CreatorsDashboard = () => {
         const userId = currentUser?.id || ''
         if (!userId) throw new Error('Not authenticated')
         const { error: profileUpdateError } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .update({ categories: values.categories })
           .eq('userId', userId)
         if (profileUpdateError) throw new Error(profileUpdateError.message)
@@ -82,7 +82,7 @@ const CreatorsDashboard = () => {
     enabled: !!currentUser?.id,
     queryFn: async () => {
       const p = await supabaseService.getDB<{ categories?: string[] }>(
-        'user_profile',
+        'creator_profile',
         { filters: { userId: currentUser?.id || '' }, single: true }
       )
       return (p as { categories?: string[] } | null) || null
@@ -102,20 +102,20 @@ const CreatorsDashboard = () => {
       if (!userId) return
       const { data: existing, error: existingError } =
         await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .select('id')
           .eq('userId', userId)
           .maybeSingle()
       if (existingError) throw new Error(existingError.message)
       if (existing?.id) {
         const { error } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .update({ categories: next })
           .eq('id', existing.id)
         if (error) throw new Error(error.message)
       } else {
         const { error } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .insert({ userId, categories: next })
         if (error) throw new Error(error.message)
       }

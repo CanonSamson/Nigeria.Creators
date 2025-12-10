@@ -7,6 +7,7 @@ import { UserContext } from '@/context/user'
 import CategoryTabs from '@/components/brand/CategoryTabs'
 import FilterBar from '@/components/brand/FilterBar'
 import CreatorCard from '@/components/brand/card/CreatorCard'
+import { useCreatorsSearch } from '@/hooks/useCreatorsSearch'
 
 const BrandDashboard = () => {
   const currentUser = useContextSelector(
@@ -15,6 +16,7 @@ const BrandDashboard = () => {
   )
 
   console.log(currentUser?.id)
+  const {creators} = useCreatorsSearch()
 
   return (
     <div
@@ -59,8 +61,8 @@ const BrandDashboard = () => {
             <FilterBar />
           </header>
           <section className={'grid grid-cols-1  px-2 gap-6 md:grid-cols-1'}>
-            {sampleCreators.map(c => (
-              <CreatorCard key={c.name + c.image} {...c} />
+            {creators.map(creator => (
+              <CreatorCard key={creator.name + creator.image} creator={creator} />
             ))}
           </section>
         </div>
@@ -70,42 +72,3 @@ const BrandDashboard = () => {
 }
 
 export default BrandDashboard
-
-const sampleCreators = [
-  {
-    name: 'Martina Levi',
-    about:
-      "I'm passionate about creating content that inspires—sharing lifestyle, wellness, and motivational videos with Nigeria based women in their early 20s",
-    image: '/images/d1852f09-82e1-42c5-bc82-9b204b6131de 1.png',
-    category: "Women's Health",
-    tags: ['KE', 'NG', 'DE', 'NL', 'GB'],
-    location: 'Abuja'
-  },
-  {
-    name: 'Favor',
-    about:
-      "I'm passionate about creating content that inspires—sharing lifestyle, wellness, and motivational videos with Nigeria based women in their early 20s",
-    image: '/images/Gemini_Generated_Image_utglu6utglu6utgl.png',
-    category: "Women's Health",
-    tags: ['KE', 'NG', 'DE', 'NL', 'GB'],
-    location: 'Jos'
-  },
-  {
-    name: 'Martina Levi',
-    about:
-      "I'm passionate about creating content that inspires—sharing lifestyle, wellness, and motivational videos with Nigeria based women in their early 20s",
-    image: '/images/Gemini_Generated_Image_fex70ofex70ofex7.png',
-    category: "Women's Health",
-    tags: ['KE', 'NG', 'DE', 'NL', 'GB'],
-    location: 'Abuja'
-  },
-  {
-    name: 'Martina Levi',
-    about:
-      "I'm passionate about creating content that inspires—sharing lifestyle, wellness, and motivational videos with Nigeria based women in their early 20s",
-    image: '/user-3.png',
-    category: "Women's Health",
-    tags: ['KE', 'NG', 'DE', 'NL', 'GB'],
-    location: 'Lagos'
-  }
-]

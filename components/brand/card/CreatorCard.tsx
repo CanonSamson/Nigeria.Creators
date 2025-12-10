@@ -2,25 +2,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Heart, ArrowUpRight } from 'lucide-react'
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa'
-import { cn } from '@/lib/utils'
+import { CreatorSearch } from '@/hooks/useCreatorsSearch'
 
 type Props = {
-  name: string
-  about: string
-  image: string
-  category: string
-  tags: string[]
-  location: string
+  creator: CreatorSearch
 }
 
 export default function CreatorCard ({
-  name,
-  about,
-  image,
-  category,
-  tags,
-  location
+  creator
 }: Props) {
+  const { name, about, image, category, tags, location } = creator
   const othersText = tags.join(',  ')
   return (
     <article className='bg-white  text-[14px] font-sans rounded-[24px]  overflow-hidden border border-[#EFEFEF]'>

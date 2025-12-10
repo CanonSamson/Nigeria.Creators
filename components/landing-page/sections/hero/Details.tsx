@@ -29,7 +29,9 @@ const HeroSectionDetails = () => {
               src='/user-1.png'
               alt='Nigeria Creators'
               height={60}
+              quality={100}
               width={60}
+             
               className=' w-[20px] h-[20px] md:w-[40px] md:h-[40px] rounded-full object-cover'
             />
             <div className=' relative ml-[-10px] md:ml-[-20px] flex items-center'>
@@ -38,6 +40,7 @@ const HeroSectionDetails = () => {
                 alt='Nigeria Creators'
                 height={60}
                 width={60}
+                quality={100}
                 className=' w-[20px] h-[20px] md:w-[40px] md:h-[40px] rounded-full object-cover'
               />
             </div>
@@ -47,6 +50,7 @@ const HeroSectionDetails = () => {
                 alt='Nigeria Creators'
                 height={60}
                 width={60}
+                quality={100}
                 className=' w-[20px] h-[20px] md:w-[40px] md:h-[40px] rounded-full object-cover'
               />
             </div>

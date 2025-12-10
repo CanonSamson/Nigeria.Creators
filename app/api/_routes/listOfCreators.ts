@@ -49,9 +49,9 @@ export const listOfCreatorsRoutes = new Elysia()
       }
 
       const { data: profiles, error: pErr } = await supabaseService.client
-        .from('user_profile')
+        .from('creator_profile')
         .select(
-          'userId,description,contentLink,tiktokLink,instagramLink,categories'
+          'userId,description,contentLink,tiktokLink,instagramLink,categories,state'
         )
         .in('userId', ids)
 
@@ -131,7 +131,7 @@ export const listOfCreatorsRoutes = new Elysia()
         }
 
         const { data: profiles, error: pErr } = await supabaseService.client
-          .from('user_profile')
+          .from('creator_profile')
           .select('userId,description,contentLink,tiktokLink,instagramLink,categories')
           .eq('userId', id)
           .limit(1)
@@ -150,7 +150,8 @@ export const listOfCreatorsRoutes = new Elysia()
                 contentLink: profile.contentLink,
                 tiktokLink: profile.tiktokLink,
                 instagramLink: profile.instagramLink,
-                categories: profile.categories
+                categories: profile.categories,
+                state: (profile as any).state
               }
             : null
         }

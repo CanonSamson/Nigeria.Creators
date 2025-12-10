@@ -42,11 +42,9 @@ const DashboardSideBar = () => {
   const items: SidebarItem[] = [
     {
       key: 'notifications',
-      href: isCreator
-        ? '/creator/settings/notifications'
-        : '/brand/settings/notifications',
+      href: isCreator ? '/creator' : '/brand',
       baseSrc: '/logo/logo-icon.svg',
-      active: pathname.includes('/notifications') && !isBottomSider,
+      active: pathname.includes('/notifications') && !pathname.includes('/settings'),
       Overlay: NotificationIcon
     },
     {
