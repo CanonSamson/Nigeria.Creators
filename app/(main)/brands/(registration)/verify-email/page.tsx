@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import Button from '@/components/custom/Button'
 import { toast } from 'sonner'
 import axios from 'axios'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
 
@@ -53,7 +53,7 @@ export default function Requested () {
     verifyMutation.mutate({ otp })
   }
 
-  const { mutate: handleResend } = useMutation({
+  const { mutate: handleResend, isPending: isResending } = useMutation({
     mutationFn: async () => {
       if (!email) throw new Error('Missing email')
       const res = await axios.post('/api/generate-otp', { email })
@@ -65,16 +65,6 @@ export default function Requested () {
     onError: () => {
       toast.error('Failed to resend code')
     }
-  })
-
-  useQuery({
-    queryKey: ['generate-otp', email],
-    enabled: !!email,
-    queryFn: async () => {
-      const res = await axios.post('/api/generate-otp', { email })
-      return res.data
-    },
-    retry: false
   })
 
   return (
@@ -126,7 +116,7 @@ export default function Requested () {
                   onClick={() => handleResend()}
                   className='text-primary font-semibold hover:underline'
                 >
-                  Resend Code
+                  {isResending ? 'Resending...' : 'Resend Code'}
                 </button>
               </div>
 

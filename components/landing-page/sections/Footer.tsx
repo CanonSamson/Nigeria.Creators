@@ -9,7 +9,7 @@ const Footer = () => {
   const pathname = usePathname()
   const router = useRouter()
 
-  const hideCard = pathname === '/creators/login'
+  const hideCard = pathname === '/login'
   return (
     <footer
       aria-label='Footer'
@@ -98,7 +98,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href='/creators/login' className='hover:text-primary'>
+                  <Link href='/login' className='hover:text-primary'>
                     Log In
                   </Link>
                 </li>

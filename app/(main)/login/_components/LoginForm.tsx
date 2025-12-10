@@ -49,8 +49,9 @@ export default function LoginForm () {
         setError(res.message || 'Failed to login')
         return
       }
-      await fetchCurrentUser({ load: false })
-      router.replace('/creator')
+      const user = await fetchCurrentUser({ load: false })
+      const dest = user?.role === 'BRAND' ? '/brand' : '/creator'
+      router.replace(dest)
     } catch (err) {
       console.log(err)
       setError('Something went wrong, please try again')

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { ReactNode } from 'react'
 import LoginForm from './_components/LoginForm'
 import Navbar from '@/components/navigation/Navbar'
@@ -9,12 +10,24 @@ function LeftPanel ({ children }: { children: ReactNode }) {
     <div className='w-full px-6 py-10 md:py-16 font-sans flex items-center justify-center'>
       <div className='w-full max-w-[480px]'>
         <h1 className='text-[18px] md:text-[22px] font-semibold text-black tracking-tight'>
-          LogIn
+          Log In
         </h1>
         <p className='mt-2 text-text-color-200 text-[14px] md:text-[16px] tracking-tight'>
-          Creators building their brand with us.
+          Log in to your brand or creator account.
         </p>
         {children}
+        <div className='mt-4'>
+          <p className='text-[13px] md:text-[14px] text-black'>
+            Are you a brand?{' '}
+            <Link href='/brands/register' className='text-primary underline'>
+              Register here
+            </Link>{' '}
+            or a creator?{' '}
+            <Link href='/creators/apply' className='text-primary underline'>
+              Apply here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )

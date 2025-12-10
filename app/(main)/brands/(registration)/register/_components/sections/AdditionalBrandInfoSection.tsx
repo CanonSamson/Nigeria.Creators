@@ -2,6 +2,7 @@
 
 import { useFormikContext } from 'formik'
 import CustomPhoneInput from '@/components/input/CustomPhoneInput'
+import CustomSelect from '@/components/input/CustomSelect'
 
 const AdditionalBrandInfoSection = () => {
   const { values, setFieldValue, errors, touched } = useFormikContext<{
@@ -26,45 +27,33 @@ const AdditionalBrandInfoSection = () => {
 
       <div className='mt-6 max-w-[640px] space-y-6'>
         <div>
-          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
-            Is your brand based in Nigeria?
-          </label>
-          <select
+          <CustomSelect
+            label='Is your brand based in Nigeria?'
+            placeholder='Select'
             value={resident}
-            onChange={e => setFieldValue('resident', e.target.value)}
-            className='w-full h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none'
-          >
-            <option value='' disabled>
-              Select
-            </option>
-            <option value='yes'>Yes</option>
-            <option value='no'>No</option>
-          </select>
-          {touched.resident && errors.resident ? (
-            <p className='mt-1 text-[12px] text-red-500'>{String(errors.resident)}</p>
-          ) : null}
+            onChange={value => setFieldValue('resident', value)}
+            options={[
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' }
+            ]}
+            error={touched.resident && errors.resident ? String(errors.resident) : undefined}
+          />
         </div>
 
         <div>
-          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
-            Brand Size
-          </label>
-          <select
+          <CustomSelect
+            label='Brand Size'
+            placeholder='Select'
             value={brandSize}
-            onChange={e => setFieldValue('brandSize', e.target.value)}
-            className='w-full h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none'
-          >
-            <option value='' disabled>
-              Select
-            </option>
-            <option value='1-10'>1-10</option>
-            <option value='11-50'>11-50</option>
-            <option value='51-200'>51-200</option>
-            <option value='200+'>200+</option>
-          </select>
-          {touched.brandSize && errors.brandSize ? (
-            <p className='mt-1 text-[12px] text-red-500'>{String(errors.brandSize)}</p>
-          ) : null}
+            onChange={value => setFieldValue('brandSize', value)}
+            options={[
+              { value: '1-10', label: '1-10' },
+              { value: '11-50', label: '11-50' },
+              { value: '51-200', label: '51-200' },
+              { value: '200+', label: '200+' }
+            ]}
+            error={touched.brandSize && errors.brandSize ? String(errors.brandSize) : undefined}
+          />
         </div>
 
         <div>
@@ -85,4 +74,3 @@ const AdditionalBrandInfoSection = () => {
 }
 
 export default AdditionalBrandInfoSection
-

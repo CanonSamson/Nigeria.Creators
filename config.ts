@@ -4,11 +4,13 @@ export const APP_DEFAULT_PATH = '/'
 export const APP_CREATOR_DEFAULT_PATH = '/creator'
 export const APP_BRAND_DEFAULT_PATH = '/brand'
 
-export const APP_DEFAULT_BRAND_GUEST_PATHS = ['/brands/register']
+export const APP_DEFAULT_BRAND_GUEST_PATHS = [
+  '/login',
+  ,'/brands/register']
 
 export const APP_DEFAULT_CREATOR_GUEST_PATHS = [
   '/creators/finish-up',
-  '/creators/login',
+  '/login',
   '/creators/forget-pass',
   '/creators/forget-pass/reset',
   '/creators/apply',

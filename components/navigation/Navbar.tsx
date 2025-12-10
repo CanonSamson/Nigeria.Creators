@@ -45,10 +45,10 @@ const Navbar = () => {
         <nav>
           <ul className=' inline-flex font font-medium  gap-[10px] text-[14px] md:text-[16px] md:gap-[16px]'>
             <li>
-              <Link href='/creators/login'>Creators</Link>
+              <Link href='/login'>Creators</Link>
             </li>
             <li>
-              <Link href='/'>Brands</Link>
+              <Link href=''>Brands</Link>
             </li>
             <li>
               <Link href='/'>Contact</Link>
@@ -77,7 +77,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <button className='duration-300 transition-all active:opacity-80 hover:opacity-80 md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'>
+              <button
+                onClick={() => {
+                  router.push('/brand')
+                }}
+                className='duration-300 transition-all active:opacity-80 hover:opacity-80 md:h-[50px] text-[14px] md:text-[16px] bg-primary text-white font-medium md:rounded-[16px] rounded-[12px] px-3 py-3 md:px-4 md:py-2'
+              >
                 I&apos;m a Brand
               </button>
             </>

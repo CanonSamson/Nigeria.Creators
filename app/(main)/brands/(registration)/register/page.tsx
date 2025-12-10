@@ -146,7 +146,8 @@ export default function CreatorApplyPage () {
             isDisabled: false,
             isDisabledAt: null,
             isSuspendedAt: null,
-            isSuspended: false
+            isSuspended: false,
+            requestId: null
           })
         if (userInsertError) throw new Error(userInsertError.message)
 

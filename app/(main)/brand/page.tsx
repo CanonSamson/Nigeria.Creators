@@ -47,13 +47,7 @@ const BrandDashboard = () => {
             </p>
            </div>
             <CategoryTabs
-              categories={[
-                'Women’s Health',
-                'Women’s Health',
-                'Women’s Health',
-                'Women’s Health',
-                'Women’s Health'
-              ]}
+           
             />
             <div className=' w-full py-6'>
               <span className=' w-full h-[1px] bg-[#DFDFDF] flex' />
