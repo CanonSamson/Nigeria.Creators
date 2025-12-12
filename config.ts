@@ -40,6 +40,7 @@ export const APP_DEFAULT_BRAND_AUTH_PATHS = [
   '/brands/verify-email',
   '/brand',
   '/brand/settings',
+  '/brand/settings/profile',
   '/brand/settings/password',
   '/brand/settings/social',
   '/brand/settings/notifications',

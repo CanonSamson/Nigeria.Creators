@@ -1,0 +1,139 @@
+'use client'
+import DashboardSideBar from '@/components/dashboard-sidebar'
+import { UserContext } from '@/context/user'
+import { cn } from '@/lib/utils'
+import { ReactNode } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useContextSelector } from 'use-context-selector'
+import Avatar from '@/components/ui/avatar'
+
+const PageLayout = ({ children }: { children: ReactNode }) => {
+  const currentUser = useContextSelector(UserContext, state => state.currentUser)
+  const logout = useContextSelector(UserContext, state => state.logout)
+  const pathName = usePathname()
+  const router = useRouter()
+
+  return (
+    <div
+      className={cn(
+        'min-h-[100dvh] flex  items-start justify-start w-full font-sans',
+        '!min-h-[100dvh]'
+      )}
+    >
+      <div
+        className={cn(
+          'min-h-[100dvh] flex font-sans items-start   overflow-x-hidden justify-start w-full max-w-[1200px] mx-auto ',
+          '!min-h-[100dvh]'
+        )}
+      >
+        <DashboardSideBar />
+        <div className=' max-w-[1200px] w-full flex-1 mx-auto'>
+          <div className='pt-20 md:mtp-10 md:pt-14  px-4 md:pl-26 flex items-start  md:pr-10   w-full '>
+            <div className='pt-10 md:pt-14  w-full sm:max-w-[80%] md:max-w-[90%]'>
+              <div className=' md:text-start text-center '>
+                <h1 className='text-[28px] md:text-[36px] font-bold tracking-tight'>
+                  Account Settings
+                </h1>
+                <p className='mt-1 text-text-color-200 text-[14px] md:text-[16px]'>
+                  Manage your brand profile and preferences
+                </p>
+              </div>
+
+              <div className=' flex-col text-center md:text-start md:flex-row   mt-8 flex items-center gap-4'>
+                <Avatar
+                  img={currentUser?.profilePictureUrl || ''}
+                  fullName={currentUser?.name || ''}
+                  className='h-10 w-10 md:h-12 md:w-12'
+                  innerClassName='size-10 md:size-12 rounded-full object-cover'
+                  width={100}
+                  height={100}
+                />
+                <div>
+                  <p className='text-[16px] md:text-[18px] font-medium text-black'>
+                    {currentUser?.name || ''} / Brand
+                  </p>
+                  <p className='text-[12px] md:text-[14px] text-text-color-200'>
+                    Update your brand details and manage your account
+                  </p>
+                </div>
+              </div>
+              <div className=' mt-10 flex flex-col  md:flex-row items-start gap-6 w-full'>
+                <div className=' md:w-[250px]'>
+                  <div>
+                    <div className='mt-3 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
+                      <Link
+                        href={'/brand/settings'}
+                        className={cn(
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/brand/settings' ? 'text-[#327468]' : 'text-black'
+                        )}
+                      >
+                        General
+                      </Link>
+                      <Link
+                        href={'/brand/settings/profile'}
+                        className={cn(
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/brand/settings/profile' ? 'text-[#327468]' : 'text-black'
+                        )}
+                      >
+                        Edit Profile
+                      </Link>
+                      <Link
+                        href={'/brand/settings/social'}
+                        className={cn(
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/brand/settings/social' ? 'text-[#327468]' : 'text-black'
+                        )}
+                      >
+                        Social Profiles
+                      </Link>
+                      <Link
+                        href={'/brand/settings/notifications'}
+                        className={cn(
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/brand/settings/notifications' ? 'text-[#327468]' : 'text-black'
+                        )}
+                      >
+                        Email Notifications
+                      </Link>
+                      <Link
+                        href={'/brand/settings/password'}
+                        className={cn(
+                          'text-[14px] md:text-[16px] font-medium flex-none',
+                          pathName === '/brand/settings/password' ? 'text-[#327468]' : 'text-black'
+                        )}
+                      >
+                        Password
+                      </Link>
+                    </div>
+                    <div className='my-4 h-px bg-[#EFEFEF]' />
+                    <div className='mt-2 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:flex-col'>
+                      <button
+                        className='text-left flex-none w-auto md:w-full text-[14px] md:text-[16px] text-red-500'
+                        onClick={() => logout({ redirect: true })}
+                      >
+                        Logout
+                      </button>
+                      <button
+                        className='text-left flex-none w-auto md:w-full text-[14px] md:text-[16px] text-red-500'
+                        onClick={() => router.push('/brand/settings/delete-account')}
+                      >
+                        Delete Account
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className=' flex-1 w-full pb-20 '>{children}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default PageLayout
+
