@@ -1,76 +1,106 @@
-"use client"
+'use client'
 
-import { useRef, useState } from "react"
-import { CloudUpload } from "lucide-react"
-import { toast } from "sonner"
-import { useFormikContext } from "formik"
+import { useRef, useState } from 'react'
+import { CloudUpload } from 'lucide-react'
+import { toast } from 'sonner'
+import { useFormikContext } from 'formik'
+import CustomSelect from '@/components/input/CustomSelect'
+import { budgetOptions } from '@/utils/options'
 
 const ProfileInfoSection = () => {
   const { values, setFieldValue, errors, touched } = useFormikContext<{
     resident: string
     profilePicture: File | null
     description: string
+    minBudget: string
   }>()
-  const resident = values.resident || ""
-  const fileName = values.profilePicture ? values.profilePicture.name : ""
+  const resident = values.resident || ''
+  const fileName = values.profilePicture ? values.profilePicture.name : ''
   const [isDragging, setIsDragging] = useState(false)
-  const description = values.description || ""
+  const description = values.description || ''
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const minBudget = values.minBudget || ''
 
   const handleFiles = (files: FileList | null) => {
     if (!files || !files[0]) return
     const file = files[0]
     if (file.size > 25 * 1024 * 1024) {
-      toast.error("File exceeds 25MB limit")
+      toast.error('File exceeds 25MB limit')
       return
     }
-    setFieldValue("profilePicture", file)
+    setFieldValue('profilePicture', file)
   }
 
   return (
     <>
-      <div className="mt-4">
-        <h2 className="text-[18px] md:text-[22px] font-bold text-black">Almost Done</h2>
-        <p className="mt-2 text-text-color-200 text-[14px] md:text-[16px]">
+      <div className='mt-4'>
+        <h2 className='text-[18px] md:text-[22px] font-bold text-black'>
+          Almost Done
+        </h2>
+        <p className='mt-2 text-text-color-200 text-[14px] md:text-[16px]'>
           Upload your best content to showcase your talents and creativity.
         </p>
       </div>
 
-      <div className="mt-6 max-w-[640px] space-y-6">
+      <div className='mt-6 max-w-[640px] space-y-6'>
         <div>
-          <label className="block text-[13px] md:text-[14px] text-black mb-2">
+          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
             Do you live in Nigeria
           </label>
           <select
             value={resident}
-            onChange={e => setFieldValue("resident", e.target.value)}
-            className="w-full h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none"
+            onChange={e => setFieldValue('resident', e.target.value)}
+            className='w-full h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none'
           >
-            <option value="" disabled>
+            <option value='' disabled>
               Select
             </option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value='yes'>Yes</option>
+            <option value='no'>No</option>
           </select>
           {touched.resident && errors.resident ? (
-            <p className="mt-1 text-[12px] text-red-500">{String(errors.resident)}</p>
+            <p className='mt-1 text-[12px] text-red-500'>
+              {String(errors.resident)}
+            </p>
           ) : null}
         </div>
 
         <div>
-          <label className="block text-[13px] md:text-[14px] text-black mb-2">
+          <CustomSelect
+            label='Minimum Starting Rate for Content Projects'
+            placeholder={
+              minBudget
+                ? budgetOptions.find(o => o.value === minBudget)?.label
+                : 'Select minimum'
+            }
+            value={minBudget}
+            onChange={v => setFieldValue('minBudget', v)}
+            options={budgetOptions}
+            error={
+              touched.minBudget && errors.minBudget
+                ? String(errors.minBudget)
+                : undefined
+            }
+          />
+          <p className='mt-1 text-[12px] text-text-color-200'>
+            This is the lowest budget you accept for creating content.
+          </p>
+        </div>
+
+        <div>
+          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
             Content Creators upload a Profile Picture
           </label>
           <input
             ref={fileInputRef}
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             hidden
             onChange={e => handleFiles(e.target.files)}
           />
           <div
-            role="button"
-            aria-label="Upload profile picture"
+            role='button'
+            aria-label='Upload profile picture'
             onClick={() => fileInputRef.current?.click()}
             onDragOver={e => {
               e.preventDefault()
@@ -86,31 +116,35 @@ const ProfileInfoSection = () => {
               handleFiles(e.dataTransfer.files)
             }}
             className={`min-h-[140px] md:min-h-[160px] flex items-center justify-center text-center rounded-[12px] md:rounded-[16px] border ${
-              isDragging ? "border-primary bg-[#F5FFFD]" : "border-[#EFEFEF] bg-[#F8F8F8]"
+              isDragging
+                ? 'border-primary bg-[#F5FFFD]'
+                : 'border-[#EFEFEF] bg-[#F8F8F8]'
             }`}
           >
-            <div className="flex flex-col items-center gap-2 px-6 py-8">
-              <CloudUpload className="h-6 w-6 text-text-color-200" />
-              <span className="text-[14px] md:text-[16px] text-text-color-200">
-                {fileName || "Click to upload file or drag-and-drop."}
+            <div className='flex flex-col items-center gap-2 px-6 py-8'>
+              <CloudUpload className='h-6 w-6 text-text-color-200' />
+              <span className='text-[14px] md:text-[16px] text-text-color-200'>
+                {fileName || 'Click to upload file or drag-and-drop.'}
               </span>
-              <span className="text-[12px] text-text-color-200">Max 25 MB</span>
+              <span className='text-[12px] text-text-color-200'>Max 25 MB</span>
             </div>
           </div>
         </div>
 
         <div>
-          <label className="block text-[13px] md:text-[14px] text-black mb-2">
+          <label className='block text-[13px] md:text-[14px] text-black mb-2'>
             Add a short Description for yourself
           </label>
           <textarea
             value={description}
-            onChange={e => setFieldValue("description", e.target.value)}
-            placeholder="Description"
-            className="w-full min-h-[120px] md:min-h-[160px] px-4 py-3 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black placeholder:text-text-color-200 outline-none"
+            onChange={e => setFieldValue('description', e.target.value)}
+            placeholder='Description'
+            className='w-full min-h-[120px] md:min-h-[160px] px-4 py-3 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black placeholder:text-text-color-200 outline-none'
           />
           {touched.description && errors.description ? (
-            <p className="mt-1 text-[12px] text-red-500">{String(errors.description)}</p>
+            <p className='mt-1 text-[12px] text-red-500'>
+              {String(errors.description)}
+            </p>
           ) : null}
         </div>
       </div>

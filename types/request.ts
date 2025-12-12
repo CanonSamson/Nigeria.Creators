@@ -12,4 +12,5 @@ export type CreatorJoinRequestType = {
   tiktok: string | null
   profilePictureUrl: string | null
   createdAt?: string
+  minBudget?: number | null
 }

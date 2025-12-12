@@ -247,75 +247,90 @@ export const categories = [
   'Others'
 ]
 
-export const categoriesOptions: Record<string, { name: string; value: string; tag: string }> = {
-  ["Tech"]: {
+export const categoriesOptions: Record<
+  string,
+  { name: string; value: string; tag: string }
+> = {
+  ['Tech']: {
     name: 'Tech',
     value: 'tech',
     tag: 'TH'
   },
-  ["Cooking"]: {
+  ['Cooking']: {
     name: 'Cooking',
     value: 'cooking',
     tag: 'CK'
   },
-  ["Family"]: {
+  ['Family']: {
     name: 'Family',
     value: 'family',
     tag: 'FA'
   },
-  ["Day in a life"]: {
+  ['Day in a life']: {
     name: 'Day in a life',
     value: 'day-in-a-life',
     tag: 'DL'
   },
-  ["Fashion & Beauty"]: {
+  ['Fashion & Beauty']: {
     name: 'Fashion & Beauty',
     value: 'fashion-beauty',
     tag: 'FB'
   },
-  ["UGC"]: {
+  ['UGC']: {
     name: 'UGC',
     value: 'ugc',
     tag: 'UG'
   },
-  ["Health & Wellness"]: {
+  ['Health & Wellness']: {
     name: 'Health & Wellness',
     value: 'health-wellness',
     tag: 'HW'
   },
-  ["Travel"]: {
+  ['Travel']: {
     name: 'Travel',
     value: 'travel',
     tag: 'TR'
   },
-  ["Women’s Health"]: {
+  ['Women’s Health']: {
     name: 'Women’s Health',
     value: 'womens-health',
     tag: 'WH'
   },
-  ["Faith & Motivation"]: {
+  ['Faith & Motivation']: {
     name: 'Faith & Motivation',
     value: 'faith-motivation',
     tag: 'FM'
   },
-  ["Art & Creativity"]: {
+  ['Art & Creativity']: {
     name: 'Art & Creativity',
     value: 'art-creativity',
     tag: 'AC'
   },
-  ["Business & Finance"]: {
+  ['Business & Finance']: {
     name: 'Business & Finance',
     value: 'business-finance',
     tag: 'BF'
   },
-  ["Travel & Culture"]: {
+  ['Travel & Culture']: {
     name: 'Travel & Culture',
     value: 'travel-culture',
     tag: 'TC'
   },
-  ["Others"]: {
+  ['Others']: {
     name: 'Others',
     value: 'others',
     tag: 'OT'
   }
 }
+
+export const budgetOptions = [
+  { label: '₦10,000', value: '10000' },
+  { label: '₦25,000', value: '25000' },
+  { label: '₦50,000', value: '50000' },
+  { label: '₦100,000', value: '100000' },
+  { label: '₦250,000', value: '250000' },
+  { label: '₦500,000', value: '500000' },
+  { label: '₦1,000,000', value: '1000000' },
+  { label: '₦1,500,000', value: '1500000' },
+  { label: '₦2,000,000', value: '2000000' }
+]

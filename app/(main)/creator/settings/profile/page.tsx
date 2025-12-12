@@ -26,7 +26,13 @@ const schema = Yup.object({
     .required('Required'),
   description: Yup.string().trim().min(10, 'Too short').required('Required'),
   profilePicture: Yup.mixed().nullable(),
-  state: Yup.string().trim().optional().nullable()
+  state: Yup.string().trim().optional().nullable(),
+  minBudget: Yup.string()
+    .oneOf(
+      ['10000', '25000', '50000', '100000', '250000', '500000', '1000000'],
+      'Select a valid amount'
+    )
+    .required('Required')
 })
 
 const CreatorsDashboard = () => {
@@ -59,6 +65,7 @@ const CreatorsDashboard = () => {
     description: string
     profilePicture: File | null
     state: string
+    minBudget: string
   }>({
     initialValues: {
       name: currentUser?.name || '',
@@ -69,7 +76,8 @@ const CreatorsDashboard = () => {
           : '',
       description: '',
       profilePicture: null,
-      state: ''
+      state: '',
+      minBudget: ''
     },
     validationSchema: schema,
     onSubmit: async values => {
@@ -105,7 +113,8 @@ const CreatorsDashboard = () => {
           .from('creator_profile')
           .update({
             description: values.description.trim(),
-            state: values.resident === 'yes' ? values.state : null
+            state: values.resident === 'yes' ? values.state : null,
+            ...(values.minBudget?.trim() && { minBudget: Number() })
           })
           .eq('userId', userId)
         if (profileUpdateError) throw new Error(profileUpdateError.message)
@@ -121,22 +130,38 @@ const CreatorsDashboard = () => {
     }
   })
 
-  const { data: profile } = useQuery<{ description?: string; state?: string } | null>({
+  const { data: profile } = useQuery<{
+    description?: string
+    state?: string
+    minBudget?: string
+  } | null>({
     queryKey: ['creator-profile', currentUser?.id],
     enabled: !!currentUser?.id,
     queryFn: async () => {
-      const p = await supabaseService.getDB<{ description: string; state?: string }>(
-        'creator_profile',
-        { filters: { userId: currentUser?.id || '' }, single: true }
+      const p = await supabaseService.getDB<{
+        description: string
+        state?: string
+        minBudget?: string
+      }>('creator_profile', {
+        filters: { userId: currentUser?.id || '' },
+        single: true
+      })
+      return (
+        (p as {
+          description?: string
+          state?: string
+          minBudget?: string
+        } | null) || null
       )
-      return (p as { description?: string; state?: string } | null) || null
     }
   })
   useEffect(() => {
     const desc = (profile as { description?: string } | null)?.description || ''
     const st = (profile as { state?: string } | null)?.state || ''
+    const mb = (profile as { minBudget?: string } | null)?.minBudget || ''
     setFieldValue('description', desc)
     setFieldValue('state', st)
+    setFieldValue('minBudget', mb)
   }, [profile])
 
   return (
@@ -201,6 +226,44 @@ const CreatorsDashboard = () => {
             }
           />
         ) : null}
+
+        <div>
+          {(() => {
+            const budgetOptions = [
+              { label: '₦10,000', value: '10000' },
+              { label: '₦25,000', value: '25000' },
+              { label: '₦50,000', value: '50000' },
+              { label: '₦100,000', value: '100000' },
+              { label: '₦250,000', value: '250000' },
+              { label: '₦500,000', value: '500000' },
+              { label: '₦1,000,000', value: '1000000' }
+            ]
+            return (
+              <>
+                <CustomSelect
+                  label='Minimum Starting Rate for Content Projects'
+                  value={values.minBudget}
+                  onChange={v => setFieldValue('minBudget', v)}
+                  placeholder={
+                    values.minBudget
+                      ? budgetOptions.find(o => o.value === values.minBudget)
+                          ?.label || 'Select minimum'
+                      : 'Select minimum'
+                  }
+                  options={budgetOptions}
+                  error={
+                    touched.minBudget && errors.minBudget
+                      ? String(errors.minBudget)
+                      : undefined
+                  }
+                />
+                <p className='mt-1 text-[12px] text-text-color-200'>
+                  This is the lowest budget you accept for creating content.
+                </p>
+              </>
+            )
+          })()}
+        </div>
 
         <div>
           <label className='block text-[13px] md:text-[14px] text-black mb-2'>

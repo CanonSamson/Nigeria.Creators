@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import CustomRootLayout from '@/components/layout/CustomRootLayout'
 import { ResolvingMetadata } from 'next'
+import { Toaster } from '@/components/ui/sonner'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -55,6 +56,7 @@ export default function RootLayout ({
     <html lang='en'>
       <body className={`${inter.variable} antialiased`}>
         <CustomRootLayout>{children}</CustomRootLayout>
+        <Toaster />
       </body>
     </html>
   )

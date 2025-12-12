@@ -3,7 +3,7 @@
 import { useSettingModal } from '@/context/model-settings'
 import { BsArrowRight } from 'react-icons/bs'
 import { useState } from 'react'
-import { Toaster, toast } from 'sonner'
+import {  toast } from 'sonner'
 import { mixpanelService } from '@/services/mixpanel'
 
 const WaitListEmailInput = () => {
@@ -37,7 +37,6 @@ const WaitListEmailInput = () => {
         error ? 'border-red-500' : 'border-[#EFEFEF]'
       }`}
     >
-      <Toaster />
       <input
         type='email'
         required

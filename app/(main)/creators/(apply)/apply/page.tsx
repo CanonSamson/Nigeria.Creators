@@ -31,13 +31,16 @@ const validationSchema = Yup.object({
     .url('Enter a valid URL')
     .required('Required'),
   instagram: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
-  tiktok: Yup.string().trim().url('Enter a valid URL').nullable().optional()
+  tiktok: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
+  minBudget: Yup.string()
+    .oneOf(['10000','25000','50000','100000','250000','500000','1000000'], 'Select a valid amount')
+    .required('Required')
 })
 
 const stepFields: Record<number, string[]> = {
   1: ['categories'],
   2: ['name', 'email', 'phone'],
-  3: ['resident', 'profilePicture', 'description'],
+  3: ['resident', 'profilePicture', 'description', 'minBudget'],
   4: ['contentLink', 'instagram', 'tiktok']
 }
 
@@ -73,6 +76,8 @@ export default function CreatorApplyPage () {
     contentLink: string
     instagram: string
     tiktok: string
+    minBudget: string
+    maxBudget?: never
   }
 
   const initialValues: FormValues = {
@@ -85,7 +90,9 @@ export default function CreatorApplyPage () {
     description: '',
     contentLink: '',
     instagram: '',
-    tiktok: ''
+    tiktok: '',
+    minBudget: '',
+    maxBudget: undefined as never
   }
 
   const handleSubmit = async (
@@ -158,7 +165,8 @@ export default function CreatorApplyPage () {
           contentLink: values.contentLink.trim(),
           instagram: values.instagram || null,
           tiktok: values.tiktok || null,
-          profilePictureUrl: profileUrl
+          profilePictureUrl: profileUrl,
+          minBudget: Number(values.minBudget || 0)
         },
         id
       )

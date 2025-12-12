@@ -142,7 +142,8 @@ export default function FinishUpForm () {
             contentLink: request?.contentLink || null,
             tiktokLink: request?.tiktok || null,
             instagramLink: request?.instagram || null,
-            categories: request?.categories || []
+            categories: request?.categories || [],
+            minBudget: request?.minBudget ? Number(request?.minBudget) : null,
           })
         if (profileInsertError) {
           await supabaseService.client

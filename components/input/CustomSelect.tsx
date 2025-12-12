@@ -88,7 +88,7 @@ const CustomSelect: React.FC<CustomCustomSelectProps> = ({
   return (
     <div className={`flex flex-col relative ${className}`}>
       {label && (
-        <label>
+        <label className='block text-[13px] md:text-[14px] text-black mb-2'>
           {label} <span className='text-red-600'>{showStar && '*'}</span>
         </label>
       )}
