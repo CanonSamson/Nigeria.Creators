@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import useAppStore from '@/store/useAppStore'
 
 export type CreatorSearch = {
   name: string
@@ -27,10 +28,25 @@ type ApiCreator = {
 }
 
 export function useCreatorsSearch () {
+  const categories = useAppStore(s => s.brandFilters.categories)
+  const others = useAppStore(s => s.brandFilters.others)
+  const defaults = useAppStore(s => s.brandFilters.defaultCategories)
   const { data } = useQuery<{ success: boolean; data: ApiCreator[] }>({
-    queryKey: ['creators-list'],
+    queryKey: ['creators-list', { categories, others, defaults }],
     queryFn: async () => {
-      const res = await axios.get('/api/creators')
+      const res = await axios.get('/api/creators', {
+        params: {
+          categories:
+            !others && categories && categories.length > 0
+              ? categories.join(',')
+              : undefined,
+          others: others ? 'true' : undefined,
+          excludeCategories:
+            others && defaults && defaults.length > 0
+              ? defaults.join(',')
+              : undefined
+        }
+      })
       return res.data
     }
   })

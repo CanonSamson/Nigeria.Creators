@@ -39,10 +39,7 @@ export default function FilterBar ({ onChange }: Props) {
         </button>
         <div className='hidden md:block'>
         <CategoriesFilter
-          options={dummyCategories}
-          onChange={(value: string[]) =>
-            onChange?.({ type: 'categories', value })
-          }
+         
         />
         </div>
         <button

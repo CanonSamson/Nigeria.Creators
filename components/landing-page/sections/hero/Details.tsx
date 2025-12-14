@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { mixpanelService } from '@/services/mixpanel'
+import { ChevronRight } from 'lucide-react'
 
 const HeroSectionDetails = () => {
   const [waitList, setWaitList] = useState(false)
@@ -90,6 +91,7 @@ const HeroSectionDetails = () => {
             </button>
           </div>
         ) : (
+          <>
           <div className=' flex mt-[26px] justify-center gap-4'>
             <button
               onClick={() => {
@@ -115,6 +117,18 @@ const HeroSectionDetails = () => {
               I&apos;m a Brand
             </button>
           </div>
+          <div className='mt-4 flex justify-center'>
+            <button
+              onClick={() => {
+                mixpanelService.track('CLICK_HERO_LOGIN', { source: 'hero-section' })
+                router.push('/login')
+              }}
+              className='inline-flex items-center gap-1 text-primary text-[14px] md:text-[16px] font-medium'
+            >
+              Login <ChevronRight className='h-4 w-4' />
+            </button>
+          </div>
+          </>
         )}
       </div>
     </div>

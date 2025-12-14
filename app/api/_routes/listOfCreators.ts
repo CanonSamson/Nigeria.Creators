@@ -6,6 +6,38 @@ export const listOfCreatorsRoutes = new Elysia()
     '/creators',
     async ({ query, set }) => {
       try {
+        const brandId =
+          query?.brandId && String(query.brandId).trim().length > 0
+            ? String(query.brandId).trim()
+            : undefined
+        const selectedCategories =
+          query?.categories && String(query.categories).trim().length > 0
+            ? String(query.categories)
+                .split(',')
+                .map((s) => s.trim())
+                .filter((s) => s.length > 0)
+            : []
+        const othersOnly =
+          typeof query?.others === 'string' &&
+          String(query.others).toLowerCase() === 'true'
+        let excludeCategories =
+          query?.excludeCategories && String(query.excludeCategories).trim().length > 0
+            ? String(query.excludeCategories)
+                .split(',')
+                .map((s) => s.trim())
+                .filter((s) => s.length > 0)
+            : []
+        if (othersOnly && excludeCategories.length === 0 && brandId) {
+          const { data: brandRows, error: brandErr } = await supabaseService.client
+            .from('brand_profile')
+            .select('categories')
+            .eq('userId', brandId)
+            .limit(1)
+          if (!brandErr) {
+            const row = (brandRows || [])[0] as { categories?: string[] } | undefined
+            excludeCategories = Array.isArray(row?.categories) ? (row!.categories as string[]) : []
+          }
+        }
         const isNonEmpty = (v: any) =>
           typeof v === 'string' ? v.trim().length > 0 : !!v
         const meetsRequired = (u: any) => {
@@ -66,12 +98,13 @@ export const listOfCreatorsRoutes = new Elysia()
         }
       }
 
-      const { data: profiles, error: pErr } = await supabaseService.client
+      const profileQuery = supabaseService.client
         .from('creator_profile')
         .select(
           'userId,description,contentLink,tiktokLink,instagramLink,categories,state'
         )
         .in('userId', ids)
+      const { data: profiles, error: pErr } = await profileQuery
 
       if (pErr) {
         set.status = 500
@@ -89,7 +122,21 @@ export const listOfCreatorsRoutes = new Elysia()
         ...u,
         profile: profileMap.get(u.id) || null
       }))
-      const filtered = merged.filter(meetsRequired)
+      const filteredBySelection = (othersOnly || selectedCategories.length > 0)
+        ? merged.filter(u => {
+            const cats = Array.isArray((u.profile as any)?.categories)
+              ? ((u.profile as any).categories as string[])
+              : []
+            if (othersOnly && excludeCategories.length > 0) {
+              return cats.every(c => !excludeCategories.includes(c))
+            }
+            if (selectedCategories.length > 0) {
+              return cats.some(c => selectedCategories.includes(c))
+            }
+            return true
+          })
+        : merged
+      const filtered = filteredBySelection.filter(meetsRequired)
 
       const total = count ?? 0
       const currentPage = page ?? Math.floor(offset / limit) + 1
@@ -110,6 +157,7 @@ export const listOfCreatorsRoutes = new Elysia()
         }
       }
     } catch (e) {
+      console.log(e)
       const msg = e instanceof Error ? e.message : String(e)
       set.status = 500
       return { success: false, error: msg }
@@ -119,7 +167,11 @@ export const listOfCreatorsRoutes = new Elysia()
       query: t.Object({
         limit: t.Optional(t.String()),
         offset: t.Optional(t.String()),
-        page: t.Optional(t.String())
+        page: t.Optional(t.String()),
+        categories: t.Optional(t.String()),
+        others: t.Optional(t.String()),
+        excludeCategories: t.Optional(t.String()),
+        brandId: t.Optional(t.String())
       })
     }
   )
