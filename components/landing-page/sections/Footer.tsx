@@ -18,7 +18,7 @@ const Footer = () => {
         hideCard ? ' pb-[200px] md:py-[200px]' : 'py-[200px]'
       )}
     >
-      <div className='w-full px-6 md:px-10'>
+      <div className='w-full font-sans px-6 md:px-10'>
         <div className='mx-auto max-w-[1100px]'>
           <div
             className={cn(

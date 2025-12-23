@@ -24,6 +24,7 @@ export const APP_DEFAULT_GUEST_PATHS= [
 
 export const DONT_ALLOW_LOADING_SCREEN_PATHS = [
   '/creators/finish-up',
+  '/brands',
   '/',
   ...APP_DEFAULT_GUEST_PATHS
 ]
