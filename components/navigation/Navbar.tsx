@@ -3,7 +3,7 @@ import { UserContext } from '@/context/user'
 import { hasPermission } from '@/utils/permissions/auth-abac'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useContextSelector } from 'use-context-selector'
 import { mixpanelService } from '@/services/mixpanel'
 
@@ -13,6 +13,7 @@ const Navbar = () => {
     UserContext,
     state => state.isAuthenticated
   )
+  const pathname = usePathname()
   const currentUser = useContextSelector(
     UserContext,
     state => state.currentUser
@@ -48,7 +49,14 @@ const Navbar = () => {
               <Link href='/login'>Creators</Link>
             </li>
             <li>
-              <Link href='/brands'>Brands</Link>
+              <Link
+                href='/brands'
+                className={`${
+                  pathname === '/brands' ? 'text-primary font-semibold' : ''
+                }`}
+              >
+                Brands
+              </Link>
             </li>
             <li>
               <Link href='/'>Contact</Link>
