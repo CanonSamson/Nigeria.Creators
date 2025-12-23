@@ -4,18 +4,18 @@ import SolutionDemoCard from '../cards/SolutionDemoCard'
 const BrandBusinessSolutionsSection = () => {
   return (
     <div>
-      <div className=' mt-20 flex flex-col justify-center items-center'>
-        <div className=' mx-auto  flex flex-col items-center'>
-          <h2 className=' text-[32px] md:text-[48px] font-bold text-black tracking-tighter'>
+      <div className='mt-12 md:mt-20 flex flex-col justify-center items-center px-4'>
+        <div className='mx-auto flex flex-col items-center'>
+          <h2 className='text-[32px] md:text-[48px] font-bold text-black tracking-tighter text-center'>
             Business Solutions
           </h2>
-          <p className=' mt-4 text-text-color-200 text-[16px] md:text-[20px]'>
+          <p className='mt-4 text-text-color-200 text-[16px] md:text-[20px] text-center max-w-[600px]'>
             Turn creator partnerships into measurable business growth with real
             performance insights.
           </p>
         </div>
 
-        <div className=' mt-10 w-full max-w-[1100px]  grid grid-cols-1 sm:grid-cols-2 gap-10 '>
+        <div className='mt-10 w-full max-w-[1100px] grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10'>
           <SolutionDemoCard
             title={
               <>

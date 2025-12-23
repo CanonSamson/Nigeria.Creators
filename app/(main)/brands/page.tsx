@@ -14,13 +14,9 @@ const Brands = () => {
       <div id='top' />
       <Navbar />
       <BrandHeroSection />
-
       <BrandFeaturedCreatorsSection />
-
       <BrandBusinessSolutionsSection />
-
       <BrandCalendlySection />
-
       <BrandPricingSection />
       <CreatorsListSection />
       <FAQSection />
