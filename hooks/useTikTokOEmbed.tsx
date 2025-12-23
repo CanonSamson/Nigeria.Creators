@@ -64,7 +64,6 @@ export const useTikTokOEmbed = (initialUrl?: string) => {
     [data?.embed_product_id, data?.author_unique_id]
   )
 
-  console.log(embedUrl, "embedUrl")
   return {
     loading: isLoading,
     error: error ? (error as Error).message : null,

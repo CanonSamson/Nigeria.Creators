@@ -3,6 +3,7 @@ import { MapPin, Heart, ArrowUpRight } from 'lucide-react'
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa'
 import { CreatorSearch } from '@/hooks/useCreatorsSearch'
 import { useSettingModal } from '@/context/model-settings'
+import { categoriesOptions } from '@/utils/options'
 import { formatAmount } from '@/utils/func'
 
 type Props = {
@@ -11,7 +12,8 @@ type Props = {
 
 export default function CreatorCard ({ creator }: Props) {
   const { name, about, image, category, tags, location, minBudget } = creator
-  const othersText = tags.join(',  ')
+  const catTag = categoriesOptions[category]?.tag || ''
+  const othersTags = [catTag, ...tags].filter(Boolean)
   const { toggleModal } = useSettingModal()
 
   return (
@@ -78,10 +80,15 @@ export default function CreatorCard ({ creator }: Props) {
                 <p className='text-[14px] md:text-[15px] font-semibold text-black'>
                   Others
                 </p>
-                <div className='mt-2'>
-                  <span className='inline-flex items-center px-4 h-8 rounded-full border border-[#EAEAEA] bg-white text-[14px] text-[#303030]'>
-                    {othersText}
-                  </span>
+                <div className='mt-2 flex flex-wrap gap-2'>
+                  {othersTags.map((t, i) => (
+                    <span
+                      key={`${t}-${i}`}
+                      className='inline-flex items-center px-4 h-8 rounded-full border border-[#EAEAEA] bg-white text-[14px] text-[#303030]'
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>

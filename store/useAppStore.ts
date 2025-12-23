@@ -8,23 +8,30 @@ export type AppStore = {
     categories: string[]
     defaultCategories: string[]
     others: boolean
+    location?: string
+    budgetRange?: { min?: number; max?: number }
   }
   toggleBrandCategory: (category: string) => void
   clearBrandFilters: () => void
   setBrandDefaultCategories: (categories: string[]) => void
   toggleOthersFilter: () => void
   loadBrandDefaultCategories: (userId: string) => Promise<void>
+  setBrandLocation: (loc: string) => void
+  setBrandBudgetRange: (range: { min?: number; max?: number }) => void
+  hasActiveFilters: () => boolean
   resetStore: () => void
 }
 
 const useAppStore = create<AppStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       count: 0,
       brandFilters: {
         categories: [],
         defaultCategories: [],
-        others: false
+        others: false,
+        location: undefined,
+        budgetRange: undefined
       },
       toggleBrandCategory: (category: string) => {
         set((state) => {
@@ -39,7 +46,7 @@ const useAppStore = create<AppStore>()(
       },
       clearBrandFilters: () => {
         set({
-          brandFilters: { categories: [], defaultCategories: [], others: false }
+          brandFilters: { categories: [], defaultCategories: [], others: false, location: undefined, budgetRange: undefined }
         })
       },
       setBrandDefaultCategories: (categories: string[]) => {
@@ -65,11 +72,37 @@ const useAppStore = create<AppStore>()(
           brandFilters: { ...state.brandFilters, defaultCategories: categories }
         }))
       },
+      setBrandLocation: (loc: string) => {
+        set((state) => ({
+          brandFilters: { ...state.brandFilters, location: loc }
+        }))
+      },
+      setBrandBudgetRange: (range: { min?: number; max?: number }) => {
+        set((state) => ({
+          brandFilters: { ...state.brandFilters, budgetRange: range }
+        }))
+      },
+      hasActiveFilters: () => {
+        const filters = get().brandFilters
+        return (
+          (Array.isArray(filters.categories) && filters.categories.length > 0) ||
+          !!filters.others ||
+          (typeof filters.location === 'string' && filters.location.trim().length > 0) ||
+          (!!filters.budgetRange &&
+            (typeof filters.budgetRange.min === 'number' ||
+              typeof filters.budgetRange.max === 'number'))
+        )
+      },
       resetStore: () => {
-        set({
+        set((state) => ({
           count: 0,
-          brandFilters: { categories: [], defaultCategories: [], others: false }
-        })
+          brandFilters: {
+            ...state.brandFilters,
+            categories: [],
+            defaultCategories: [],
+            others: false
+          }
+        }))
       },
     }),
     { name: 'nigeria-creators-app-storage' }

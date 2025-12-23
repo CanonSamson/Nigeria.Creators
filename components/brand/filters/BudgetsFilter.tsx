@@ -23,7 +23,7 @@ export default function BudgetsFilter ({ onChange }: BudgetsFilterProps) {
     onChange?.(range)
   }
   return (
-    <DropdownBase label='Budget'>
+    <DropdownBase label='Budget' closeOnChildSubmit keepMounted>
       <form className='w-[360px] space-y-3' aria-label='Budget range' onSubmit={apply}>
         <div className='flex items-center gap-3'>
           <label className='flex-1'>

@@ -38,6 +38,10 @@ export const statesInNIgeriaOptions = [
   { label: 'Federal Capital Territory (FCT)', value: 'fct' }
 ]
 
+export const statesInNIgeriaByValue: Record<string, string> = Object.fromEntries(
+  statesInNIgeriaOptions.map(o => [o.value, o.label])
+)
+
 export const citiesInNigeriaByState: Record<
   string,
   { name: string; value: string }[]

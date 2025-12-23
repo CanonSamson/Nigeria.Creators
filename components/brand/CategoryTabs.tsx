@@ -11,6 +11,8 @@ export default function CategoryTabs () {
   const toggle = useAppStore(s => s.toggleBrandCategory)
   const clear = useAppStore(s => s.clearBrandFilters)
   const loadDefaults = useAppStore(s => s.loadBrandDefaultCategories)
+  const hasActiveFilters = useAppStore(s => s.hasActiveFilters)
+  
 
   useEffect(() => {
     const id = currentUser?.id || ''
@@ -24,7 +26,7 @@ export default function CategoryTabs () {
   return (
     <div className='w-full overflow-x-auto max-md:px-2 scroll-smooth'>
       <div className='flex flex-nowrap md:flex-wrap gap-2 mt-4 min-w-max'>
-        {categories.length > 0 ? (
+        {hasActiveFilters() ? (
           <button
             onClick={() => clear()}
             className='px-3 py-2 inline-flex items-center gap-1 rounded-full border text-[12px] md:text-[13px] bg-white border-[#EAEAEA] text-black'

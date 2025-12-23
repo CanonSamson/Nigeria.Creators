@@ -101,7 +101,7 @@ const CustomSelect: React.FC<CustomCustomSelectProps> = ({
         <SelectTrigger
           disabled={disabled}
           className={cn(
-            `w-full mt-1 shadow-none h-[48px] md:h-[54px] px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none`,
+            `w-full  ${label ?"mt-1" : ""} shadow-none  px-4 rounded-[12px] md:rounded-[16px] bg-[#F8F8F8] border border-[#EFEFEF] text-[14px] md:text-[16px] text-black outline-none`, "h-[48px] md:h-[54px]",
             selectTriggerClassName
           )}
         >

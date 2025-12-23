@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import useAppStore from '@/store/useAppStore'
+import { useContextSelector } from 'use-context-selector'
+import { UserContext } from '@/context/user'
 
 export type CreatorSearch = {
   id: string
@@ -34,8 +36,12 @@ export function useCreatorsSearch () {
   const categories = useAppStore(s => s.brandFilters.categories)
   const others = useAppStore(s => s.brandFilters.others)
   const defaults = useAppStore(s => s.brandFilters.defaultCategories)
+  const location = useAppStore(s => s.brandFilters.location)
+  const budgetRange = useAppStore(s => s.brandFilters.budgetRange)
+  const currentUser = useContextSelector(UserContext, s => s.currentUser)
+  const brandId = currentUser?.id || ''
   const { data } = useQuery<{ success: boolean; data: ApiCreator[] }>({
-    queryKey: ['creators-list', { categories, others, defaults }],
+    queryKey: ['creators-list', { categories, others, defaults, location, brandId, budgetRange }],
     queryFn: async () => {
       const res = await axios.get('/api/creators', {
         params: {
@@ -47,7 +53,11 @@ export function useCreatorsSearch () {
           excludeCategories:
             others && defaults && defaults.length > 0
               ? defaults.join(',')
-              : undefined
+              : undefined,
+          location: location || undefined,
+          minBudget: typeof budgetRange?.min === 'number' ? String(budgetRange.min) : undefined,
+          maxBudget: typeof budgetRange?.max === 'number' ? String(budgetRange.max) : undefined,
+          brandId: brandId || undefined
         }
       })
       return res.data

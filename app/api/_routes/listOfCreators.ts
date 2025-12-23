@@ -136,7 +136,38 @@ export const listOfCreatorsRoutes = new Elysia()
             return true
           })
         : merged
-      const filtered = filteredBySelection.filter(meetsRequired)
+      const loc = typeof (query as any)?.location === 'string' ? String((query as any).location).trim() : ''
+      const filteredByLocation = loc.length > 0
+        ? filteredBySelection.filter(u => {
+            const st = String(((u.profile as any)?.state || '')).trim().toLowerCase()
+            return st.length > 0 && st === loc.toLowerCase()
+          })
+        : filteredBySelection
+      const minQ =
+        typeof (query as any)?.minBudget === 'string' &&
+        String((query as any).minBudget).trim().length > 0
+          ? Number(String((query as any).minBudget).trim())
+          : undefined
+      const maxQ =
+        typeof (query as any)?.maxBudget === 'string' &&
+        String((query as any).maxBudget).trim().length > 0
+          ? Number(String((query as any).maxBudget).trim())
+          : undefined
+      const filteredByBudget =
+        typeof minQ === 'number' || typeof maxQ === 'number'
+          ? filteredByLocation.filter(u => {
+              const mbStr = String(((u.profile as any)?.minBudget || '')).trim()
+              const mb = mbStr.length > 0 ? Number(mbStr) : undefined
+              if (typeof mb !== 'number' || !Number.isFinite(mb)) return false
+              if (typeof minQ === 'number' && typeof maxQ === 'number') {
+                return mb >= minQ && mb <= maxQ
+              }
+              if (typeof minQ === 'number') return mb >= minQ
+              if (typeof maxQ === 'number') return mb <= maxQ
+              return true
+            })
+          : filteredByLocation
+      const filtered = filteredByBudget.filter(meetsRequired)
 
       const total = count ?? 0
       const currentPage = page ?? Math.floor(offset / limit) + 1
@@ -171,7 +202,10 @@ export const listOfCreatorsRoutes = new Elysia()
         categories: t.Optional(t.String()),
         others: t.Optional(t.String()),
         excludeCategories: t.Optional(t.String()),
-        brandId: t.Optional(t.String())
+        brandId: t.Optional(t.String()),
+        location: t.Optional(t.String()),
+        minBudget: t.Optional(t.String()),
+        maxBudget: t.Optional(t.String())
       })
     }
   )
