@@ -77,6 +77,9 @@ importers:
       react-social-media-embed:
         specifier: ^2.5.18
         version: 2.5.18(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+      react-tiktok:
+        specifier: ^1.0.0
+        version: 1.0.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
       resend:
         specifier: ^6.5.0
         version: 6.5.2(@react-email/render@2.0.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2))
@@ -1939,6 +1942,9 @@ packages:
       picomatch:
         optional: true
 
+  fetch-retry@4.1.1:
+    resolution: {integrity: sha512-e6eB7zN6UBSwGVwrbWVH+gdLnkW9WwHhmq2YDK1Sh30pzx1onRVGBvogTlUeWxwTa+L86NYdo4hFkh7O8ZjSnA==}
+
   file-entry-cache@8.0.0:
     resolution: {integrity: sha512-XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==}
     engines: {node: '>=16.0.0'}
@@ -2668,6 +2674,14 @@ packages:
   react-fast-compare@2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
 
+  react-fast-compare@3.2.2:
+    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
+
+  react-helmet@6.1.0:
+    resolution: {integrity: sha512-4uMzEY9nlDlgxr61NL3XbKRy1hEkXmKNXhjbAIOVw5vcFrsdYbH2FEwcNyWvWinl103nXgzYNlns9ca+8kFiWw==}
+    peerDependencies:
+      react: '>=16.3.0'
+
   react-html-props@2.1.1:
     resolution: {integrity: sha512-tM+YCYlr90m3JontKUAa+gNVU2zkyprlCS7OQ9aa3z2MfyJjAioJzrSmi1Vef/+UCTE6CQlPqLX4ebdLIJDKxw==}
     peerDependencies:
@@ -2711,6 +2725,11 @@ packages:
       '@types/react':
         optional: true
 
+  react-side-effect@2.1.2:
+    resolution: {integrity: sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==}
+    peerDependencies:
+      react: ^16.3.0 || ^17.0.0 || ^18.0.0
+
   react-social-media-embed@2.5.18:
     resolution: {integrity: sha512-+PkzLRGAwnySkxKajaiK5VD+EjOhlFsh/vjNxgHsDfKBTseDpFxPrMXXQWkk6BRCwFBNVWX+V1HZ9AU0y54Wgw==}
     peerDependencies:
@@ -2732,6 +2751,12 @@ packages:
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0
+
+  react-tiktok@1.0.0:
+    resolution: {integrity: sha512-t7CDkzEI6CWTxuqW7NJGF4u4N+21qvA1NGn06+kOzWDphueoAFg+BdxEKz0jtyzJYB+2nvuoPHuPK4cYdLIXvg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-twitter-embed@4.0.4:
     resolution: {integrity: sha512-2JIL7qF+U62zRzpsh6SZDXNI3hRNVYf5vOZ1WRcMvwKouw+xC00PuFaD0aEp2wlyGaZ+f4x2VvX+uDadFQ3HVA==}
@@ -5065,6 +5090,8 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.3
 
+  fetch-retry@4.1.1: {}
+
   file-entry-cache@8.0.0:
     dependencies:
       flat-cache: 4.0.1
@@ -5772,6 +5799,16 @@ snapshots:
 
   react-fast-compare@2.0.4: {}
 
+  react-fast-compare@3.2.2: {}
+
+  react-helmet@6.1.0(react@19.1.2):
+    dependencies:
+      object-assign: 4.1.1
+      prop-types: 15.8.1
+      react: 19.1.2
+      react-fast-compare: 3.2.2
+      react-side-effect: 2.1.2(react@19.1.2)
+
   react-html-props@2.1.1(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
     dependencies:
       react: 19.1.2
@@ -5815,6 +5852,10 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.1.12
 
+  react-side-effect@2.1.2(react@19.1.2):
+    dependencies:
+      react: 19.1.2
+
   react-social-media-embed@2.5.18(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
     dependencies:
       '@types/youtube-player': 5.5.11
@@ -5840,6 +5881,13 @@ snapshots:
     dependencies:
       react: 19.1.2
       react-dom: 19.1.2(react@19.1.2)
+
+  react-tiktok@1.0.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
+    dependencies:
+      fetch-retry: 4.1.1
+      react: 19.1.2
+      react-dom: 19.1.2(react@19.1.2)
+      react-helmet: 6.1.0(react@19.1.2)
 
   react-twitter-embed@4.0.4(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
     dependencies:

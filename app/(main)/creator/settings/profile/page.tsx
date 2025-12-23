@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import { CloudUpload } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabaseService } from '@/utils/supabase/services'
-import { statesInNIgeriaOptions } from '@/utils/options'
+import { budgetOptions, statesInNIgeriaOptions } from '@/utils/options'
 import CustomSelect from '@/components/input/CustomSelect'
 import { useQuery } from '@tanstack/react-query'
 
@@ -114,7 +114,9 @@ const CreatorsDashboard = () => {
           .update({
             description: values.description.trim(),
             state: values.resident === 'yes' ? values.state : null,
-            ...(values.minBudget?.trim() && { minBudget: Number() })
+            ...(values.minBudget?.trim() && {
+              minBudget: Number(values.minBudget?.trim())
+            })
           })
           .eq('userId', userId)
         if (profileUpdateError) throw new Error(profileUpdateError.message)
@@ -228,41 +230,28 @@ const CreatorsDashboard = () => {
         ) : null}
 
         <div>
-          {(() => {
-            const budgetOptions = [
-              { label: '₦10,000', value: '10000' },
-              { label: '₦25,000', value: '25000' },
-              { label: '₦50,000', value: '50000' },
-              { label: '₦100,000', value: '100000' },
-              { label: '₦250,000', value: '250000' },
-              { label: '₦500,000', value: '500000' },
-              { label: '₦1,000,000', value: '1000000' }
-            ]
-            return (
-              <>
-                <CustomSelect
-                  label='Minimum Starting Rate for Content Projects'
-                  value={values.minBudget}
-                  onChange={v => setFieldValue('minBudget', v)}
-                  placeholder={
-                    values.minBudget
-                      ? budgetOptions.find(o => o.value === values.minBudget)
-                          ?.label || 'Select minimum'
-                      : 'Select minimum'
-                  }
-                  options={budgetOptions}
-                  error={
-                    touched.minBudget && errors.minBudget
-                      ? String(errors.minBudget)
-                      : undefined
-                  }
-                />
-                <p className='mt-1 text-[12px] text-text-color-200'>
-                  This is the lowest budget you accept for creating content.
-                </p>
-              </>
-            )
-          })()}
+          <>
+            <CustomSelect
+              label='Minimum Starting Rate for Content Projects'
+              value={values.minBudget}
+              onChange={v => setFieldValue('minBudget', v)}
+              placeholder={
+                values.minBudget
+                  ? budgetOptions.find(o => o.value === values.minBudget)
+                      ?.label || 'Select minimum'
+                  : 'Select minimum'
+              }
+              options={budgetOptions}
+              error={
+                touched.minBudget && errors.minBudget
+                  ? String(errors.minBudget)
+                  : undefined
+              }
+            />
+            <p className='mt-1 text-[12px] text-text-color-200'>
+              This is the lowest budget you accept for creating content.
+            </p>
+          </>
         </div>
 
         <div>

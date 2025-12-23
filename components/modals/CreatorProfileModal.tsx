@@ -5,14 +5,15 @@ import React from 'react'
 import Image from 'next/image'
 import { BsInstagram } from 'react-icons/bs'
 import { SiTiktok } from 'react-icons/si'
+import { RxCross2 } from 'react-icons/rx'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import {
-  TikTokEmbed,
   InstagramEmbed,
   YouTubeEmbed
 } from 'react-social-media-embed'
 import { resolveEmbedUrl } from '@/utils/func/resolveEmbedUrl'
+import CustomTikTokEmbed from '../embed/CustomTikTokEmbed'
 
 const CreatorProfileModal = () => {
   const { toggleModal, modals, modalData } = useSettingModal()
@@ -72,6 +73,7 @@ const CreatorProfileModal = () => {
     toggleModal('creatorProfileModal')
   }
 
+  if (!isOpen) return null
   return (
     <div
       className={cn(
@@ -95,7 +97,7 @@ const CreatorProfileModal = () => {
               alt={data.name || 'Creator avatar'}
               height={600}
               width={1000}
-              className='w-full h-[240px] md:h-[300px] object-cover'
+              className='w-full h-[240px] object-top md:h-[340px] object-cover'
             />
           ) : null}
           <button
@@ -103,7 +105,7 @@ const CreatorProfileModal = () => {
             aria-label='Close'
             className='absolute top-3 right-3 h-8 w-8 rounded-full bg-white/80 text-black flex items-center justify-center hover:bg-white'
           >
-            ×
+            <RxCross2 className='h-4 w-4' />
           </button>
         </div>
 
@@ -155,10 +157,11 @@ const CreatorProfileModal = () => {
                 </div>
               ) : null}
 
+          
               {Boolean(data.links.contentLink) ? (
                 <div className='mt-6'>
                   {getPlatform(data.links.contentLink) === 'tiktok' ? (
-                    <TikTokEmbed url={data.links.contentLink} width={'100%'} />
+                    <CustomTikTokEmbed url={data.links.contentLink} />
                   ) : getPlatform(data.links.contentLink) === 'instagram' ? (
                     <InstagramEmbed
                       url={data.links.contentLink}
@@ -181,6 +184,7 @@ const CreatorProfileModal = () => {
               ) : null}
             </>
           )}
+          <div></div>
         </div>
       </div>
     </div>

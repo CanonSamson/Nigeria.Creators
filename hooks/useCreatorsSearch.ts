@@ -3,12 +3,14 @@ import axios from 'axios'
 import useAppStore from '@/store/useAppStore'
 
 export type CreatorSearch = {
+  id: string
   name: string
   about: string
   image: string
   category: string
   tags: string[]
   location: string
+  minBudget?: string
 }
 
 type ApiCreator = {
@@ -24,6 +26,7 @@ type ApiCreator = {
     tiktokLink?: string | null
     contentLink: string | null
     state?: string | null
+    minBudget?: string | null
   }
 }
 
@@ -53,12 +56,14 @@ export function useCreatorsSearch () {
 
   const items = Array.isArray(data?.data) ? data!.data : []
   const creators: CreatorSearch[] = items.map(c => ({
+    id: c.id,
     name: c.name,
     about: c.profile.description,
     image: c.profilePictureUrl ?? '',
     category: (c.profile?.categories && c.profile.categories[0]) || 'Others',
     tags: ['NG'],
-    location: c.profile?.state || 'Nigeria'
+    location: c.profile?.state || 'Nigeria',
+    minBudget: c.profile?.minBudget || ''
   }))
 
   return {

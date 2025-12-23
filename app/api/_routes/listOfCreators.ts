@@ -101,7 +101,7 @@ export const listOfCreatorsRoutes = new Elysia()
       const profileQuery = supabaseService.client
         .from('creator_profile')
         .select(
-          'userId,description,contentLink,tiktokLink,instagramLink,categories,state'
+          'userId,description,contentLink,tiktokLink,instagramLink,categories,state,minBudget'
         )
         .in('userId', ids)
       const { data: profiles, error: pErr } = await profileQuery
@@ -203,7 +203,7 @@ export const listOfCreatorsRoutes = new Elysia()
 
         const { data: profiles, error: pErr } = await supabaseService.client
           .from('creator_profile')
-          .select('userId,description,contentLink,tiktokLink,instagramLink,categories,state')
+          .select('userId,description,contentLink,tiktokLink,instagramLink,categories,state,minBudget')
           .eq('userId', id)
           .limit(1)
 

@@ -149,7 +149,7 @@ const CustomSelect: React.FC<CustomCustomSelectProps> = ({
           </SelectGroup>
         </SelectContent>
       </Select>
-      {error && <p className='text-negative mt-2 capitalize'>{error}</p>}
+      {error ? <p className='mt-1 text-[12px] text-red-500'>{error}</p> : null}
     </div>
   )
 }

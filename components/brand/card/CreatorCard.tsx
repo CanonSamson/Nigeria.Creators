@@ -1,18 +1,19 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { MapPin, Heart, ArrowUpRight } from 'lucide-react'
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa'
 import { CreatorSearch } from '@/hooks/useCreatorsSearch'
+import { useSettingModal } from '@/context/model-settings'
+import { formatAmount } from '@/utils/func'
 
 type Props = {
   creator: CreatorSearch
 }
 
-export default function CreatorCard ({
-  creator
-}: Props) {
-  const { name, about, image, category, tags, location } = creator
+export default function CreatorCard ({ creator }: Props) {
+  const { name, about, image, category, tags, location, minBudget } = creator
   const othersText = tags.join(',  ')
+  const { toggleModal } = useSettingModal()
+
   return (
     <article className='bg-white  text-[14px] font-sans rounded-[24px]  overflow-hidden border border-[#EFEFEF]'>
       <div className=' flex flex-col md:flex-row gap-8 p-6'>
@@ -23,7 +24,7 @@ export default function CreatorCard ({
             width={800}
             height={800}
             quality={100}
-            className=' w-full object-cover h-[360px] md:h-[560px] md:max-w-[460px] md:min-w-[200px] rounded-[24px]'
+            className=' w-full object-cover object-top h-[360px] md:h-[560px] md:max-w-[460px] md:min-w-[200px] rounded-[24px]'
           />
           <div className='absolute inset-0 bg-black/[16%] rounded-[24px]' />
           <div className='absolute top-5 left-5 w-9 h-9 bg-white/10 border-[2px] border-white rounded-full flex items-center justify-center backdrop-blur'>
@@ -44,17 +45,21 @@ export default function CreatorCard ({
               </p>
             </div>
             <div className='mt-10 flex gap-2'>
-              {/* <button className='px-4 py-2 rounded-[14px] bg-primary text-white text-[15px]'>
+              <button className='px-4 py-2 rounded-[14px] bg-primary text-white text-[15px]'>
                 Get in touch
-              </button> */}
+              </button>
             </div>
-            <Link
-              href={'#'}
+            <button
+              onClick={() => {
+                toggleModal('creatorProfileModal', {
+                  userId: creator.id
+                })
+              }}
               className='mt-4 inline-flex items-center gap-1 text-[#40444C] text-[15px]'
             >
               <span className=' italic'>View Full Profile</span>
               <ArrowUpRight className='w-3 h-3' />
-            </Link>
+            </button>
           </div>
 
           <div className=' w-full'>
@@ -80,6 +85,18 @@ export default function CreatorCard ({
                 </div>
               </div>
             </div>
+            {formatAmount(minBudget) ? (
+              <div className='mt-6'>
+                <p className='text-[14px] md:text-[15px] font-semibold text-black'>
+                  Minimum Expected
+                </p>
+                <div className='mt-2'>
+                  <span className='inline-flex italic items-center px-4 h-8 rounded-full border border-[#EAEAEA] bg-white text-[14px] text-[#303030]'>
+                    {formatAmount(minBudget)}+
+                  </span>
+                </div>
+              </div>
+            ) : null}
             <div className='mt-6 flex items-center justify-between'>
               <div className='flex items-center gap-2 text-[#40444C] text-[15px] italic'>
                 <MapPin className='w-4 h-4' />
