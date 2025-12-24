@@ -4,6 +4,7 @@ import { applyAsCreatorRoutes } from '@/app/api/_routes/applyAsCreator'
 import { metricsRoutes } from '@/app/api/_routes/metrics'
 import { listOfCreatorsRoutes } from '@/app/api/_routes/listOfCreators'
 import { verifyUserEmailRoutes } from '@/app/api/_routes/verifyUserEmail'
+import { alatPayRoutes } from '@/app/api/_routes/alatPay'
 
 const app = new Elysia({ prefix: '/api' })
   .get('/', 'Hello Nigeria Creators')
@@ -17,6 +18,7 @@ const app = new Elysia({ prefix: '/api' })
   .use(metricsRoutes)
   .use(listOfCreatorsRoutes)
   .use(verifyUserEmailRoutes)
+  .use(alatPayRoutes)
 
 export const GET = app.fetch
 export const POST = app.fetch
