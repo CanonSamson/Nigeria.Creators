@@ -58,20 +58,11 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     UserContext,
     state => state.allowRedirect
   )
+  const isGuestPath = useContextSelector(
+    UserContext,
+    state => state.isGuestPath
+  )
   const isOnline = useContextSelector(UserContext, state => state.isOnline)
-
-  const isGuestPath = useMemo(() => {
-    return APP_DEFAULT_GUEST_PATHS.some(path => {
-      // Remove query parameters from pathName for comparison
-      const cleanPathName = pathName.split('?')[0]
-
-      if (path?.includes('[id]')) {
-        const pathPattern = new RegExp(`^${path.replace('[id]', '([^/]+)')}$`)
-        return pathPattern.test(cleanPathName)
-      }
-      return path === cleanPathName
-    })
-  }, [pathName])
 
   const isAuthPath = useMemo(() => {
     return APP_DEFAULT_AUTH_PATHS.some(path => {

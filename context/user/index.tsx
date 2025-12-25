@@ -1,10 +1,12 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { createContext } from 'use-context-selector'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { UserType } from '@/types/users'
 import { supabaseService } from '@/utils/supabase/services'
+import { toast } from 'sonner'
+import { APP_DEFAULT_GUEST_PATHS } from '@/config'
 
 export interface UserContextType {
   currentUser: UserType | null
@@ -18,12 +20,14 @@ export interface UserContextType {
   setAllowRedirect: React.Dispatch<React.SetStateAction<boolean>>
   allowRedirect: boolean
   isOnline: boolean
+  isGuestPath: boolean
 }
 
 // Create the UserContext
 export const UserContext = createContext<UserContextType>({
   currentUser: null,
   isLoading: true,
+  isGuestPath: true,
   setIsLoading: () => {},
   setCurrentUser: () => {},
   isAuthenticated: undefined,
@@ -47,6 +51,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isOnline, setIsOnline] = React.useState(true)
 
   const router = useRouter()
+  const pathName = usePathname()
+
+  const isGuestPath = useMemo(() => {
+    return APP_DEFAULT_GUEST_PATHS.some(path => {
+      // Remove query parameters from pathName for comparison
+      const cleanPathName = pathName.split('?')[0]
+
+      if (path?.includes('[id]')) {
+        const pathPattern = new RegExp(`^${path.replace('[id]', '([^/]+)')}$`)
+        return pathPattern.test(cleanPathName)
+      }
+      return path === cleanPathName
+    })
+  }, [pathName])
 
   useEffect(() => {
     const init = async () => {
@@ -64,6 +82,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
               setCurrentUser(user)
             } else {
               setCurrentUser(null)
+              toast.error(
+                'Account not found. Sign in is limited to existing users.'
+              )
+
+              await logout({
+                redirect: !isGuestPath,
+                redirectionPath: '/login'
+              })
             }
           })()
         } else {
@@ -121,12 +147,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function logout ({ redirect = true }: { redirect?: boolean }) {
+  async function logout ({
+    redirect = true,
+    redirectionPath = '/'
+  }: {
+    redirect?: boolean
+    redirectionPath?: string
+  }) {
     try {
       setAllowRedirect(false)
       await supabaseService.client.auth.signOut()
       if (redirect) {
-        router.push('/')
+        router.push(redirectionPath)
       }
     } finally {
       setTimeout(() => setAllowRedirect(true), 50)
@@ -146,7 +178,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [])
 
-
   return (
     <UserContext.Provider
       value={{
@@ -160,6 +191,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         logout,
         fetchCurrentUser,
         allowRedirect,
+        isGuestPath,
         setAllowRedirect
       }}
     >

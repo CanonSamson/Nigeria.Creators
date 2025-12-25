@@ -42,6 +42,29 @@ export class SupabaseAuthService extends SupabaseService {
     }
   }
 
+  async signInWithGoogle () {
+    const { data, error } = await this.client.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/login`,
+        queryParams: {
+          signup: 'false'
+        }
+      }
+    })
+    if (error) {
+      return {
+        success: false,
+        error: error,
+        message: error.message
+      }
+    }
+    return {
+      success: true,
+      data: data
+    }
+  }
+
   async resetPasswordForEmail (email: string, redirectTo?: string) {
     const { data, error } = await this.client.auth.resetPasswordForEmail(
       email,

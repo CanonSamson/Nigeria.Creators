@@ -5,11 +5,12 @@ import Button from '@/components/custom/Button'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useRouter } from 'next/navigation'
-// import { toast } from 'sonner'
 import { supabaseAuthService } from '@/utils/supabase/services/auth'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
+import GoogleAuthButton from '@/components/buttons/GoogleAuthButton'
+import { toast } from 'sonner'
 
 const schema = Yup.object({
   email: Yup.string().trim().email('Enter a valid email').required('Required'),
@@ -52,6 +53,8 @@ export default function LoginForm () {
       const user = await fetchCurrentUser({ load: false })
       const dest = user?.role === 'BRAND' ? '/brand' : '/creator'
       router.replace(dest)
+
+      toast.success('Login successful')
     } catch (err) {
       console.log(err)
       setError('Something went wrong, please try again')
@@ -104,7 +107,7 @@ export default function LoginForm () {
           <p className='mt-1 text-[14px] text-red-500'>{error}</p>
         ) : null}
       </div>
-      <div className='pt-2'>
+      <div className='pt-2 flex items-center gap-4'>
         <Button
           text='Login'
           aria-label='Login'
@@ -113,6 +116,9 @@ export default function LoginForm () {
           onClick={() => handleSubmit()}
           isSubmit={isLoading}
         />
+       <Suspense>
+         <GoogleAuthButton />
+       </Suspense>
       </div>
     </div>
   )
