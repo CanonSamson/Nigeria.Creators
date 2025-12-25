@@ -9,7 +9,7 @@ import { supabaseAuthService } from '@/utils/supabase/services/auth'
 import { Suspense, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
-import GoogleAuthButton from '@/components/buttons/GoogleAuthButton'
+import GoogleAuthButton from '@/components/button/GoogleAuthButton'
 import { toast } from 'sonner'
 
 const schema = Yup.object({
