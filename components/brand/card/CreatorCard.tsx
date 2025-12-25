@@ -5,16 +5,77 @@ import { CreatorSearch } from '@/hooks/useCreatorsSearch'
 import { useSettingModal } from '@/context/model-settings'
 import { categoriesOptions } from '@/utils/options'
 import { formatAmount } from '@/utils/func'
+import { supabaseService } from '@/utils/supabase/services'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useContextSelector } from 'use-context-selector'
+import { UserContext } from '@/context/user'
+import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
 
 type Props = {
   creator: CreatorSearch
 }
 
 export default function CreatorCard ({ creator }: Props) {
-  const { name, about, image, category, tags, location, minBudget } = creator
+  const { name, about, image, category, location, minBudget } = creator
   const catTag = categoriesOptions[category]?.tag || ''
-  const othersTags = [catTag, ...tags].filter(Boolean)
+  const othersTags = [catTag].filter(Boolean)
   const { toggleModal } = useSettingModal()
+  const currentUser = useContextSelector(
+    UserContext,
+    state => state.currentUser
+  )
+  const queryClient = useQueryClient()
+
+  const { data: isFavorite } = useQuery({
+    queryKey: ['favorite-creator', currentUser?.id, creator.id],
+    enabled: !!currentUser?.id,
+    queryFn: async () => {
+      const { data } = await supabaseService.client
+        .from('favourite_brand_creators')
+        .select('id')
+        .eq('brandId', currentUser?.id)
+        .eq('creatorId', creator.id)
+        .maybeSingle()
+      return !!data
+    }
+  })
+
+  const { mutate: toggleFavorite } = useMutation({
+    mutationFn: async () => {
+      if (!currentUser?.id) return
+
+      if (isFavorite) {
+        await supabaseService.client
+          .from('favourite_brand_creators')
+          .delete()
+          .eq('brandId', currentUser.id)
+          .eq('creatorId', creator.id)
+      } else {
+        await supabaseService.client.from('favourite_brand_creators').insert({
+          brandId: currentUser.id,
+          creatorId: creator.id
+        })
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['favorite-creator', currentUser?.id, creator.id]
+      })
+    }
+  })
+
+  const handleOnProfileViewed = async () => {
+    try {
+      await supabaseService.client.from('metrics').insert({
+        eventName: 'PROFILE_VIEW',
+        creatorId: creator.id,
+        timestamp: new Date().toISOString()
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <article className='bg-white  text-[14px] font-sans rounded-[24px]  overflow-hidden border border-[#EFEFEF]'>
@@ -29,9 +90,17 @@ export default function CreatorCard ({ creator }: Props) {
             className=' w-full object-cover object-top h-[360px] md:h-[560px] md:max-w-[460px] md:min-w-[200px] rounded-[24px]'
           />
           <div className='absolute inset-0 bg-black/[16%] rounded-[24px]' />
-          <div className='absolute top-5 left-5 w-9 h-9 bg-white/10 border-[2px] border-white rounded-full flex items-center justify-center backdrop-blur'>
-            <Heart className='w-5 h-5 text-white' />
-          </div>
+          <button
+            onClick={() => toggleFavorite()}
+            className='absolute top-5 left-5 w-9 h-9 bg-white/10 border-[2px] border-white rounded-full flex items-center justify-center backdrop-blur hover:bg-white/20 transition-all'
+          >
+            <Heart
+              className={cn(
+                'w-5 h-5 transition-colors',
+                isFavorite ? 'text-red-500 fill-red-500' : 'text-white'
+              )}
+            />
+          </button>
         </div>
         <div className='flex flex-1 flex-col max-w-[460px] justify-between'>
           <div>
@@ -47,7 +116,10 @@ export default function CreatorCard ({ creator }: Props) {
               </p>
             </div>
             <div className='mt-10 flex gap-2'>
-              <button className='px-4 py-2 rounded-[14px] bg-primary text-white text-[15px]'>
+              <button
+                onClick={() => toast.info('Coming soon')}
+                className='px-4 py-2 rounded-[14px] bg-primary text-white text-[15px]'
+              >
                 Get in touch
               </button>
             </div>
@@ -56,6 +128,8 @@ export default function CreatorCard ({ creator }: Props) {
                 toggleModal('creatorProfileModal', {
                   userId: creator.id
                 })
+
+                handleOnProfileViewed()
               }}
               className='mt-4 inline-flex items-center gap-1 text-[#40444C] text-[15px]'
             >

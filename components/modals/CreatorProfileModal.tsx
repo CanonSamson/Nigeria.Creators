@@ -14,6 +14,7 @@ import {
 } from 'react-social-media-embed'
 import { resolveEmbedUrl } from '@/utils/func/resolveEmbedUrl'
 import CustomTikTokEmbed from '../embed/CustomTikTokEmbed'
+import { getPlatform } from '@/utils/func'
 
 const CreatorProfileModal = () => {
   const { toggleModal, modals, modalData } = useSettingModal()
@@ -35,6 +36,9 @@ const CreatorProfileModal = () => {
     }
   })
 
+
+
+
   const mergedData =
     creatorData?.success && creatorData?.data ? creatorData.data : null
 
@@ -51,23 +55,7 @@ const CreatorProfileModal = () => {
     work: Array.isArray(values?.work) ? values.work : []
   }
 
-  const getPlatform = (
-    url: string
-  ): 'tiktok' | 'instagram' | 'youtube' | 'other' => {
-    if (!url) return 'other'
-    const u = url.trim()
-    try {
-      const parsed = new URL(u)
-      const host = parsed.hostname.toLowerCase()
-      if (host.includes('tiktok.com')) return 'tiktok'
-      if (host.includes('instagram.com')) return 'instagram'
-      if (host.includes('youtube.com') || host.includes('youtu.be'))
-        return 'youtube'
-      return 'other'
-    } catch {
-      return 'other'
-    }
-  }
+
 
   const handleClose = () => {
     toggleModal('creatorProfileModal')
