@@ -33,14 +33,29 @@ export async function generateMetadata (
   const metadata = {
     title: { default: 'Nigeria Creators', template: '%s | Nigeria Creators' },
     description: "Connect with Nigeria's Content Creators.",
-
+    keywords: ['Nigeria', 'Creators', 'Content Creators', 'Nigerian Creators'],
     openGraph: {
       title: 'Nigeria Creators',
       description: "Connect with Nigeria's Content Creators.",
       images: [
         `${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/meta/1200-675.png`,
         ...previousImages
-      ].filter(Boolean)
+      ].filter(Boolean),
+      siteName: `${process.env.NEXT_PUBLIC_FRONTEND_URL}`,
+      locale: 'en_US',
+      type: 'website'
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1
+      }
     }
   }
 

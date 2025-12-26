@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import DashboardIcon from '@/public/icons/DashboardIcon'
 import NotificationIcon from '@/public/icons/NotificationIcon'
 import SettingsIcon from '@/public/icons/SettingsIcon'
+import WalletIcon from '@/public/icons/WalletIcon'
 import { hasPermission } from '@/utils/permissions/auth-abac'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -44,7 +45,8 @@ const DashboardSideBar = () => {
       key: 'notifications',
       href: isCreator ? '/creator' : '/brand',
       baseSrc: '/logo/logo-icon.svg',
-      active: pathname.includes('/notifications') && !pathname.includes('/settings'),
+      active:
+        pathname.includes('/notifications') && !pathname.includes('/settings'),
       Overlay: NotificationIcon
     },
     {

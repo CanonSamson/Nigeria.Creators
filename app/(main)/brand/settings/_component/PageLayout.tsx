@@ -9,7 +9,10 @@ import { useContextSelector } from 'use-context-selector'
 import Avatar from '@/components/ui/avatar'
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
-  const currentUser = useContextSelector(UserContext, state => state.currentUser)
+  const currentUser = useContextSelector(
+    UserContext,
+    state => state.currentUser
+  )
   const logout = useContextSelector(UserContext, state => state.logout)
   const pathName = usePathname()
   const router = useRouter()
@@ -61,52 +64,87 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               <div className=' mt-10 flex flex-col  md:flex-row items-start gap-6 w-full'>
                 <div className=' md:w-[250px]'>
                   <div>
-                    <div className='mt-3 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
-                      <Link
-                        href={'/brand/settings'}
-                        className={cn(
-                          'text-[14px] md:text-[16px] font-medium flex-none',
-                          pathName === '/brand/settings' ? 'text-[#327468]' : 'text-black'
-                        )}
-                      >
-                        General
-                      </Link>
-                      <Link
-                        href={'/brand/settings/profile'}
-                        className={cn(
-                          'text-[14px] md:text-[16px] font-medium flex-none',
-                          pathName === '/brand/settings/profile' ? 'text-[#327468]' : 'text-black'
-                        )}
-                      >
-                        Edit Profile
-                      </Link>
-                      <Link
-                        href={'/brand/settings/social'}
-                        className={cn(
-                          'text-[14px] md:text-[16px] font-medium flex-none',
-                          pathName === '/brand/settings/social' ? 'text-[#327468]' : 'text-black'
-                        )}
-                      >
-                        Social Profiles
-                      </Link>
-                      <Link
-                        href={'/brand/settings/notifications'}
-                        className={cn(
-                          'text-[14px] md:text-[16px] font-medium flex-none',
-                          pathName === '/brand/settings/notifications' ? 'text-[#327468]' : 'text-black'
-                        )}
-                      >
-                        Email Notifications
-                      </Link>
-                      <Link
-                        href={'/brand/settings/password'}
-                        className={cn(
-                          'text-[14px] md:text-[16px] font-medium flex-none',
-                          pathName === '/brand/settings/password' ? 'text-[#327468]' : 'text-black'
-                        )}
-                      >
-                        Password
-                      </Link>
+                    <div className='mt-3 space-y-6'>
+                      <div className='space-y-2'>
+                        <p className='text-[12px] md:text-[12px] font-semibold uppercase tracking-wide text-[#9AA0A6]'>
+                          Account
+                        </p>
+                        <div className='mt-3 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
+                          <Link
+                            href={'/brand/settings'}
+                            className={cn(
+                              'text-[14px] md:text-[16px] font-medium flex-none',
+                              pathName === '/brand/settings'
+                                ? 'text-[#327468]'
+                                : 'text-black'
+                            )}
+                          >
+                            General
+                          </Link>
+                          <Link
+                            href={'/brand/settings/profile'}
+                            className={cn(
+                              'text-[14px] md:text-[16px] font-medium flex-none',
+                              pathName === '/brand/settings/profile'
+                                ? 'text-[#327468]'
+                                : 'text-black'
+                            )}
+                          >
+                            Edit Profile
+                          </Link>
+                          <Link
+                            href={'/brand/settings/social'}
+                            className={cn(
+                              'text-[14px] md:text-[16px] font-medium flex-none',
+                              pathName === '/brand/settings/social'
+                                ? 'text-[#327468]'
+                                : 'text-black'
+                            )}
+                          >
+                            Social Profiles
+                          </Link>
+                          <Link
+                            href={'/brand/settings/notifications'}
+                            className={cn(
+                              'text-[14px] md:text-[16px] font-medium flex-none',
+                              pathName === '/brand/settings/notifications'
+                                ? 'text-[#327468]'
+                                : 'text-black'
+                            )}
+                          >
+                            Email Notifications
+                          </Link>
+                          <Link
+                            href={'/brand/settings/password'}
+                            className={cn(
+                              'text-[14px] md:text-[16px] font-medium flex-none',
+                              pathName === '/brand/settings/password'
+                                ? 'text-[#327468]'
+                                : 'text-black'
+                            )}
+                          >
+                            Password
+                          </Link>
+                        </div>
+                      </div>
+                      <div className='space-y-2'>
+                        <p className='text-[12px] md:text-[12px] font-semibold uppercase tracking-wide text-[#9AA0A6]'>
+                          Subscription
+                        </p>
+                        <div className='flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
+                          <Link
+                            href={'/brand/settings/billing'}
+                            className={cn(
+                              'text-[14px] md:text-[16px] font-medium flex-none',
+                              pathName === '/brand/settings/billing'
+                                ? 'text-[#327468]'
+                                : 'text-black'
+                            )}
+                          >
+                            Plan & Billings
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                     <div className='my-4 h-px bg-[#EFEFEF]' />
                     <div className='mt-2 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:flex-col'>
@@ -118,7 +156,9 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                       </button>
                       <button
                         className='text-left flex-none w-auto md:w-full text-[14px] md:text-[16px] text-red-500'
-                        onClick={() => router.push('/brand/settings/delete-account')}
+                        onClick={() =>
+                          router.push('/brand/settings/delete-account')
+                        }
                       >
                         Delete Account
                       </button>
@@ -136,4 +176,3 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
 }
 
 export default PageLayout
-

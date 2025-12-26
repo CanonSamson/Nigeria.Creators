@@ -68,7 +68,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                       General
                     </p> */}
                     <div className='mt-3 flex gap-3 overflow-x-auto whitespace-nowrap hide-scrollbar md:overflow-visible md:flex-col'>
-                     
+
                       <Link
                         href={'/creator/settings'}
                         className={cn(
@@ -80,7 +80,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
                       >
                         General
                       </Link>
-                       <Link
+                      <Link
                         href={'/creator/settings/profile'}
                         className={cn(
                           'text-[14px] md:text-[16px] font-medium flex-none',
