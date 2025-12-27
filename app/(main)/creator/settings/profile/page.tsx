@@ -29,7 +29,7 @@ const schema = Yup.object({
   state: Yup.string().trim().optional().nullable(),
   minBudget: Yup.string()
     .oneOf(
-      ['10000', '25000', '50000', '100000', '250000', '500000', '1000000'],
+      budgetOptions.map(item => item.value),
       'Select a valid amount'
     )
     .required('Required')

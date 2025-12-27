@@ -13,6 +13,9 @@ export type CreatorSearch = {
   tags: string[]
   location: string
   minBudget?: string
+  instagramLink?: string
+  tiktokLink?: string
+  contentLink?: string
 }
 
 type ApiCreator = {
@@ -73,7 +76,10 @@ export function useCreatorsSearch () {
     category: (c.profile?.categories && c.profile.categories[0]) || 'Others',
     tags: ['NG'],
     location: c.profile?.state || 'Nigeria',
-    minBudget: c.profile?.minBudget || ''
+    minBudget: c.profile?.minBudget || '',
+    instagramLink: c.profile?.instagramLink || undefined,
+    tiktokLink: c.profile?.tiktokLink || undefined,
+    contentLink: c.profile?.contentLink || undefined
   }))
 
   return {

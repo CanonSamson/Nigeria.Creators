@@ -8,10 +8,7 @@ import { SiTiktok } from 'react-icons/si'
 import { RxCross2 } from 'react-icons/rx'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import {
-  InstagramEmbed,
-  YouTubeEmbed
-} from 'react-social-media-embed'
+import { InstagramEmbed, YouTubeEmbed } from 'react-social-media-embed'
 import { resolveEmbedUrl } from '@/utils/func/resolveEmbedUrl'
 import CustomTikTokEmbed from '../embed/CustomTikTokEmbed'
 import { getPlatform } from '@/utils/func'
@@ -36,9 +33,6 @@ const CreatorProfileModal = () => {
     }
   })
 
-
-
-
   const mergedData =
     creatorData?.success && creatorData?.data ? creatorData.data : null
 
@@ -54,8 +48,6 @@ const CreatorProfileModal = () => {
     },
     work: Array.isArray(values?.work) ? values.work : []
   }
-
-
 
   const handleClose = () => {
     toggleModal('creatorProfileModal')
@@ -145,7 +137,6 @@ const CreatorProfileModal = () => {
                 </div>
               ) : null}
 
-          
               {Boolean(data.links.contentLink) ? (
                 <div className='mt-6'>
                   {getPlatform(data.links.contentLink) === 'tiktok' ? (

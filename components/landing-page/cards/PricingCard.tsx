@@ -25,7 +25,7 @@ const PricingCard = ({
   onButtonClick,
   features,
   variant = 'default',
-  buttonVariant = 'black',
+  buttonVariant = 'black'
 }: PricingCardProps) => {
   const isHighlighted = variant === 'highlighted'
 
@@ -46,7 +46,7 @@ const PricingCard = ({
       {billingInfo ? (
         <p className='text-gray-500 text-sm mb-6'>{billingInfo}</p>
       ) : (
-        <div className='h-[20px] mb-6'/>
+        <div className='h-[20px] mb-6' />
       )}
 
       <div
@@ -60,7 +60,7 @@ const PricingCard = ({
       <button
         className={`rounded-full py-3 font-medium mb-8 transition-colors ${
           buttonVariant === 'black'
-            ? 'w-fit bg-[#1A1A1A] text-white hover:bg-black/90'
+            ? 'w-fit px-8 bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90'
             : 'w-fit px-8 bg-[#2F6658] text-white hover:bg-[#2F6658]/90'
         }`}
         onClick={onButtonClick}

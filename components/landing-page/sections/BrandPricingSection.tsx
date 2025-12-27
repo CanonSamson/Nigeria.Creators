@@ -2,8 +2,10 @@
 
 import { mixpanelService } from '@/services/mixpanel'
 import PricingCard from '../cards/PricingCard'
+import { useRouter } from 'next/navigation'
 
 const BrandPricingSection = () => {
+  const router = useRouter()
   const featuresFree = ['Unlock creator database', 'Basic analytics dashboard']
 
   const featuresTeam = [
@@ -37,11 +39,12 @@ const BrandPricingSection = () => {
             billingInfo='Billed monthly'
             description='Perfect for small brands testing the waters'
             buttonText='Get Started'
-            onButtonClick={() =>
+            onButtonClick={() => {
               mixpanelService.track('CLICK_PRICING_FREE', {
                 location: 'pricing_section'
               })
-            }
+              router.push(`/brands/register`)
+            }}
             features={featuresFree}
             variant='default'
             buttonVariant='black'

@@ -11,13 +11,24 @@ import { useContextSelector } from 'use-context-selector'
 import { UserContext } from '@/context/user'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import VideoIcon from '@/public/icons/VideoIcon'
 
 type Props = {
   creator: CreatorSearch
 }
 
 export default function CreatorCard ({ creator }: Props) {
-  const { name, about, image, category, location, minBudget } = creator
+  const {
+    name,
+    about,
+    image,
+    category,
+    location,
+    minBudget,
+    instagramLink,
+    tiktokLink,
+    contentLink
+  } = creator
   const catTag = categoriesOptions[category]?.tag || ''
   const othersTags = [catTag].filter(Boolean)
   const { toggleModal } = useSettingModal()
@@ -184,15 +195,39 @@ export default function CreatorCard ({ creator }: Props) {
                 <span className=' leading-none'>{location}</span>
               </div>
               <div className='flex items-center gap-2'>
-                <div className='w-9 h-9 rounded-[10px] border border-[#EAEAEA] bg-white flex items-center justify-center'>
-                  <FaInstagram className='w-4 h-4 text-[#2F8D68]' />
-                </div>
-                <div className='w-9 h-9 rounded-[10px] border border-[#EAEAEA] bg-white flex items-center justify-center'>
-                  <FaTiktok className='w-4 h-4 text-[#2F8D68]' />
-                </div>
-                <div className='w-9 h-9 rounded-[10px] border border-[#EAEAEA] bg-white flex items-center justify-center'>
-                  <FaYoutube className='w-4 h-4 text-[#2F8D68]' />
-                </div>
+                {instagramLink && (
+                  <a
+                    href={instagramLink}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='w-9 h-9 rounded-[10px] border border-[#EAEAEA] bg-white flex items-center justify-center hover:bg-gray-50 transition-colors'
+                  >
+                    <FaInstagram className='w-5 h-5 text-[#2F8D68]' />
+                  </a>
+                )}
+                {tiktokLink && (
+                  <a
+                    href={tiktokLink}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='w-9 h-9 rounded-[10px] border border-[#EAEAEA] bg-white flex items-center justify-center hover:bg-gray-50 transition-colors'
+                  >
+                    <FaTiktok className='w-5 h-5 text-[#2F8D68]' />
+                  </a>
+                )}
+                {contentLink && (
+                  <a
+                    href={contentLink}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='w-9 h-9 rounded-[10px] border border-[#EAEAEA] bg-white flex items-center justify-center hover:bg-gray-50 transition-colors'
+                  >
+                    <VideoIcon
+                      className='w-5 h-5 text-[#2F8D68]'
+                      stroke='#2F8D68'
+                    />
+                  </a>
+                )}
               </div>
             </div>
           </div>
