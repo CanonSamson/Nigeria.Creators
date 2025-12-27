@@ -33,7 +33,10 @@ const validationSchema = Yup.object({
   instagram: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
   tiktok: Yup.string().trim().url('Enter a valid URL').nullable().optional(),
   minBudget: Yup.string()
-    .oneOf(['10000','25000','50000','100000','250000','500000','1000000'], 'Select a valid amount')
+    .oneOf(
+      ['10000', '25000', '50000', '100000', '250000', '500000', '1000000'],
+      'Select a valid amount'
+    )
     .required('Required')
 })
 
@@ -61,8 +64,12 @@ export default function CreatorApplyPage () {
   useEffect(() => {
     mixpanelService.track('APPLY_VIEWED', { totalSteps })
   }, [totalSteps])
+
   useEffect(() => {
-    mixpanelService.track('APPLY_STEP_CHANGED', { step: currentStep })
+    mixpanelService.track('APPLY_STEP_CHANGED', {
+      step: currentStep,
+      ...formik?.values
+    })
   }, [currentStep])
 
   type FormValues = {
