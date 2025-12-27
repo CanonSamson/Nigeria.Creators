@@ -6,15 +6,32 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { mixpanelService } from '@/services/mixpanel'
 import { ChevronRight } from 'lucide-react'
+import { supabaseService } from '@/utils/supabase/services'
+import { useQuery } from '@tanstack/react-query'
 
 const HeroSectionDetails = () => {
   const [waitList, setWaitList] = useState(false)
 
   const router = useRouter()
 
+  const { data: creatorCount, isLoading: isLoadingCreatorCount } = useQuery({
+    queryKey: ['creator-count'],
+    queryFn: async () => {
+      const { count } = await supabaseService.client
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'CREATOR')
+        .not('isDisabled', 'eq', true)
+        .not('isSuspended', 'eq', true)
+      return count ?? 0
+    },
+    initialData: 0
+  })
+
+
   return (
     <div className=' max-w-[750px] relative z-20 mx-auto min-h-[600px]  md:min-h-[600px]  flex flex-col justify-center items-center'>
-      {waitList ? (
+      {true ? (
         <div className=' mb-[18px] md:mb-[26px] gap-2 bg-[#F6FFFD] p-2 flex items-center rounded-[12px] md:rounded-[20px]'>
           <div className='  h-[12px] w-[12px]  flex items-center rounded-[12px] relative  bg-[#00FFCC]'>
             <div className='  h-[12px] w-[12px]  flex items-center rounded-[12px] animate-ping  bg-[#00FFCC] absolute' />
@@ -57,7 +74,7 @@ const HeroSectionDetails = () => {
             </div>
           </div>
           <span className=' tracking-tight text-[12px] md:text-[16px] text-text-color-200'>
-            1,026+ Nigeria Content Creators
+            {creatorCount.toLocaleString()}+ Nigeria Content Creators
           </span>
         </div>
       )}
