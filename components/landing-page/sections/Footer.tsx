@@ -1,7 +1,8 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Instagram, Youtube, Camera } from 'lucide-react'
+import { Instagram } from 'lucide-react'
+import { FaTiktok } from 'react-icons/fa'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
@@ -144,7 +145,7 @@ const Footer = () => {
 
             <div className='flex items-center gap-4 md:justify-end'>
               <a
-                href='https://instagram.com'
+                href='https://www.instagram.com/nigeriacreators?igsh=MXZyaGZ6dWpsMWg2cg%3D%3D&utm_source=qr'
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='Instagram'
@@ -153,22 +154,13 @@ const Footer = () => {
                 <Instagram className='h-5 w-5' />
               </a>
               <a
-                href='https://youtube.com'
+                href='https://www.tiktok.com/@nigeriacreators?_r=1&_t=ZS-92ZbvesyaHP'
                 target='_blank'
                 rel='noopener noreferrer'
-                aria-label='YouTube'
+                aria-label='TikTok'
                 className='h-9 w-9 rounded-full border border-[#DFE2EB] flex items-center justify-center hover:border-primary hover:text-primary'
               >
-                <Youtube className='h-5 w-5' />
-              </a>
-              <a
-                href='https://www.instagram.com/nigeriacreators?igsh=MXZyaGZ6dWpsMWg2cg%3D%3D&utm_source=qr'
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='Creators media'
-                className='h-9 w-9 rounded-full border border-[#DFE2EB] flex items-center justify-center hover:border-primary hover:text-primary'
-              >
-                <Camera className='h-5 w-5' />
+                <FaTiktok className='h-5 w-5' />
               </a>
             </div>
           </div>

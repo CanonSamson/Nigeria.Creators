@@ -261,6 +261,10 @@ export default function CreatorApplyPage () {
                     return
                   }
                   if (currentStep < totalSteps - 1) {
+                    if (process.env.NEXT_PUBLIC_BRAND_SIGNUP !== 'true') {
+                      toast.error('Brand signup is not enabled yet')
+                      return null
+                    }
                     mixpanelService.track('BRAND_REGISTRATION_NEXT_CLICK', {
                       step: currentStep
                     })
